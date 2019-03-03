@@ -5,9 +5,6 @@ client = commands.Bot(command_prefix='.')
 
 TOKEN = open("secret.txt", "r")
 
-game = "CorruptReaktor"
-
-
 @client.event
 async def on_ready():
     print("I am ready")
