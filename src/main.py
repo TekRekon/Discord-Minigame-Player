@@ -3,8 +3,6 @@ from discord.ext import commands
 
 client = commands.Bot(command_prefix='.')
 
-TOKEN = open("secret.txt", "r")
-
 @client.event
 async def on_ready():
     print("I am ready")
@@ -17,4 +15,4 @@ async def on_message(message):
     await client.add_reaction(message, "⏬")
     await client.add_reaction(message, emoji="⭐")
 
-client.run(TOKEN.read())
+client.login(process.env.token)
