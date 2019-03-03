@@ -15,4 +15,4 @@ async def on_message(message):
     await client.add_reaction(message, "⏬")
     await client.add_reaction(message, emoji="⭐")
 
-client.login(process.env.token)
+client.run("NTEzODMyNzk3NjM5NTQwNzM5.D12Yzw.dUzzYz2y5k886Azzll2QPqMLeiM")

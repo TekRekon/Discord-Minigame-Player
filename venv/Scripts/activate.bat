@@ -1,5 +1,5 @@
 @echo off
-set "VIRTUAL_ENV=C:\DiscordBot\DiscordBot\venv"
+set "VIRTUAL_ENV=C:\DiscordBot\venv"
 
 if not defined PROMPT (
     set "PROMPT=$P$G"
