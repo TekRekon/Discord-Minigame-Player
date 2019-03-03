@@ -14,4 +14,10 @@ async def on_ready():
     await client.change_presence(game=discord.Game(name="CorruptReaktor.py"), status=None, afk=False)
 
 
+@client.event
+async def on_message(message):
+    await client.add_reaction(message, emoji="⏫")
+    await client.add_reaction(message, "⏬")
+    await client.add_reaction(message, emoji="⭐")
+
 client.run(TOKEN.read())
