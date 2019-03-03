@@ -12,7 +12,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     await client.add_reaction(message, emoji="⏫")
-    await client.add_reaction(message, "⏬")
     await client.add_reaction(message, emoji="⭐")
+    await client.add_reaction(message, "⏬")
 
 client.run("NTEzODMyNzk3NjM5NTQwNzM5.D12Yzw.dUzzYz2y5k886Azzll2QPqMLeiM")
