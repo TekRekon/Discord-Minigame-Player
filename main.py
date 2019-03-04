@@ -17,7 +17,26 @@ async def on_message(message):
 
 @client.event
 async def on_member_update(x, y):
-    if discord.Member.display_name == "TekRekon":
-        await client.send_message(destination="514591632327442432", content="worked")
+    server = client.get_server(id="477829362771689484")
+    DJ = discord.utils.get(server.roles, name="DJ")
+    mod_roles = [discord.utils.get(server.roles, name="DJ"), "GetsNotifs", "getsAds", "GameNotifs"]
+    await client.send_message(destination="514591632327442432", content="I detected a member update")
+    role_list = y.roles
+    Moderator = False
+    for i in range(len(role_list)):
+        if role_list[i] == "Moderator":
+            Moderator = True
+            await client.send_message(destination="514591632327442432",
+                                      content="I detected a member update to role Moderator")
+            await client.add_roles(y, mod_roles)
+            await client.add_roles(y, DJ)
+    else:
+        await client.send_message(destination="514591632327442432",
+                                  content="I detected a member update that did not include role Moderator")
+
+    await client.send_message(destination="514591632327442432", content="worked")
+
+
+
 
 client.run("NTEzODMyNzk3NjM5NTQwNzM5.D12Yzw.dUzzYz2y5k886Azzll2QPqMLeiM")
