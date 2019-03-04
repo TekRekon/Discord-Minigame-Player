@@ -16,7 +16,7 @@ async def on_message(message):
     await client.add_reaction(message, emoji="⏫")
 
 @client.event
-async def on_member_update():
+async def on_member_update(x, y):
     if discord.Member.display_name == "TekRekon":
         await client.send_message(destination="514591632327442432", content="worked")
 
