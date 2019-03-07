@@ -25,7 +25,9 @@ async def on_message(message):
         if message.channel is one_word_story_channel:
             if message.author != client.user:
                 await client.delete_message(message=message)
-                await client.send_message(message.channel, "You may only type one word" + message.author.mention)
+                my_message = await client.send_message(message.channel, "You may only type one word" + message.author.mention)
+                time.sleep(2)
+                await client.delete_message(message=my_message)
     elif message.author is hi.prev_author:
         if message.channel is one_word_story_channel:
             await client.delete_message(message=message)
@@ -37,12 +39,6 @@ async def on_message(message):
     await client.add_reaction(message, "⏬")
     await client.add_reaction(message, emoji="⭐")
     await client.add_reaction(message, emoji="⏫")
-
-@client.event
-async def on_message(message):
-    if message.author is client.user:
-        client.delete_message(message=message)
-
 
 @client.event
 async def on_member_update(x, y):
