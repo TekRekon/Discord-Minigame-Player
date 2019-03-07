@@ -31,6 +31,7 @@ async def on_message(message):
         if message.channel is one_word_story_channel:
             await client.delete_message(message=message)
             my_message = await client.send_message(message.channel, "You may only type after another person" + message.author.mention)
+            await client.delete_message(message=my_message)
     elif message.channel is one_word_story_channel:
         hi.prev_author = message.author
 
