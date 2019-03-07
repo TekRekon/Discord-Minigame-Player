@@ -21,9 +21,6 @@ async def on_message(message):
     bot_testing_commands_channel = discord.utils.get(message.server.channels, name='bot  testing  commands')
     one_word_story_channel = discord.utils.get(message.server.channels, name="1  word  story")
     server = message.server
-    if hi.just_started == True:
-        hi.prev_author = server.get_member(user_id="285879705989677058")
-        hi.just_started = False
 
     #####UPVOTING AUTO REACTIONS
     await client.add_reaction(message, "⏬")
@@ -39,11 +36,8 @@ async def on_message(message):
         if message.channel is one_word_story_channel:
             await client.delete_message(message=message)
             await client.send_message(message.author, "You may only type after another person")
-            hi.just_started = False
     elif message.channel is one_word_story_channel:
         hi.prev_author = message.author
-        hi.just_started = False
-
 
 
 @client.event
