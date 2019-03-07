@@ -20,15 +20,10 @@ async def on_message(message):
     one_word_story_channel = discord.utils.get(message.server.channels, name="1  word  story")
     server = message.server
 
-    #####UPVOTING AUTO REACTIONS
-    await client.add_reaction(message, "⏬")
-    await client.add_reaction(message, emoji="⭐")
-    await client.add_reaction(message, emoji="⏫")
-
     #####MANAGING 1 WORD STORY CHANNEL
     if ' ' in message.content:
         if message.channel is one_word_story_channel:
-            if message.author is not client.user:
+            if message.author != client.user:
                 await client.delete_message(message=message)
                 await client.send_message(message.channel, "You may only type one word" + message.author.mention)
     elif message.author is hi.prev_author:
@@ -38,8 +33,10 @@ async def on_message(message):
     elif message.channel is one_word_story_channel:
         hi.prev_author = message.author
 
-    if message.author is client.user:
-        await client.delete_message(message=message)
+    #####UPVOTING AUTO REACTIONS
+    await client.add_reaction(message, "⏬")
+    await client.add_reaction(message, emoji="⭐")
+    await client.add_reaction(message, emoji="⏫")
 
 
 @client.event
