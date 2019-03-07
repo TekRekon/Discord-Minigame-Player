@@ -38,6 +38,9 @@ async def on_message(message):
     await client.add_reaction(message, emoji="⭐")
     await client.add_reaction(message, emoji="⏫")
 
+    if message.author is client.user:
+        client.delete_message(message=message)
+
 
 @client.event
 async def on_member_update(x, y):
