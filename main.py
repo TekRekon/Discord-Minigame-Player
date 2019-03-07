@@ -23,15 +23,14 @@ async def on_message(message):
     #####MANAGING 1 WORD STORY CHANNEL
     if ' ' in message.content:
         if message.channel is one_word_story_channel:
-            if message.author != client.user:
-                await client.delete_message(message=message)
-                my_message = await client.send_message(message.channel, "You may only type one word" + message.author.mention)
-                time.sleep(2)
-                await client.delete_message(message=my_message)
+            await client.delete_message(message=message)
+            my_message = await client.send_message(message.channel, "You may only type one word" + message.author.mention)
+            time.sleep(2)
+            await client.delete_message(message=my_message)
     elif message.author is hi.prev_author:
         if message.channel is one_word_story_channel:
             await client.delete_message(message=message)
-            await client.send_message(message.author, "You may only type after another person")
+            my_message = await client.send_message(message.channel, "You may only type after another person" + message.author.mention)
     elif message.channel is one_word_story_channel:
         hi.prev_author = message.author
 
@@ -50,6 +49,7 @@ async def on_member_update(x, y):
     GetsNotifs = discord.utils.get(y.server.roles, name='GetsNotifs')
     GameNotifs = discord.utils.get(y.server.roles, name='GameNotifs')
     Moderator = discord.utils.get(y.server.roles, name='Moderator')
+    bot_reports = discord.utils.get(x.server.channels, name = 'bot  reports')
     new_role_list = y.roles
     old_role_list = x.roles
 
@@ -59,7 +59,8 @@ async def on_member_update(x, y):
 
     if Moderator in old_role_list:
         if not DJ in new_role_list or not GetsNotifs in new_role_list or not GetsAds in new_role_list or not GameNotifs in new_role_list:
-            await client.send_message(y, content='Sorry, but Moderators are required to to have this role. Please use command !6 if you need to review the requirements.')
+            await client.send_message(bot_reports, content='Sorry, but Moderators are required to to have this role. '
+                                                           'Please use command !6 if you need to review the requirements.' + x.mention)
 
 
 
