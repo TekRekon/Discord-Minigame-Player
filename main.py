@@ -1,10 +1,10 @@
 import discord
 from discord.ext import commands
+import time
 
 client = commands.Bot(command_prefix='.')
 
 class hi():
-    just_started = True
     prev_author = "something"
 
 #####STARTUP
@@ -12,8 +12,6 @@ class hi():
 async def on_ready():
     print("I am ready")
     await client.change_presence(game=discord.Game(name="CorruptReaktor.py"), status=None, afk=False)
-    hi.just_started = True
-
 
 @client.event
 async def on_message(message):
@@ -27,11 +25,15 @@ async def on_message(message):
     await client.add_reaction(message, emoji="⭐")
     await client.add_reaction(message, emoji="⏫")
 
+    if message.author is client.user:
+        await client.delete_message(message=message)
+
     #####MANAGING 1 WORD STORY CHANNEL
     if ' ' in message.content:
         if message.channel is one_word_story_channel:
             await client.delete_message(message=message)
-            await client.send_message(message.author, "You may only type one word")
+            await client.send_message(message.channel, "You may only type one word" + message.author.mention)
+            time.sleep(2)
     elif message.author is hi.prev_author:
         if message.channel is one_word_story_channel:
             await client.delete_message(message=message)
