@@ -17,7 +17,6 @@ async def on_ready():
     await printDailyPoll()
 
 class storage():
-    client.wait_until_ready()
     prev_author = "something"
 
 #Print the daily poll
@@ -44,7 +43,6 @@ async def printDailyPoll():
 
 @client.event
 async def on_message(message):
-
     #VARIABLES
     bot_testing_commands_channel = discord.utils.get(message.server.channels, name='bot  testing  commands')
     one_word_story_channel = discord.utils.get(message.server.channels, name="1  word  story")
@@ -97,6 +95,7 @@ async def on_member_update(x, y):
         if not DJ in new_role_list or not GetsNotifs in new_role_list or not GetsAds in new_role_list or not GameNotifs in new_role_list:
             await client.send_message(bot_reports, content='Sorry, but Moderators are required to to have this role. '
                                                            'Please use command !6 if you need to review the requirements.' + x.mention)
+
 
 
 client.run("NTEzODMyNzk3NjM5NTQwNzM5.D12Yzw.dUzzYz2y5k886Azzll2QPqMLeiM")
