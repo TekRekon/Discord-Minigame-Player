@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import asyncio
 import datetime
+import time
 
 client = commands.Bot(command_prefix='.')
 
