@@ -14,7 +14,6 @@ client = commands.Bot(command_prefix='.')
 async def on_ready():
     print("I am ready")
     await client.change_presence(game=discord.Game(name="CorruptReaktor.py"), status=None, afk=False)
-    await printDailyPoll()
 
 class storage():
     prev_author = "something"
@@ -43,35 +42,41 @@ async def printDailyPoll():
 
 @client.event
 async def on_message(message):
-    #VARIABLES
-    bot_testing_commands_channel = discord.utils.get(message.server.channels, name='bot  testing  commands')
     one_word_story_channel = discord.utils.get(message.server.channels, name="1  word  story")
     daily_poll_channel = client.get_channel('553760889778733073')
-    server = message.server
+    try:
 
-    # UPVOTING AUTO REACTIONS
-    if message.channel != daily_poll_channel:
-        await client.add_reaction(message, emoji="⏬")
-        await client.add_reaction(message, emoji="⭐")
-        await client.add_reaction(message, emoji="⏫")
+        if message.channel != daily_poll_channel:
+            if message.author != client.user:
+                await client.add_reaction(message, emoji="⏬")
+                await client.add_reaction(message, emoji="⭐")
+                await client.add_reaction(message, emoji="⏫")
 
-    #MANAGING 1 WORD STORY CHANNEL
-    if ' ' in message.content:
-        if message.channel is one_word_story_channel:
-            if message.author != client.user:
-                my_message = await client.send_message(message.channel, "You may only type one word" + message.author.mention)
-                time.sleep(2)
-                await client.delete_message(message=my_message)
-                await client.delete_message(message=message)
-    elif message.author is storage.prev_author:
-        if message.channel is one_word_story_channel:
-            if message.author != client.user:
-                my_message = await client.send_message(message.channel, "You may only type after another person" + message.author.mention)
-                time.sleep(2)
-                await client.delete_message(message=my_message)
-                await client.delete_message(message=message)
-    elif message.channel is one_word_story_channel:
-        storage.prev_author = message.author
+        if ' ' in message.content:
+            if message.channel is one_word_story_channel:
+                if message.author != client.user:
+                    await client.delete_message(message=message)
+                    my_message = await client.send_message(message.channel, "You may only type one word"
+                                                           + message.author.mention)
+                    time.sleep(2)
+                    await client.delete_message(message=my_message)
+        elif message.author is storage.prev_author:
+            if message.channel is one_word_story_channel:
+                if message.author != client.user:
+                    await client.delete_message(message=message)
+                    my_message = await client.send_message(message.channel, "You may only type after another person"
+                                                           + message.author.mention)
+                    time.sleep(2)
+                    await client.delete_message(message=my_message)
+        elif message.channel is one_word_story_channel:
+            storage.prev_author = message.author
+
+    except discord.errors.Forbidden:
+        await client.delete_message(message=message)
+        warn_message = await client.send_message(message.channel, "Please unblock " + client.user.mention
+                                                 + "to participate")
+        await asyncio.sleep(5)
+        await client.delete_message(warn_message)
 
 @client.event
 async def on_member_update(x, y):
