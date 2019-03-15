@@ -3,22 +3,21 @@ from discord.ext import commands
 import requests
 from bs4 import BeautifulSoup
 import asyncio
-import datetime
-import time
+import schedule
+from asyncio import *
 
 client = commands.Bot(command_prefix='.')
 
-
-#####STARTUP
 @client.event
 async def on_ready():
     print("I am ready")
     await client.change_presence(game=discord.Game(name="CorruptReaktor.py"), status=None, afk=False)
+    await printDailyPoll()
 
 class storage():
     prev_author = "something"
+    prev_question = "something"
 
-#Print the daily poll
 async def printDailyPoll():
     while True:
         daily_poll_channel = client.get_channel('553760889778733073')
@@ -28,17 +27,21 @@ async def printDailyPoll():
         daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class':'indivAnswerText'})
         daily_poll_answers = []
         test = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯']
-        for x in daily_poll_answers_html:
-            daily_poll_answers.append(x.text)
-        daily_poll_embed = discord.Embed(title=daily_poll_question, color=0xff0000)
-        counter = 0
-        for x in daily_poll_answers:
-            daily_poll_embed.add_field(name='\u200b', value=test[counter] + ' ' + x, inline=False)
-            counter += 1
-        sent_message = await client.send_message(daily_poll_channel, embed=daily_poll_embed)
-        for i in range(counter):
-            await client.add_reaction(sent_message, emoji=test[i])
-        await asyncio.sleep(86400)
+        if daily_poll_question != storage.prev_question:
+            storage.prev_question = daily_poll_question
+            for x in daily_poll_answers_html:
+                daily_poll_answers.append(x.text)
+            daily_poll_embed = discord.Embed(title=daily_poll_question, color=0xff0000)
+            counter = 0
+            for x in daily_poll_answers:
+                daily_poll_embed.add_field(name='\u200b', value=test[counter] + ' ' + x, inline=False)
+                counter += 1
+            sent_message = await client.send_message(daily_poll_channel, embed=daily_poll_embed)
+            for i in range(counter):
+                await client.add_reaction(sent_message, emoji=test[i])
+            await asyncio.sleep(180)
+        else:
+            await asyncio.sleep(180)
 
 @client.event
 async def on_message(message):
@@ -58,7 +61,7 @@ async def on_message(message):
                     await client.delete_message(message=message)
                     my_message = await client.send_message(message.channel, "You may only type one word"
                                                            + message.author.mention)
-                    time.sleep(2)
+                    await asyncio.sleep(2)
                     await client.delete_message(message=my_message)
         elif message.author is storage.prev_author:
             if message.channel is one_word_story_channel:
@@ -66,7 +69,7 @@ async def on_message(message):
                     await client.delete_message(message=message)
                     my_message = await client.send_message(message.channel, "You may only type after another person"
                                                            + message.author.mention)
-                    time.sleep(2)
+                    await asyncio.sleep(2)
                     await client.delete_message(message=my_message)
         elif message.channel is one_word_story_channel:
             storage.prev_author = message.author
