@@ -11,12 +11,19 @@ client = commands.Bot(command_prefix='.')
 @client.event
 async def on_ready():
     print("I am ready")
-    await client.change_presence(game=discord.Game(name="CorruptReaktor.py"), status=None, afk=False)
+    await carrouselStatus()
     await printDailyPoll()
 
 class storage():
     prev_author = "something"
-    prev_question = "something"
+    prev_question = "Do you wash your face every day?"
+    statusNames = ['DM Otter Pup 2 partner', '!help to get started', 'CorruptReaktor.py', '100 Members!']
+
+async def carrouselStatus():
+    while True:
+        for x in storage.statusNames:
+            await client.change_presence(game=discord.Game(name=x), status=None, afk=False)
+            await asyncio.sleep(3)
 
 async def printDailyPoll():
     while True:
@@ -46,6 +53,7 @@ async def printDailyPoll():
 @client.event
 async def on_message(message):
     one_word_story_channel = discord.utils.get(message.server.channels, name="1  word  story")
+    notes_channel = discord.utils.get(message.server.channels, name="notes")
     daily_poll_channel = client.get_channel('553760889778733073')
     try:
 
