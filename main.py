@@ -53,15 +53,12 @@ async def printDailyPoll():
 @client.event
 async def on_message(message):
     one_word_story_channel = discord.utils.get(message.server.channels, name="1  word  story")
-    notes_channel = discord.utils.get(message.server.channels, name="notes")
     daily_poll_channel = client.get_channel('553760889778733073')
     try:
 
         if message.channel != daily_poll_channel:
             if message.author != client.user:
-                await client.add_reaction(message, emoji="⏬")
                 await client.add_reaction(message, emoji="⭐")
-                await client.add_reaction(message, emoji="⏫")
 
         if ' ' in message.content:
             if message.channel is one_word_story_channel:
