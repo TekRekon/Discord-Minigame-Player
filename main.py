@@ -3,8 +3,6 @@ from discord.ext import commands
 import requests
 from bs4 import BeautifulSoup
 import asyncio
-import schedule
-from asyncio import *
 
 client = commands.Bot(command_prefix='.')
 
@@ -13,6 +11,7 @@ async def on_ready():
     print("I am ready")
     await carrouselStatus()
     await printDailyPoll()
+    print(client.messages)
 
 class storage():
     prev_author = "something"
@@ -52,10 +51,11 @@ async def printDailyPoll():
 
 @client.event
 async def on_message(message):
+    bot_updates_channel = discord.utils.get(message.server.channels, name='bot_updates')
     one_word_story_channel = discord.utils.get(message.server.channels, name="1  word  story")
     daily_poll_channel = client.get_channel('553760889778733073')
+    BotUpdatesRole = discord.utils.get(message.server.roles, name="BotNotifs")
     try:
-
         if message.channel != daily_poll_channel:
             if message.author != client.user:
                 await client.add_reaction(message, emoji="⭐")
@@ -78,7 +78,6 @@ async def on_message(message):
                     await client.delete_message(message=my_message)
         elif message.channel is one_word_story_channel:
             storage.prev_author = message.author
-
     except discord.errors.Forbidden:
         await client.delete_message(message=message)
         warn_message = await client.send_message(message.channel, "Please unblock " + client.user.mention
@@ -86,28 +85,30 @@ async def on_message(message):
         await asyncio.sleep(5)
         await client.delete_message(warn_message)
 
+    if message.channel is bot_updates_channel:
+        if message.author != client.user:
+            await client.send_message(bot_updates_channel, BotUpdatesRole.mention)
+
 @client.event
 async def on_member_update(x, y):
-
-    #VARIABLES
-    bot_testing_commands_channel = discord.utils.get(y.server.channels, name="bot  testing  commands")
     DJ = discord.utils.get(y.server.roles, name='DJ')
     GetsAds = discord.utils.get(y.server.roles, name='GetsAds')
     GetsNotifs = discord.utils.get(y.server.roles, name='GetsNotifs')
     GameNotifs = discord.utils.get(y.server.roles, name='GameNotifs')
     Moderator = discord.utils.get(y.server.roles, name='Moderator')
     bot_reports = discord.utils.get(x.server.channels, name = 'bot  reports')
+    BotUpdatesRole = discord.utils.get(x.server.roles, name="BotNotifs")
     new_role_list = y.roles
     old_role_list = x.roles
 
-    #####ASSIGNING/MANAGING MOD ROLES
     if Moderator in new_role_list:
-        await client.add_roles(y, DJ, GameNotifs, GetsAds, GetsNotifs)
-
+        await client.add_roles(y, DJ, GameNotifs, GetsAds, GetsNotifs, BotUpdatesRole)
     if Moderator in old_role_list:
-        if not DJ in new_role_list or not GetsNotifs in new_role_list or not GetsAds in new_role_list or not GameNotifs in new_role_list:
+        if not DJ in new_role_list or not GetsNotifs in new_role_list or not GetsAds in new_role_list \
+                or not GameNotifs in new_role_list or not BotUpdatesRole in new_role_list:
             await client.send_message(bot_reports, content='Sorry, but Moderators are required to to have this role. '
-                                                           'Please use command !6 if you need to review the requirements.' + x.mention)
+                                                           'Please use command !6 if you need to review the '
+                                                           'requirements.' + x.mention)
 
 
 
