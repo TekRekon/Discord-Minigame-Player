@@ -92,7 +92,7 @@ async def on_message(message):
                                                  + "to participate")
         await asyncio.sleep(5)
         await client.delete_message(warn_message)
-
+        
     if message.channel is bot_updates_channel:
         if message.author != client.user:
             await client.send_message(bot_updates_channel, BotUpdatesRole.mention)

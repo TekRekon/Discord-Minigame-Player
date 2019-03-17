@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
@@ -19,8 +20,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="97" selection-start-line="97" selection-end-line="97" />
+            <state relative-caret-position="287">
+              <caret line="94" column="8" selection-start-line="94" selection-start-column="8" selection-end-line="94" selection-end-column="8" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -449,7 +450,21 @@
       <option name="project" value="LOCAL" />
       <updated>1552839965990</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Hopefully fix bot update pings">
+      <created>1552840195883</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1552840195883</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Fix bot update pings">
+      <created>1552840433989</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1552840433989</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -519,7 +534,9 @@
     <MESSAGE value="Add optional ping for code updates" />
     <MESSAGE value="fix bot_update pings" />
     <MESSAGE value="Fix daily_poll AGAIN" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix daily_poll AGAIN" />
+    <MESSAGE value="Hopefully fix bot update pings" />
+    <MESSAGE value="Fix bot update pings" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix bot update pings" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/secret.txt" />
@@ -547,8 +564,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="97" selection-start-line="97" selection-end-line="97" />
+        <state relative-caret-position="287">
+          <caret line="94" column="8" selection-start-line="94" selection-start-column="8" selection-end-line="94" selection-end-column="8" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
