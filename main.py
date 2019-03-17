@@ -9,30 +9,30 @@ client = commands.Bot(command_prefix='.')
 @client.event
 async def on_ready():
     print("I am ready")
-    await carrouselStatus()
     await printDailyPoll()
-    print(client.messages)
+    await carrouselStatus()
 
 class storage():
     prev_author = "something"
-    prev_question = "Do you wash your face every day?"
+    prev_question = "The final season of Game Of Thrones starts next month! Who do you want to end up on the Iron " \
+                    "Throne at the end?"
     statusNames = ['DM Otter Pup 2 partner', '!help to get started', 'CorruptReaktor.py', '100 Members!']
 
 async def carrouselStatus():
     while True:
         for x in storage.statusNames:
             await client.change_presence(game=discord.Game(name=x), status=None, afk=False)
-            await asyncio.sleep(3)
+            await asyncio.sleep(5)
 
 async def printDailyPoll():
+    daily_poll_answers = []
+    test = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯']
+    daily_poll_channel = client.get_channel('553760889778733073')
+    daily_poll_website_html = requests.get('https://www.swagbucks.com/polls')
+    daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
+    daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
+    daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class': 'indivAnswerText'})
     while True:
-        daily_poll_channel = client.get_channel('553760889778733073')
-        daily_poll_website_html = requests.get('https://www.swagbucks.com/polls')
-        daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
-        daily_poll_question = daily_poll_huge_string.find('span', attrs={'class':'pollQuestion'}).text
-        daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class':'indivAnswerText'})
-        daily_poll_answers = []
-        test = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯']
         if daily_poll_question != storage.prev_question:
             storage.prev_question = daily_poll_question
             for x in daily_poll_answers_html:
@@ -45,9 +45,17 @@ async def printDailyPoll():
             sent_message = await client.send_message(daily_poll_channel, embed=daily_poll_embed)
             for i in range(counter):
                 await client.add_reaction(sent_message, emoji=test[i])
-            await asyncio.sleep(180)
-        else:
-            await asyncio.sleep(180)
+            print('new question is new question, excuting')
+        elif daily_poll_question == storage.prev_question:
+            daily_poll_channel = client.get_channel('553760889778733073')
+            daily_poll_website_html = requests.get('https://www.swagbucks.com/polls')
+            daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
+            daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
+            daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class': 'indivAnswerText'})
+            print("new question is old question, skipping")
+
+        await asyncio.sleep(5)
+        print('repeating loop')
 
 @client.event
 async def on_message(message):
