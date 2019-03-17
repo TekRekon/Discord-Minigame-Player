@@ -94,7 +94,7 @@ async def on_message(message):
         await client.delete_message(warn_message)
 
     if message.channel is bot_updates_channel:
-        if message.author is not client.user:
+        if message.author != client.user:
             await client.send_message(bot_updates_channel, BotUpdatesRole.mention)
 
 @client.event
