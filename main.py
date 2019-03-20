@@ -3,28 +3,30 @@ from discord.ext import commands
 import requests
 from bs4 import BeautifulSoup
 import asyncio
+from threading import Thread
 
 client = commands.Bot(command_prefix='.')
 
 @client.event
 async def on_ready():
+    await client.wait_until_ready()
     print("I am ready")
-    await printDailyPoll()
-    await carrouselStatus()
 
 class storage():
     prev_author = "something"
-    prev_question = "The final season of Game Of Thrones starts next month! Who do you want to end up on the Iron " \
-                    "Throne at the end?"
+    prev_question = "90210 has recently announced that a reboot is in the works. What other show would you want " \
+                    "to see remade?"
     statusNames = ['DM Otter Pup 2 partner', '!help to get started', 'CorruptReaktor.py', '100 Members!']
 
 async def carrouselStatus():
+    await client.wait_until_ready()
     while True:
         for x in storage.statusNames:
             await client.change_presence(game=discord.Game(name=x), status=None, afk=False)
             await asyncio.sleep(5)
 
 async def printDailyPoll():
+    client.wait_until_ready()
     daily_poll_answers = []
     test = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯']
     daily_poll_channel = client.get_channel('553760889778733073')
@@ -45,17 +47,14 @@ async def printDailyPoll():
             sent_message = await client.send_message(daily_poll_channel, embed=daily_poll_embed)
             for i in range(counter):
                 await client.add_reaction(sent_message, emoji=test[i])
-            print('new question is new question, excuting')
         elif daily_poll_question == storage.prev_question:
             daily_poll_channel = client.get_channel('553760889778733073')
             daily_poll_website_html = requests.get('https://www.swagbucks.com/polls')
             daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
             daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
             daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class': 'indivAnswerText'})
-            print("new question is old question, skipping")
 
         await asyncio.sleep(5)
-        print('repeating loop')
 
 @client.event
 async def on_message(message):
@@ -92,7 +91,7 @@ async def on_message(message):
                                                  + "to participate")
         await asyncio.sleep(5)
         await client.delete_message(warn_message)
-        
+
     if message.channel is bot_updates_channel:
         if message.author != client.user:
             await client.send_message(bot_updates_channel, BotUpdatesRole.mention)
@@ -118,6 +117,6 @@ async def on_member_update(x, y):
                                                            'Please use command !6 if you need to review the '
                                                            'requirements.' + x.mention)
 
-
-
+client.loop.create_task(carrouselStatus())
+client.loop.create_task(printDailyPoll())
 client.run("NTEzODMyNzk3NjM5NTQwNzM5.D12Yzw.dUzzYz2y5k886Azzll2QPqMLeiM")
