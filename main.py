@@ -14,8 +14,7 @@ async def on_ready():
 
 class storage():
     prev_author = "something"
-    prev_question = "90210 has recently announced that a reboot is in the works. What other show would you want " \
-                    "to see remade?"
+    prev_question = "What type of house plants do you have in your home?"
     statusNames = ['DM Otter Pup 2 partner', '!help to get started', 'CorruptReaktor.py', '100 Members!']
 
 async def carrouselStatus():
@@ -26,7 +25,7 @@ async def carrouselStatus():
             await asyncio.sleep(5)
 
 async def printDailyPoll():
-    client.wait_until_ready()
+    await client.wait_until_ready()
     daily_poll_answers = []
     test = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯']
     daily_poll_channel = client.get_channel('553760889778733073')
@@ -34,28 +33,27 @@ async def printDailyPoll():
     daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
     daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
     daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class': 'indivAnswerText'})
-    while not client.is_closed:
-        while True:
-            if daily_poll_question != storage.prev_question:
-                storage.prev_question = daily_poll_question
-                for x in daily_poll_answers_html:
-                    daily_poll_answers.append(x.text)
-                daily_poll_embed = discord.Embed(title=daily_poll_question, color=0xff0000)
-                counter = 0
-                for x in daily_poll_answers:
-                    daily_poll_embed.add_field(name='\u200b', value=test[counter] + ' ' + x, inline=False)
-                    counter += 1
-                sent_message = await client.send_message(daily_poll_channel, embed=daily_poll_embed)
-                for i in range(counter):
-                    await client.add_reaction(sent_message, emoji=test[i])
-            elif daily_poll_question == storage.prev_question:
-                daily_poll_channel = client.get_channel('553760889778733073')
-                daily_poll_website_html = requests.get('https://www.swagbucks.com/polls')
-                daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
-                daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
-                daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class': 'indivAnswerText'})
+    while True:
+        if daily_poll_question != storage.prev_question:
+            storage.prev_question = daily_poll_question
+            for x in daily_poll_answers_html:
+                daily_poll_answers.append(x.text)
+            daily_poll_embed = discord.Embed(title=daily_poll_question, color=0xff0000)
+            counter = 0
+            for x in daily_poll_answers:
+                daily_poll_embed.add_field(name='\u200b', value=test[counter] + ' ' + x, inline=False)
+                counter += 1
+            sent_message = await client.send_message(daily_poll_channel, embed=daily_poll_embed)
+            for i in range(counter):
+                await client.add_reaction(sent_message, emoji=test[i])
+        elif daily_poll_question == storage.prev_question:
+            daily_poll_channel = client.get_channel('553760889778733073')
+            daily_poll_website_html = requests.get('https://www.swagbucks.com/polls')
+            daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
+            daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
+            daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class': 'indivAnswerText'})
 
-            await asyncio.sleep(21600)
+        await asyncio.sleep(28800)
 
 @client.event
 async def on_message(message):
