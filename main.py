@@ -21,7 +21,7 @@ async def carrouselStatus():
     while True:
         for x in storage.statusNames:
             await client.change_presence(game=discord.Game(name=x), status=None, afk=False)
-            await asyncio.sleep(5)
+            await asyncio.sleep(43200)
 
 async def printDailyPoll():
     await client.wait_until_ready()
