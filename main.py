@@ -3,7 +3,6 @@ from discord.ext import commands
 import requests
 from bs4 import BeautifulSoup
 import asyncio
-from threading import Thread
 
 client = commands.Bot(command_prefix='.')
 
@@ -14,7 +13,7 @@ async def on_ready():
 
 class storage():
     prev_author = "something"
-    prev_question = "What type of house plants do you have in your home?"
+    prev_question = "Do you still keep in touch with people from high school?"
     statusNames = ['DM Otter Pup 2 partner', '!help to get started', 'CorruptReaktor.py', '100 Members!']
 
 async def carrouselStatus():
@@ -33,8 +32,10 @@ async def printDailyPoll():
     daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
     daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
     daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class': 'indivAnswerText'})
+    await client.wait_until_ready()
     while True:
         if daily_poll_question != storage.prev_question:
+            print("it is new question, running...")
             storage.prev_question = daily_poll_question
             for x in daily_poll_answers_html:
                 daily_poll_answers.append(x.text)
@@ -46,14 +47,10 @@ async def printDailyPoll():
             sent_message = await client.send_message(daily_poll_channel, embed=daily_poll_embed)
             for i in range(counter):
                 await client.add_reaction(sent_message, emoji=test[i])
-        elif daily_poll_question == storage.prev_question:
-            daily_poll_channel = client.get_channel('553760889778733073')
-            daily_poll_website_html = requests.get('https://www.swagbucks.com/polls')
-            daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
-            daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
-            daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class': 'indivAnswerText'})
+        else:
+            print("old quesiton, skipping...")
 
-        await asyncio.sleep(28800)
+        await asyncio.sleep(5)
 
 @client.event
 async def on_message(message):
@@ -61,6 +58,7 @@ async def on_message(message):
     one_word_story_channel = discord.utils.get(message.server.channels, name="1  word  story")
     daily_poll_channel = client.get_channel('553760889778733073')
     BotUpdatesRole = discord.utils.get(message.server.roles, name="BotNotifs")
+    await client.wait_until_ready()
     try:
         if message.channel != daily_poll_channel:
             if message.author != client.user:
@@ -107,14 +105,13 @@ async def on_member_update(x, y):
     new_role_list = y.roles
     old_role_list = x.roles
 
+
     if Moderator in new_role_list:
-        await client.add_roles(y, DJ, GameNotifs, GetsAds, GetsNotifs, BotUpdatesRole)
-    if Moderator in old_role_list:
-        if not DJ in new_role_list or not GetsNotifs in new_role_list or not GetsAds in new_role_list \
-                or not GameNotifs in new_role_list or not BotUpdatesRole in new_role_list:
-            await client.send_message(bot_reports, content='Sorry, but Moderators are required to to have this role. '
-                                                           'Please use command !6 if you need to review the '
-                                                           'requirements.' + x.mention)
+        print('mod removed required role, adding roles...')
+        if DJ not in new_role_list or GetsNotifs not in new_role_list or GameNotifs not in new_role_list or BotUpdatesRole not in new_role_list:
+                await client.add_roles(x, DJ, GetsAds, GetsNotifs, GameNotifs, BotUpdatesRole)
+                await client.send_message(bot_reports, content='WARNING ' + x.mention + ': Moderators are required to have that role')
+
 
 client.loop.create_task(carrouselStatus())
 client.loop.create_task(printDailyPoll())
