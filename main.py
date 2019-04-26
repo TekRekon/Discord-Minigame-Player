@@ -13,7 +13,7 @@ async def on_ready():
 
 class storage():
     prev_author = "something"
-    prev_question = "Do you still keep in touch with people from high school?"
+    prev_question = "When ordering a soft pretzel, do you prefer salted or unsalted?"
     statusNames = ['DM Otter Pup 2 partner', '!help to get started', 'CorruptReaktor.py', '100 Members!']
 
 async def carrouselStatus():
