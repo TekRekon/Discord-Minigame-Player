@@ -64,9 +64,10 @@ async def on_message(message):
     BotUpdatesRole = discord.utils.get(message.server.roles, name="BotNotifs")
     await client.wait_until_ready()
     try:
-        if message.channel != daily_poll_channel:
-            if message.author != client.user:
-                await client.add_reaction(message, emoji="⭐")
+        if message.server.id == '477829362771689484':
+            if message.channel != daily_poll_channel:
+                if message.author != client.user:
+                    await client.add_reaction(message, emoji="⭐")
 
         if ' ' in message.content:
             if message.channel is one_word_story_channel:
