@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="66" column="25" selection-start-line="66" selection-start-column="25" selection-end-line="66" selection-end-column="25" />
+            <state relative-caret-position="-153">
+              <caret line="15" column="84" selection-start-line="15" selection-start-column="84" selection-end-line="15" selection-end-column="84" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -169,20 +168,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00001" summary="code cleanup">
-      <created>1551650575538</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1551650575538</updated>
-    </task>
-    <task id="LOCAL-00002" summary="code cleanup">
-      <created>1551651629125</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1551651629126</updated>
     </task>
     <task id="LOCAL-00003" summary="code cleanup">
       <created>1551653507731</created>
@@ -513,7 +498,21 @@
       <option name="project" value="LOCAL" />
       <updated>1556289861430</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Star appends only in certain servers">
+      <created>1556290854685</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1556290854685</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Small spelling fix">
+      <created>1556290903986</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1556290903986</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -560,8 +559,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="fix delete_message bug" />
-    <MESSAGE value="bot testing" />
     <MESSAGE value="fi bot infinite loop" />
     <MESSAGE value="delete messages in #1word story# that are repetitive" />
     <MESSAGE value="add daily_poll cog" />
@@ -585,7 +582,9 @@
     <MESSAGE value="Remove log spam for role_updates" />
     <MESSAGE value="Make code more efficient" />
     <MESSAGE value="Modify code to merge with 2 servers" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modify code to merge with 2 servers" />
+    <MESSAGE value="Star appends only in certain servers" />
+    <MESSAGE value="Small spelling fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Small spelling fix" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/secret.txt" />
@@ -613,8 +612,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="66" column="25" selection-start-line="66" selection-start-column="25" selection-end-line="66" selection-end-column="25" />
+        <state relative-caret-position="-153">
+          <caret line="15" column="84" selection-start-line="15" selection-start-column="84" selection-end-line="15" selection-end-column="84" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>

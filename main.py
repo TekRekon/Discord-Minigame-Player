@@ -29,6 +29,7 @@ async def printDailyPoll():
     test = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯']
     daily_poll_channel = client.get_channel('553760889778733073')
     daily_poll_channel_2 = client.get_channel('571341878570647553')
+    daily_poll_channel_3 = client.get_channel('595434072889884703')
     daily_poll_website_html = requests.get('https://www.swagbucks.com/polls')
     daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
     daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
@@ -51,6 +52,9 @@ async def printDailyPoll():
             sent_message_2 = await client.send_message(daily_poll_channel_2, embed=daily_poll_embed)
             for i in range(counter):
                 await client.add_reaction(sent_message_2, emoji=test[i])
+            sent_message_3 = await client.send_message(daily_poll_channel_3, embed=daily_poll_embed)
+            for i in range(counter):
+                await client.add_reaction(sent_message_3, emoji=test[i])
         else:
             print("old quesiton, skipping...")
 
