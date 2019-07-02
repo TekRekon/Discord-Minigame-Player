@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,8 +20,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-153">
-              <caret line="15" column="84" selection-start-line="15" selection-start-column="84" selection-end-line="15" selection-end-column="84" />
+            <state relative-caret-position="357">
+              <caret line="114" column="56" selection-start-line="114" selection-start-column="56" selection-end-line="114" selection-end-column="56" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -168,20 +169,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00003" summary="code cleanup">
-      <created>1551653507731</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1551653507731</updated>
-    </task>
-    <task id="LOCAL-00004" summary="code cleanup">
-      <created>1551654018396</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1551654018396</updated>
     </task>
     <task id="LOCAL-00005" summary="code cleanup">
       <created>1551654092951</created>
@@ -512,7 +499,21 @@
       <option name="project" value="LOCAL" />
       <updated>1556290903986</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Add daily poll to other server">
+      <created>1562033345338</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1562033345340</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Integrations with another server added">
+      <created>1562034195035</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1562034195036</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -524,14 +525,14 @@
       <window_info id="Favorites" order="2" sideWeight="0.5005192" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4852941" visible="true" weight="0.2990654" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4956427" weight="0.39875388" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4842048" visible="true" weight="0.2990654" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49509802" weight="0.39875388" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49673203" weight="0.32606438" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info active="true" anchor="bottom" id="Event Log" order="9" sideWeight="0.5147059" side_tool="true" visible="true" weight="0.2990654" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.51579523" side_tool="true" visible="true" weight="0.2990654" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -559,8 +560,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="fi bot infinite loop" />
-    <MESSAGE value="delete messages in #1word story# that are repetitive" />
     <MESSAGE value="add daily_poll cog" />
     <MESSAGE value="Testing 123" />
     <MESSAGE value="Fix one word story deleting mechanism" />
@@ -584,7 +583,9 @@
     <MESSAGE value="Modify code to merge with 2 servers" />
     <MESSAGE value="Star appends only in certain servers" />
     <MESSAGE value="Small spelling fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Small spelling fix" />
+    <MESSAGE value="Add daily poll to other server" />
+    <MESSAGE value="Integrations with another server added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Integrations with another server added" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/secret.txt" />
@@ -610,20 +611,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-153">
-          <caret line="15" column="84" selection-start-line="15" selection-start-column="84" selection-end-line="15" selection-end-column="84" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="114" column="56" selection-start-line="114" selection-start-column="56" selection-end-line="114" selection-end-column="56" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
