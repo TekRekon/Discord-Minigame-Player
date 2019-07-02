@@ -14,7 +14,7 @@ async def on_ready():
 class storage():
     prev_author = "something"
     prev_question = "When ordering a soft pretzel, do you prefer salted or unsalted?"
-    statusNames = ['DM Otter Pup 2 partner', '!help to get started', 'CorruptReaktor.py', '100 Members!']
+    statusNames = ['Welcome', 'Made By TekRekon', 'CorruptReaktor.py', 'Stop Procrastinating']
 
 async def carrouselStatus():
     await client.wait_until_ready()
@@ -63,7 +63,7 @@ async def printDailyPoll():
 @client.event
 async def on_message(message):
     bot_updates_channel = discord.utils.get(message.server.channels, name='bot_updates')
-    one_word_story_channel = discord.utils.get(message.server.channels, name="1  word  story")
+    one_word_story_channel = discord.utils.get(message.server.channels, name="1_ word _story")
     daily_poll_channel = client.get_channel('553760889778733073')
     BotUpdatesRole = discord.utils.get(message.server.roles, name="BotNotifs")
     await client.wait_until_ready()
