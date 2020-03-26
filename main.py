@@ -1,150 +1,128 @@
+import asyncio
 import discord
-from discord.ext import commands
 import requests
 from bs4 import BeautifulSoup
-import asyncio
+from discord.ext import commands
 
 client = commands.Bot(command_prefix='.')
 
-@client.event
-async def on_ready():
-    await client.wait_until_ready()
-    print("I am ready")
 
-class storage():
-    prev_author = "something"
-    prev_question = "When ordering a soft pretzel, do you prefer salted or unsalted?"
-    statusNames = ['Welcome', 'Made By TekRekon', 'CorruptReaktor.py', 'Stop Procrastinating']
+class S:
+    guild = client.get_guild(477829362771689484)
 
-async def carrouselStatus():
-    await client.wait_until_ready()
+    djRole = guild.get_role(490183595386863636)
+    getsAdsRole = guild.get_role(515548066871246888)
+    getsNotifsRole = guild.get_role(511316628013580309)
+    gameNotifsRole = guild.get_role(513767484571254816)
+    botNotifsRole = guild.get_role(556277198361722900)
+    moderatorRole = guild.get_role(488756415738150922)
+    extraCategoryRole = guild.get_role(513535344449159188)
+    levelCategoryRole = guild.get_role(513535057110106134)
+    profileCategoryRole = guild.get_role(513536050434539540)
+    modRequiredRoles = [djRole, getsAdsRole, getsNotifsRole, gameNotifsRole, botNotifsRole, profileCategoryRole,
+                        levelCategoryRole, extraCategoryRole]
+    memberRequiredRoles = [levelCategoryRole, profileCategoryRole, extraCategoryRole]
+
+    dailyPollChannel = client.get_channel(553760889778733073)
+    botUpdatesChannel = client.get_channel(554807470288011264)
+    oneWordStoryChannel = client.get_channel(552130564031774760)
+    botReportsChannel = client.get_channel(488726201607782421)
+    frontDeskChannel = client.get_channel(488745422773551107)
+
+    prevAuthor = "something"
+    prevQuestion = "When ordering a soft pretzel, do you prefer salted or unsalted?"
+    statusNames = ['Made By TekRekon', 'CorruptReaktor.py']
+    pollButtons = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯']
+
+
+async def carousel_status():
     while True:
-        for x in storage.statusNames:
-            await client.change_presence(game=discord.Game(name=x), status=None, afk=False)
+        for x in S.statusNames:
+            await client.change_presence(status=discord.Status.online, activity=discord.Game(x), afk=False)
             await asyncio.sleep(3)
 
-async def printDailyPoll():
-    await client.wait_until_ready()
+
+async def print_daily_poll():
     daily_poll_answers = []
-    test = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯']
-    daily_poll_channel = client.get_channel('553760889778733073')
-    daily_poll_channel_2 = client.get_channel('571341878570647553')
-    daily_poll_channel_3 = client.get_channel('595434072889884703')
     daily_poll_website_html = requests.get('https://www.swagbucks.com/polls')
-    daily_poll_huge_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
-    daily_poll_question = daily_poll_huge_string.find('span', attrs={'class': 'pollQuestion'}).text
-    daily_poll_answers_html = daily_poll_huge_string.find_all('td', attrs={'class': 'indivAnswerText'})
-    await client.wait_until_ready()
+    daily_poll_website_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
+    daily_poll_question = daily_poll_website_string.find('span', attrs={'class': 'pollQuestion'})  # .text removed
+    daily_poll_answers_html = daily_poll_website_string.find_all('td', attrs={'class': 'indivAnswerText'})
     while True:
-        if daily_poll_question != storage.prev_question:
-            print("it is new question, running...")
-            storage.prev_question = daily_poll_question
+        if daily_poll_question != S.prevQuestion:
+            S.prevQuestion = daily_poll_question
             for x in daily_poll_answers_html:
                 daily_poll_answers.append(x.text)
             daily_poll_embed = discord.Embed(title=daily_poll_question, color=0xff0000)
             counter = 0
             for x in daily_poll_answers:
-                daily_poll_embed.add_field(name='\u200b', value=test[counter] + ' ' + x, inline=False)
+                daily_poll_embed.add_field(name='\u200b', value=S.pollButtons[counter] + ' ' + x, inline=False)
                 counter += 1
-            sent_message = await client.send_message(daily_poll_channel, embed=daily_poll_embed)
+            sent_message = await S.dailyPollChannel.send_message(embed=daily_poll_embed)
             for i in range(counter):
-                await client.add_reaction(sent_message, emoji=test[i])
-            sent_message_2 = await client.send_message(daily_poll_channel_2, embed=daily_poll_embed)
-            for i in range(counter):
-                await client.add_reaction(sent_message_2, emoji=test[i])
-            sent_message_3 = await client.send_message(daily_poll_channel_3, embed=daily_poll_embed)
-            for i in range(counter):
-                await client.add_reaction(sent_message_3, emoji=test[i])
-        else:
-            print("old quesiton, skipping...")
+                await sent_message.add_reaction(emoji=S.pollButtons[i])
+        await asyncio.sleep(100)
 
-        await asyncio.sleep(5)
 
 @client.event
 async def on_message(message):
-    print('recognize message')
-    bot_updates_channel = discord.utils.get(message.server.channels, name='bot_updates')
-    exmaple_one_word_story_channel = discord.utils.get(message.server.channels, name="1_ word _story")
-    one_word_story_channel = client.get_channel('552130564031774760')
-    one_word_story_channel_2 = client.get_channel('595438539135647751')
-    daily_poll_channel = client.get_channel('553760889778733073')
-    BotUpdatesRole = discord.utils.get(message.server.roles, name="BotNotifs")
-    await client.wait_until_ready()
+    author = message.author
+    channel = message.channel
+    content = message.content
     try:
-        if message.server.id == '477829362771689484':
-            if message.channel != daily_poll_channel:
-                if message.author != client.user:
-                    await client.add_reaction(message, emoji="⭐")
+        # One Word Story Channel Manager
+        if ' ' in content or author is S.prevAuthor:
+            if channel is S.oneWordStoryChannel:
+                if author != client.user:
+                    await message.delete_message()
+                    warn_message = await channel.send_message("You may only type ONE word after another person has gone"
+                                                              + author.mention)
+                    await warn_message.delete_message(2.0)
 
-        if ' ' in message.content:
-            if message.channel is one_word_story_channel_2:
-                if message.author != client.user:
-                    await client.delete_message(message=message)
-                    my_message = await client.send_message(message.channel, "You may only type one word"
-                                                           + message.author.mention)
-                    await asyncio.sleep(2)
-                    await client.delete_message(message=my_message)
-            if message.channel is one_word_story_channel:
-                if message.author != client.user:
-                    await client.delete_message(message=message)
-                    my_message = await client.send_message(message.channel, "You may only type one word"
-                                                           + message.author.mention)
-                    await asyncio.sleep(2)
-                    await client.delete_message(message=my_message)
-        elif message.author is storage.prev_author:
-            print('message from prev author')
-            if message.channel is one_word_story_channel_2:
-                print('message in story channel')
-                if message.author != client.user:
-                    await client.delete_message(message=message)
-                    my_message = await client.send_message(message.channel, "You may only type after another person"
-                                                           + message.author.mention)
-                    await asyncio.sleep(2)
-                    await client.delete_message(message=my_message)
+        elif channel is S.oneWordStoryChannel:
+            S.prevAuthor = author
 
-            if message.channel is one_word_story_channel:
-                print('message in story channel')
-                if message.author != client.user:
-                    await client.delete_message(message=message)
-                    my_message = await client.send_message(message.channel, "You may only type after another person"
-                                                           + message.author.mention)
-                    await asyncio.sleep(2)
-                    await client.delete_message(message=my_message)
-        elif message.channel is one_word_story_channel:
-            storage.prev_author = message.author
-        elif message.channel is one_word_story_channel_2:
-            storage.prev_author = message.author
+        # Bot Auto Star Reaction
+        if channel != S.dailyPollChannel and channel != S.botUpdatesChannel:
+            if author != client.user:
+                await message.add_reaction(emoji="⭐")
+
+    # Catch + Handle Error If User Blocked Bot
     except discord.errors.Forbidden:
-        await client.delete_message(message=message)
-        warn_message = await client.send_message(message.channel, "Please unblock " + client.user.mention
-                                                 + "to participate")
-        await asyncio.sleep(5)
-        await client.delete_message(warn_message)
+        await message.delete_message()
+        warn_message = await S.oneWordStoryChannel.send_message("Please unblock " + client.user.mention
+                                                                + " to participate " + author.mention)
+        await warn_message.delete_message(5.0)
 
-    if message.channel is bot_updates_channel:
-        if message.author != client.user:
-            await client.send_message(bot_updates_channel, BotUpdatesRole.mention)
+    # Bot Update Channel Mentioning
+    if channel is S.botUpdatesChannel:
+        if author != client.user:
+            await S.botUpdatesChannel.send_message(S.botNotifsRole.mention)
+
 
 @client.event
-async def on_member_update(x, y):
-    DJ = discord.utils.get(y.server.roles, name='DJ')
-    GetsAds = discord.utils.get(y.server.roles, name='GetsAds')
-    GetsNotifs = discord.utils.get(y.server.roles, name='GetsNotifs')
-    GameNotifs = discord.utils.get(y.server.roles, name='GameNotifs')
-    Moderator = discord.utils.get(y.server.roles, name='Moderator')
-    bot_reports = discord.utils.get(x.server.channels, name = 'bot  reports')
-    BotUpdatesRole = discord.utils.get(x.server.roles, name="BotNotifs")
-    new_role_list = y.roles
-    old_role_list = x.roles
+async def on_member_update(old_member, new_member):
+    # Enforce Member-Required Roles
+    if old_member.roles.sort() != new_member.roles.sort():
+        for role in S.memberRequiredRoles:
+            if role not in new_member.roles:
+                await new_member.add_roles(role)
+                await S.botReportsChannel.send_message(content='WARNING ' + new_member.mention
+                                                               + ": " + role.name + ' is a REQUIRED role')
+
+    # Enforce Mod-Required Roles
+    if S.moderatorRole in new_member.roles:
+        for role in S.modRequiredRoles:
+            if role not in new_member.roles:
+                await new_member.add_roles(role)
+                await S.botReportsChannel.send_message(content='WARNING ' + new_member.mention
+                                                               + ': Moderators are required to have the ' + role.name
+                                                               + ' role')
 
 
-    if Moderator in new_role_list:
-        print('mod removed required role, adding roles...')
-        if DJ not in new_role_list or GetsNotifs not in new_role_list or GameNotifs not in new_role_list or BotUpdatesRole not in new_role_list:
-                await client.add_roles(x, DJ, GetsAds, GetsNotifs, GameNotifs, BotUpdatesRole)
-                await client.send_message(bot_reports, content='WARNING ' + x.mention + ': Moderators are required to have that role')
-
-
-client.loop.create_task(carrouselStatus())
-client.loop.create_task(printDailyPoll())
-client.run("NTEzODMyNzk3NjM5NTQwNzM5.D12Yzw.dUzzYz2y5k886Azzll2QPqMLeiM")
+@client.event
+async def on_ready():
+    await client.wait_until_ready()
+    client.loop.create_task(carousel_status())
+    client.loop.create_task(print_daily_poll())
+    client.run("NTEzODMyNzk3NjM5NTQwNzM5.D12Yzw.dUzzYz2y5k886Azzll2QPqMLeiM")
