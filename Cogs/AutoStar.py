@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 
 # Note: to get the emoji id, use \:emoji_name: in discord #
 
@@ -22,7 +23,12 @@ class AutoStar(commands.Cog):
         if channel != AutoStar.dailyPollChannel and channel != AutoStar.botUpdatesChannel \
                 and channel != AutoStar.countChannel and channel != AutoStar.starboardChannel:
             if message.author != self.bot.user:
-                await message.add_reaction(emoji="⭐")
+                if not message.content.startswith('.'):
+                    try:
+                        await message.add_reaction(emoji="⭐")
+                    except discord.errors.NotFound:
+                        print('passed')
+                        pass
 
 
 def setup(bot):
