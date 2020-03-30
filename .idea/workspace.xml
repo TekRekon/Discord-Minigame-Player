@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment=".embed">
+    <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/AutoFormatNewGit.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/AutoFormatNewGit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/AutoStar.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/AutoStar.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cogs/OnDemandEmbed.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/OnDemandEmbed.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/OneWordStoryEnforcer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/OneWordStoryEnforcer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -115,13 +116,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00015" summary="fi bot infinite loop">
-      <created>1551998741799</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1551998741799</updated>
     </task>
     <task id="LOCAL-00016" summary="fi bot infinite loop">
       <created>1551999067887</created>
@@ -459,7 +453,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585535004592</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="Fix auto git message formatting">
+      <created>1585536800787</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1585536800788</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -477,7 +478,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Add optional ping for code updates" />
     <MESSAGE value="fix bot_update pings" />
     <MESSAGE value="Fix daily_poll AGAIN" />
     <MESSAGE value="Hopefully fix bot update pings" />
@@ -502,6 +502,7 @@
     <MESSAGE value=".embed command finished" />
     <MESSAGE value="Free all cogs" />
     <MESSAGE value=".embed fix for consistency" />
-    <option name="LAST_COMMIT_MESSAGE" value=".embed fix for consistency" />
+    <MESSAGE value="Fix auto git message formatting" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix auto git message formatting" />
   </component>
 </project>

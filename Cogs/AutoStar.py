@@ -27,7 +27,6 @@ class AutoStar(commands.Cog):
                     try:
                         await message.add_reaction(emoji="⭐")
                     except discord.errors.NotFound:
-                        print('passed')
                         pass
 
 

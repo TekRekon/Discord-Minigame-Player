@@ -4,6 +4,7 @@ import asyncio
 
 
 class OnDemandEmbed(commands.Cog):
+    oneWordStoryChannel = None
     userTekRekon = None
     guild = None
     title = ''
@@ -14,15 +15,17 @@ class OnDemandEmbed(commands.Cog):
     user_embed = discord.Embed(color=color)
     example_embed = discord.Embed(color=color)
     footer = 'Enter 4 to change the Footer'
+    stage = ""
 
     def __init__(self, bot):
         self.bot = bot
         OnDemandEmbed.guild = self.bot.get_guild(477829362771689484)
         OnDemandEmbed.userTekRekon = OnDemandEmbed.guild.get_member(285879705989677058)
+        OnDemandEmbed.oneWordStoryChannel = self.bot.get_channel(552130564031774760)
 
     @commands.command()
     async def embed(self, ctx):
-        if ctx.author != self.bot.user:
+        if ctx.author != self.bot.user and ctx.message.channel != OnDemandEmbed.oneWordStoryChannel:
             OnDemandEmbed.thumbnail = 'https://cdn.discordapp.com/attachments/549334435737239566/693915786665787583/' \
                                       'Annotation_2020-03-29_153201.png'
             OnDemandEmbed.user_embed = discord.Embed(color=OnDemandEmbed.color)
@@ -30,7 +33,8 @@ class OnDemandEmbed(commands.Cog):
             OnDemandEmbed.footer = 'Enter 4 to change the Footer'
             try:
                 def check(message):
-                    return message.author == ctx.author and len(message.content) > 0
+                    return message.author == ctx.author and len(message.content) > 0 \
+                           and message.channel == ctx.message.channel
 
                 def generate_example_embed():
                     if OnDemandEmbed.title == 'None' and OnDemandEmbed.description == 'None':
@@ -58,6 +62,7 @@ class OnDemandEmbed(commands.Cog):
                     OnDemandEmbed.example_embed.set_thumbnail(url=OnDemandEmbed.thumbnail)
                     OnDemandEmbed.example_embed.set_footer(text=OnDemandEmbed.footer)
 
+                OnDemandEmbed.stage = 'init'
                 await ctx.message.delete()
                 prompt = await ctx.send(embed=discord.Embed(description=ctx.author.mention + 'Enter a Title or None',
                                                             color=OnDemandEmbed.color))
@@ -77,6 +82,7 @@ class OnDemandEmbed(commands.Cog):
                 generate_example_embed()
 
                 working = True
+                OnDemandEmbed.stage = 'working'
                 while working:
                     sent_example_embed = await ctx.send(embed=OnDemandEmbed.example_embed)
                     input_num = await self.bot.wait_for('message', timeout=60.0, check=check)
@@ -97,7 +103,7 @@ class OnDemandEmbed(commands.Cog):
                         await sent_example_embed.delete()
                         await input_num.delete()
                         prompt = await ctx.send(embed=discord.Embed(description=ctx.author.mention
-                                                                    + ' Enter a valid Thumbnail URL',
+                                                                                + ' Enter a valid Thumbnail URL',
                                                                     color=OnDemandEmbed.color))
                         input_url = await self.bot.wait_for('message', timeout=60.0, check=check)
                         OnDemandEmbed.thumbnail = input_url.content
@@ -116,19 +122,22 @@ class OnDemandEmbed(commands.Cog):
                     elif input_num.content == 'Cancel' or input_num == 'cancel':
                         await sent_example_embed.delete()
                         await input_num.delete()
-                        cancel_msg = ctx.send(embed=discord.Embed(description=ctx.author.mention
-                                                                  + ' Operation cancelled', color=OnDemandEmbed.color))
+                        cancel_msg = await ctx.send(embed=discord.Embed(description=ctx.author.mention
+                                                                        + ' Operation cancelled', color=OnDemandEmbed.color))
                         cancel_msg.delete(delay=10)
                     else:
                         await input_num.delete()
                         cancel_msg = ctx.send(embed=discord.Embed(description=ctx.author.mention + ' Valid input '
-                                                                  'please', color=OnDemandEmbed.color))
+                                                                                                   'please',
+                                                                  color=OnDemandEmbed.color))
                         cancel_msg.delete(delay=3)
 
             except asyncio.TimeoutError:
                 embed_warn = discord.Embed(description=ctx.author.mention + ' Operation timed out', color=0xff0000)
-                await sent_example_embed.delete()
-                await prompt.delete()
+                if OnDemandEmbed.stage == 'init':
+                    await prompt.delete()
+                elif OnDemandEmbed.stage == 'working':
+                    await sent_example_embed.delete()
                 warn_cache = await ctx.send(embed=embed_warn)
                 await warn_cache.delete(delay=60)
 
