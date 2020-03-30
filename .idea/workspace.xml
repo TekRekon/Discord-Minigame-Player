@@ -4,9 +4,7 @@
     <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cogs/AutoFormatNewGit.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/AutoFormatNewGit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/AutoStar.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/AutoStar.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cogs/OnDemandEmbed.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/OnDemandEmbed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -117,20 +115,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00012" summary="clean one word story code">
-      <created>1551996426242</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1551996426242</updated>
-    </task>
-    <task id="LOCAL-00013" summary="fix delete_message bug">
-      <created>1551996847788</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1551996847788</updated>
     </task>
     <task id="LOCAL-00014" summary="bot testing">
       <created>1551998382168</created>
@@ -461,7 +445,21 @@
       <option name="project" value="LOCAL" />
       <updated>1585464121359</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary=".embed command finished">
+      <created>1585519341115</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1585519341116</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Free all cogs">
+      <created>1585519459402</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1585519459402</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -479,8 +477,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Improve daily_poll question timing" />
-    <MESSAGE value="Bot status carousel for quick info" />
     <MESSAGE value="Only react with ⭐ to messages" />
     <MESSAGE value="Add optional ping for code updates" />
     <MESSAGE value="fix bot_update pings" />
@@ -504,6 +500,8 @@
     <MESSAGE value="Organized all code into cogs" />
     <MESSAGE value="Actually COMMIT the cogs this time" />
     <MESSAGE value="added '.create_embed' command" />
-    <option name="LAST_COMMIT_MESSAGE" value="added '.create_embed' command" />
+    <MESSAGE value=".embed command finished" />
+    <MESSAGE value="Free all cogs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Free all cogs" />
   </component>
 </project>

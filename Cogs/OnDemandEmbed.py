@@ -36,6 +36,13 @@ class OnDemandEmbed(commands.Cog):
                     if OnDemandEmbed.title == 'None' and OnDemandEmbed.description == 'None':
                         OnDemandEmbed.example_embed = discord.Embed(color=OnDemandEmbed.color)
                         OnDemandEmbed.user_embed = discord.Embed(color=OnDemandEmbed.color)
+                    elif OnDemandEmbed.title is not None and OnDemandEmbed.description is not None:
+                        OnDemandEmbed.example_embed = discord.Embed(title=OnDemandEmbed.title,
+                                                                    description=OnDemandEmbed.description,
+                                                                    color=OnDemandEmbed.color)
+                        OnDemandEmbed.user_embed = discord.Embed(title=OnDemandEmbed.title,
+                                                                 description=OnDemandEmbed.description,
+                                                                 color=OnDemandEmbed.color)
                     elif OnDemandEmbed.title == 'None':
                         OnDemandEmbed.example_embed = discord.Embed(description=OnDemandEmbed.description,
                                                                     color=OnDemandEmbed.color)
@@ -45,13 +52,7 @@ class OnDemandEmbed(commands.Cog):
                         OnDemandEmbed.example_embed = discord.Embed(title=OnDemandEmbed.title,
                                                                     color=OnDemandEmbed.color)
                         OnDemandEmbed.user_embed = discord.Embed(title=OnDemandEmbed.title, color=OnDemandEmbed.color)
-                    else:
-                        OnDemandEmbed.example_embed = discord.Embed(title=OnDemandEmbed.title,
-                                                                    description=OnDemandEmbed.description,
-                                                                    color=OnDemandEmbed.color)
-                        OnDemandEmbed.user_embed = discord.Embed(title=OnDemandEmbed.title,
-                                                                 description=OnDemandEmbed.description,
-                                                                 color=OnDemandEmbed.color)
+
                     OnDemandEmbed.example_embed.set_author(name='Type done to finish or Cancel to exit',
                                                            icon_url=ctx.author.avatar_url)
                     OnDemandEmbed.example_embed.set_thumbnail(url=OnDemandEmbed.thumbnail)
@@ -66,14 +67,14 @@ class OnDemandEmbed(commands.Cog):
                 await prompt.delete()
 
                 prompt = await ctx.send(embed=discord.Embed(description=ctx.author.mention + ' Enter a Description or '
-                                                            'None', color=OnDemandEmbed.color))
+                                                                                             'None',
+                                                            color=OnDemandEmbed.color))
                 description = await self.bot.wait_for('message', timeout=60.0, check=check)
                 OnDemandEmbed.description = description.content
                 await  description.delete()
                 await prompt.delete()
 
                 generate_example_embed()
-
 
                 working = True
                 while working:
@@ -82,7 +83,8 @@ class OnDemandEmbed(commands.Cog):
                     if input_num.content == '4':
                         await sent_example_embed.delete()
                         await input_num.delete()
-                        prompt = await ctx.send(embed=discord.Embed(description=ctx.author.mention + ' Enter a Footer', color=OnDemandEmbed.color))
+                        prompt = await ctx.send(embed=discord.Embed(description=ctx.author.mention + ' Enter a Footer',
+                                                                    color=OnDemandEmbed.color))
                         input_footer = await self.bot.wait_for('message', timeout=60.0, check=check)
                         OnDemandEmbed.footer = input_footer.content
                         if OnDemandEmbed.footer != 'None':
@@ -94,7 +96,9 @@ class OnDemandEmbed(commands.Cog):
                     elif input_num.content == '3':
                         await sent_example_embed.delete()
                         await input_num.delete()
-                        prompt = await ctx.send(embed=discord.Embed(description=ctx.author.mention + ' Enter a valid Thumbnail URL', color=OnDemandEmbed.color))
+                        prompt = await ctx.send(embed=discord.Embed(description=ctx.author.mention
+                                                                    + ' Enter a valid Thumbnail URL',
+                                                                    color=OnDemandEmbed.color))
                         input_url = await self.bot.wait_for('message', timeout=60.0, check=check)
                         OnDemandEmbed.thumbnail = input_url.content
                         if OnDemandEmbed.thumbnail != 'None':
