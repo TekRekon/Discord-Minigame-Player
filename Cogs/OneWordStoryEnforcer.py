@@ -16,15 +16,20 @@ class OneWordStoryEnforcer(commands.Cog):
         channel = message.channel
         content = message.content
         try:
-            if channel == OneWordStoryEnforcer.oneWordStoryChannel:
-                if ' ' in content or author == OneWordStoryEnforcer.prevAuthor:
-                    if author != self.bot.user:
-                        await message.delete()
-                        warn_message = await channel.send("You may only type ONE word after another person has gone"
-                                                          + author.mention)
-                        await warn_message.delete(delay=2)
-                else:
-                    OneWordStoryEnforcer.prevAuthor = author
+            if message.channel != '.embed':
+                if channel == OneWordStoryEnforcer.oneWordStoryChannel:
+                    if ' ' in content or author == OneWordStoryEnforcer.prevAuthor:
+                        if author != self.bot.user:
+                            await message.delete()
+                            warn_message = await channel.send("You may only type ONE word after another person has gone"
+                                                              + author.mention)
+                            await warn_message.delete(delay=2)
+                    else:
+                        if author != self.bot.user:
+                            OneWordStoryEnforcer.prevAuthor = author
+                            await message.delete()
+                            await channel.send(embed=discord.Embed(description=author.mention + ' ' + content,
+                                                                   color=0xff0000))
 
         # Catch + Handle Error If User Blocked Bot based off of ability to mention
         except discord.errors.Forbidden:
