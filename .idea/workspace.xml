@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
+    <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment=".embed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cogs/AutoFormatNewGit.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/AutoFormatNewGit.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cogs/OnDemandEmbed.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/OnDemandEmbed.py" afterDir="false" />
@@ -115,13 +115,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00014" summary="bot testing">
-      <created>1551998382168</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1551998382168</updated>
     </task>
     <task id="LOCAL-00015" summary="fi bot infinite loop">
       <created>1551998741799</created>
@@ -459,7 +452,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585519459402</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary=".embed fix for consistency">
+      <created>1585535004591</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1585535004592</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -477,7 +477,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Only react with ⭐ to messages" />
     <MESSAGE value="Add optional ping for code updates" />
     <MESSAGE value="fix bot_update pings" />
     <MESSAGE value="Fix daily_poll AGAIN" />
@@ -502,6 +501,7 @@
     <MESSAGE value="added '.create_embed' command" />
     <MESSAGE value=".embed command finished" />
     <MESSAGE value="Free all cogs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Free all cogs" />
+    <MESSAGE value=".embed fix for consistency" />
+    <option name="LAST_COMMIT_MESSAGE" value=".embed fix for consistency" />
   </component>
 </project>
