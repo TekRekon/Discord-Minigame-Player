@@ -4,6 +4,7 @@ import asyncio
 import requests
 import discord
 import json
+import Jsontools
 
 
 class DailyPoll(commands.Cog):
@@ -24,12 +25,10 @@ class DailyPoll(commands.Cog):
         daily_poll_answers_html = daily_poll_website_string.find_all('td', attrs={'class': 'indivAnswerText'})
         with open('data.json', 'r') as f:
             data = json.load(f)
-        prevQuestion = data[str('prevQuestion')]
+        prevQuestion = data['constants']['prevQuestion']
         while True:
             if daily_poll_question != prevQuestion:
-                data[str('prevQuestion')] = daily_poll_question
-                with open('data.json', 'w') as f:
-                    json.dump(data, f)
+                Jsontools.changeData('constants', 'prevQuestion', daily_poll_question)
                 for x in daily_poll_answers_html:
                     daily_poll_answers.append(x.text)
                 daily_poll_embed = discord.Embed(title=daily_poll_question, color=0xff0000)
