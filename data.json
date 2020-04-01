@@ -1,0 +1,23 @@
+{
+    "Gaming GenBase": {
+        "noCommandChannels": [],
+        "mods": [
+            285879705989677058
+        ],
+        "prefix": ".",
+        "dailyPollChannel": 553760889778733073,
+        "guildID": 477829362771689484,
+        "countingChannel": 489513733652086785
+    },
+    "Bot Testing": {
+        "guildID": 694630261958115399,
+        "noCommandChannels": [],
+        "mods": [
+            285879705989677058
+        ],
+        "prefix": "+"
+    },
+    "constants": {
+        "prevQuestion": "How have you been getting food lately?"
+    }
+}

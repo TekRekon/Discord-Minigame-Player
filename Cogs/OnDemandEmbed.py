@@ -103,7 +103,7 @@ class OnDemandEmbed(commands.Cog):
                         await sent_example_embed.delete()
                         await input_num.delete()
                         prompt = await ctx.send(embed=discord.Embed(description=ctx.author.mention
-                                                                                + ' Enter a valid Thumbnail URL',
+                                                                    + ' Enter a valid Thumbnail URL',
                                                                     color=OnDemandEmbed.color))
                         input_url = await self.bot.wait_for('message', timeout=60.0, check=check)
                         OnDemandEmbed.thumbnail = input_url.content
@@ -123,14 +123,16 @@ class OnDemandEmbed(commands.Cog):
                         await sent_example_embed.delete()
                         await input_num.delete()
                         cancel_msg = await ctx.send(embed=discord.Embed(description=ctx.author.mention
-                                                                        + ' Operation cancelled', color=OnDemandEmbed.color))
-                        cancel_msg.delete(delay=10)
+                                                                        + ' Operation cancelled',
+                                                                        color=OnDemandEmbed.color))
+                        await cancel_msg.delete(delay=10)
+                        working = False
                     else:
                         await input_num.delete()
                         cancel_msg = ctx.send(embed=discord.Embed(description=ctx.author.mention + ' Valid input '
                                                                                                    'please',
                                                                   color=OnDemandEmbed.color))
-                        cancel_msg.delete(delay=3)
+                        await cancel_msg.delete(delay=3)
 
             except asyncio.TimeoutError:
                 embed_warn = discord.Embed(description=ctx.author.mention + ' Operation timed out', color=0xff0000)
@@ -139,7 +141,7 @@ class OnDemandEmbed(commands.Cog):
                 elif OnDemandEmbed.stage == 'working':
                     await sent_example_embed.delete()
                 warn_cache = await ctx.send(embed=embed_warn)
-                await warn_cache.delete(delay=60)
+                await warn_cache.delete(delay=20)
 
 
 def setup(bot):
