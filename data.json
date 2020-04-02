@@ -15,9 +15,9 @@
         "mods": [
             285879705989677058
         ],
-        "prefix": "+"
+        "prefix": "."
     },
     "constants": {
-        "prevQuestion": "How have you been getting food lately?"
+        "prevQuestion": "What is your favorite spread to put on toasted bread?"
     }
 }

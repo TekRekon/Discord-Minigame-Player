@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/DailyPoll.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/DailyPoll.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/ConfigBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/ConfigBot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jsontools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Jsontools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -114,13 +116,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00019" summary="fi bot infinite loop">
-      <created>1551999962232</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1551999962232</updated>
     </task>
     <task id="LOCAL-00020" summary="fi bot infinite loop">
       <created>1552000224558</created>
@@ -458,7 +453,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585720731937</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="Add json capabilities to dailyPoll, no more poll spam!">
+      <created>1585721163129</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1585721163129</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -476,7 +478,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Fix bot update pings" />
     <MESSAGE value="Test" />
     <MESSAGE value="Integrate multiple threads for bot multitasking" />
     <MESSAGE value="Increase daily poll dependability?" />
@@ -501,6 +502,7 @@
     <MESSAGE value="Can't use command in one_word_story channel" />
     <MESSAGE value="Bot re-enters input so editing won't work in one_word" />
     <MESSAGE value="Stage bot for commercial abilities" />
-    <option name="LAST_COMMIT_MESSAGE" value="Stage bot for commercial abilities" />
+    <MESSAGE value="Add json capabilities to dailyPoll, no more poll spam!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add json capabilities to dailyPoll, no more poll spam!" />
   </component>
 </project>
