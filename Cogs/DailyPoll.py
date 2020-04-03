@@ -3,8 +3,7 @@ from bs4 import BeautifulSoup
 import asyncio
 import requests
 import discord
-import json
-import Jsontools
+import JsonTools
 
 
 class DailyPoll(commands.Cog):
@@ -23,12 +22,10 @@ class DailyPoll(commands.Cog):
         daily_poll_website_string = BeautifulSoup(daily_poll_website_html.text, 'html.parser')
         daily_poll_question = daily_poll_website_string.find('span', attrs={'class': 'pollQuestion'}).text
         daily_poll_answers_html = daily_poll_website_string.find_all('td', attrs={'class': 'indivAnswerText'})
-        with open('data.json', 'r') as f:
-            data = json.load(f)
-        prevQuestion = data['constants']['prevQuestion']
+        prevQuestion = JsonTools.getData('constants', 'prevQuestion')
         while True:
             if daily_poll_question != prevQuestion:
-                Jsontools.changeData('constants', 'prevQuestion', daily_poll_question)
+                JsonTools.changeData('constants', 'prevQuestion', daily_poll_question)
                 for x in daily_poll_answers_html:
                     daily_poll_answers.append(x.text)
                 daily_poll_embed = discord.Embed(title=daily_poll_question, color=0xff0000)

@@ -1,8 +1,8 @@
 from discord.ext import commands
-import json
+import MessageTools
 import discord
 import asyncio
-import Jsontools
+import JsonTools
 
 
 class ConfigBot(commands.Cog):
@@ -19,29 +19,17 @@ class ConfigBot(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        Jsontools.addGuild(guild)
+        JsonTools.addGuild(guild)
 
-    @staticmethod
-    def correct_command_use(ctx, admin_command):
-        data = Jsontools.getDataParsable()
-        if ctx.message.channel.id not in data[ctx.guild.name]['noCommandChannels']:
-            if admin_command and ctx.author.id in data[ctx.guild.name]['mods']:
-                if ctx.message.content.startswith(data[ctx.guild.name]['prefix']):
-                    return True
-            elif not admin_command:
-                return True
-        else:
-            return False
-
-    def generateSettings(self, ctx, num):
-        data = Jsontools.getDataParsable()
+    def generateSettings(self, ctx):
+        data = JsonTools.getDataParsable()
         settings_embed = discord.Embed(title=f'Hey {ctx.author.name}, what needs editing?', color=0xff0000)
         settings_embed.add_field(name='\u200b',
                                  value='🇦**:** Edit my command prefix: `' + data[ctx.guild.name]['prefix'] + '`',
                                  inline=False)
-        userMods = [self.bot.get_user(x) for x in data[ctx.guild.name]['mods']]
+        user_mods = [self.bot.get_user(x) for x in data[ctx.guild.name]['mods']]
         settings_embed.add_field(name='\u200b',
-                                 value='🇧**:** Edit your mods: `' + str([x.name for x in userMods]) + '`',
+                                 value='🇧**:** Edit your mods: `' + str([x.name for x in user_mods]) + '`',
                                  inline=False)
         settings_embed.set_author(name='Settings',
                                   icon_url='https://cdn.discordapp.com/attachments/488700267060133889'
@@ -49,25 +37,14 @@ class ConfigBot(commands.Cog):
         settings_embed.set_footer(text='React to continue')
         return settings_embed
 
-    async def addReactions(self, message, num):
-        for n, reaction in enumerate(ConfigBot.reactions):
-            if n < num:
-                await message.add_reaction(reaction)
-
-    async def sendSimpleEmbed(self, channel, text, delete):
-        sent_msg = await channel.send(
-            embed=discord.Embed(description=text, color=0xff0000))
-        if delete:
-            await sent_msg.delete(delay=10)
-        return sent_msg
-
     @commands.command()
     async def config(self, ctx):
         try:
             await ctx.message.delete()
-            if ConfigBot.correct_command_use(ctx=ctx, admin_command=True):
+            if MessageTools.correct_command_use(ctx=ctx, admin_command=True):
                 def check_reaction(reaction, user):
-                    return user == ctx.author and reaction.emoji in ConfigBot.reactions and reaction.message.id == sent_prompt.id
+                    return user == ctx.author and reaction.emoji in ConfigBot.reactions and reaction.message.id == \
+                           sent_prompt.id
 
                 def check_message(message):
                     return message.author == ctx.author and len(
@@ -75,9 +52,10 @@ class ConfigBot(commands.Cog):
 
                 use_settings = True
                 while use_settings:
-                    embed = ConfigBot.generateSettings(self, ctx, 2)
+                    # Create settings page and retrieve reaction
+                    embed = ConfigBot.generateSettings(self, ctx)
                     sent_prompt = await ctx.send(embed=embed)
-                    await ConfigBot.addReactions(self, sent_prompt, 2)
+                    await MessageTools.addReactions(sent_prompt, 2)
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
                     await sent_prompt.delete()
 
@@ -87,46 +65,44 @@ class ConfigBot(commands.Cog):
                                                 color=0xff0000))
                         command_change_response = await self.bot.wait_for('message', timeout=60.0, check=check_message)
                         if len(command_change_response.content) < 6:
-                            Jsontools.changeData(ctx.guild.name, 'prefix', command_change_response.content)
+                            JsonTools.changeData(ctx.guild.name, 'prefix', command_change_response.content)
                         await sent_prompt.delete()
                         await command_change_response.delete()
 
                     if reaction.emoji == '🇧':
                         sent_prompt = await ctx.send(embed=discord.Embed(
-                            description=f'{ctx.author.mention} React to continue: \n 🇦: Add a mod \n 🇧: Delete a mod',
+                            description=f'{ctx.author.mention} React to continue: \n 🇦: Add mods \n 🇧: Delete mods',
                             color=0xff0000))
-                        await ConfigBot.addReactions(self, sent_prompt, 2)
+                        await MessageTools.addReactions(sent_prompt, 2)
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
                         await sent_prompt.delete()
 
                         if reaction.emoji == '🇦':
                             sent_prompt = await ctx.send(
-                                embed=discord.Embed(description=f'{ctx.author.mention} Mention the mod you want to add',
-                                                    color=0xff0000))
+                                embed=discord.Embed(description=f'{ctx.author.mention} Mention the mods you want to '
+                                                    f'add', color=0xff0000))
                             mod_add_response = await self.bot.wait_for('message', timeout=60.0, check=check_message)
                             await sent_prompt.delete()
                             for member in mod_add_response.mentions:
-                                if member.id not in Jsontools.getData(ctx.guild.name, 'mods'):
-                                    Jsontools.addListVar(ctx.guild.name, 'mods', member.id)
+                                if member.id not in JsonTools.getData(ctx.guild.name, 'mods'):
+                                    JsonTools.addListVar(ctx.guild.name, 'mods', member.id)
                             await mod_add_response.delete()
                         if reaction.emoji == '🇧':
-                            sent_prompt = await ctx.send(embed=discord.Embed(
-                                description=f'{ctx.author.mention} Mention the mod you want to delete', color=0xff0000))
+                            sent_prompt = await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} '
+                                                         f'Mention the mods you want to delete', color=0xff0000))
                             mod_add_response = await self.bot.wait_for('message', timeout=60.0, check=check_message)
                             await sent_prompt.delete()
                             for member in mod_add_response.mentions:
-                                if member.id in Jsontools.getData(ctx.guild.name, 'mods'):
-                                    Jsontools.removeListVar(ctx.guild.name, 'mods', member.id)
+                                if member.id in JsonTools.getData(ctx.guild.name, 'mods'):
+                                    JsonTools.removeListVar(ctx.guild.name, 'mods', member.id)
                             await mod_add_response.delete()
-
-
             else:
-                await ConfigBot.sendSimpleEmbed(self, channel=ctx.message.channel,
-                                                text=f'{ctx.author.mention} Access denied. Mod-Only.', delete=True)
+                await MessageTools.sendSimpleEmbed(channel=ctx.message.channel, text=f'{ctx.author.mention} Access '
+                                                   f'denied. Mod-Only.', delete=True)
 
         except asyncio.TimeoutError:
-            await ConfigBot.sendSimpleEmbed(self, channel=ctx.message.channel,
-                                            text=f'{ctx.author.mention} Operation timed out', delete=True)
+            await MessageTools.sendSimpleEmbed(channel=ctx.message.channel, text=f'{ctx.author.mention} Operation '
+                                               f'timed out', delete=True)
             ConfigBot.config.use_settings = False
 
     # @commands.command()

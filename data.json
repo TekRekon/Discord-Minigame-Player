@@ -1,6 +1,8 @@
 {
     "Gaming GenBase": {
-        "noCommandChannels": [],
+        "noCommandChannels": [
+            553760889778733073,
+            489513733652086785],
         "mods": [
             285879705989677058
         ],
@@ -18,6 +20,6 @@
         "prefix": "."
     },
     "constants": {
-        "prevQuestion": "What is your favorite spread to put on toasted bread?"
+        "prevQuestion": "Which of the following unique flavors of Doritos chips would you be most interested in trying?"
     }
 }

@@ -1,8 +1,10 @@
 from discord.ext import commands
 import json
+import discord
+import MessageTools
 
 
-# A callable to discern the current guild's set prefix
+# A callable to retrieve the current guild's prefix
 def prefix(bot, message):
     with open('data.json', 'r') as f:
         data = json.load(f)
@@ -22,9 +24,6 @@ async def on_ready():
     bot.load_extension('Cogs.CarouselStatus')
     print('CarouselStatus initiated')
 
-    bot.load_extension('Cogs.AutoStar')
-    print('AutoStar initiated')
-
     bot.load_extension('Cogs.OneWordStoryEnforcer')
     print('OneWordStoryEnforcer Initiated')
 
@@ -39,6 +38,9 @@ async def on_ready():
 
     bot.load_extension('Cogs.ConfigBot')
     print('jsonExperiment initiated')
+
+    bot.load_extension('Cogs.Fun')
+    print('Fun initiated')
 
     print('Rigged for silent running')
 
