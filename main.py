@@ -1,7 +1,8 @@
 from discord.ext import commands
 import json
-import discord
-import MessageTools
+import os
+from boto.s3.connection import S3Connection
+token = S3Connection(os.environ['TOKEN'])
 
 
 # A callable to retrieve the current guild's prefix
@@ -44,4 +45,4 @@ async def on_ready():
 
     print('Rigged for silent running')
 
-bot.run('NTEzODMyNzk3NjM5NTQwNzM5.Xn_2cg.wXn3h9HJl-AcVA2s1gnh0hRQE7U')
+bot.run(token)
