@@ -119,7 +119,7 @@ class OnDemandEmbed(commands.Cog):
                         OnDemandEmbed.user_embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
                         await ctx.send(embed=OnDemandEmbed.user_embed)
                         working = False
-                    elif input_num.content == 'Cancel' or input_num == 'cancel':
+                    elif input_num.content.lower() == 'cancel':
                         await sent_example_embed.delete()
                         await input_num.delete()
                         cancel_msg = await ctx.send(embed=discord.Embed(description=ctx.author.mention
