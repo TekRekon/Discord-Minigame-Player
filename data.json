@@ -1,25 +1,32 @@
 {
-    "Gaming GenBase": {
+    "477829362771689484": {
         "noCommandChannels": [
             553760889778733073,
-            489513733652086785],
+            489513733652086785
+        ],
         "mods": [
             285879705989677058
         ],
         "prefix": ".",
         "dailyPollChannel": 553760889778733073,
-        "guildID": 477829362771689484,
+        "oneWordPrevAuthor": 0,
+        "oneWordChannel": 552130564031774760,
+        "guildName": "Gaming GenBase",
         "countingChannel": 489513733652086785
     },
-    "Bot Testing": {
-        "guildID": 694630261958115399,
-        "noCommandChannels": [],
+    "694630261958115399": {
+        "guildID": "Bot Testing",
+        "noCommandChannels": [
+            695703812043702354
+        ],
         "mods": [
             285879705989677058
         ],
-        "prefix": "."
+        "prefix": ".",
+        "oneWordChannel": 695703812043702354,
+        "oneWordPrevAuthor": 285879705989677058
     },
     "constants": {
-        "prevQuestion": "Which of the following unique flavors of Doritos chips would you be most interested in trying?"
+        "prevQuestion": "Have you ever done a workout video at home?"
     }
 }

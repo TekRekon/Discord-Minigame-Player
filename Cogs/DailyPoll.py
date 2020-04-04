@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import asyncio
 import requests
 import discord
-import JsonTools
+from Cogs.Tools import JsonTools
 
 
 class DailyPoll(commands.Cog):

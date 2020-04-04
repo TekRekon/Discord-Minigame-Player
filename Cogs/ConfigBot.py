@@ -1,8 +1,7 @@
 from discord.ext import commands
-import MessageTools
 import discord
 import asyncio
-import JsonTools
+from Cogs.Tools import JsonTools, MessageTools
 
 
 class ConfigBot(commands.Cog):
@@ -10,12 +9,6 @@ class ConfigBot(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-    # with open('data.json', 'r') as f:
-    #     data = json.load(f)
-    #     for majorkey, subdict in data.items():
-    #         for subkey, value in subdict.items():
-    #             print (subkey)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -41,7 +34,7 @@ class ConfigBot(commands.Cog):
     async def config(self, ctx):
         try:
             await ctx.message.delete()
-            if MessageTools.correct_command_use(ctx=ctx, admin_command=True):
+            if MessageTools.correct_command_use(ctx=ctx, mod_command=True):
                 def check_reaction(reaction, user):
                     return user == ctx.author and reaction.emoji in ConfigBot.reactions and reaction.message.id == \
                            sent_prompt.id
@@ -97,8 +90,7 @@ class ConfigBot(commands.Cog):
                                     JsonTools.removeListVar(ctx.guild.name, 'mods', member.id)
                             await mod_add_response.delete()
             else:
-                await MessageTools.sendSimpleEmbed(channel=ctx.message.channel, text=f'{ctx.author.mention} Access '
-                                                   f'denied. Mod-Only.', delete=True)
+                await MessageTools.sendSimpleEmbed(channel=ctx.message.channel, text=f'{ctx.author.name}: Command used incorrectly', delete=True)
 
         except asyncio.TimeoutError:
             await MessageTools.sendSimpleEmbed(channel=ctx.message.channel, text=f'{ctx.author.mention} Operation '

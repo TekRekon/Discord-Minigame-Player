@@ -1,6 +1,5 @@
 from discord.ext import commands
-import JsonTools
-import MessageTools
+from Cogs.Tools import JsonTools, MessageTools
 import discord
 from itertools import cycle
 import asyncio
@@ -14,58 +13,52 @@ class Fun(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
+
         # Check for an original exception, if present
         error = getattr(error, 'original', error)
 
-        # Stuff to ignore errors if they are handled within the command
-        # if hasattr(ctx.command, 'on_error'):
-        # return
-        # ignored = (commands.CommandNotFound, commands.UserInputError)
-        # if isinstance(error, ignored):
-        # return
-
         if isinstance(error, discord.errors.Forbidden):
-            # Raises another Forbidden error if sent in channel without access
-            # await MessageTools.sendSimpleEmbed(ctx, f'Unblock {self.bot.user.mention} to do this', delete=True)
+            # Raises another Forbidden error if error message sent in channel without access
             pass
         elif isinstance(error, discord.ext.commands.errors.BadArgument) or isinstance(error, ValueError):
-            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention} Not valid input. Use .help for assistance',
+            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: Not valid input. Use .help for assistance',
                                                delete=True)
         elif isinstance(error, commands.DisabledCommand):
-            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention} {ctx.command} has been disabled',
+            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: {ctx.command} has been disabled',
                                                delete=True)
         elif isinstance(error, asyncio.TimeoutError):
-            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.mention} Operation timed out',
+            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Operation timed out',
                                                delete=False)
+        # else:
+        #     await ctx.send('YES! YOU FOUND AN ERROR:')
+        #     await ctx.send(error)
 
     @commands.command()
     async def roast(self, ctx, arg: discord.Member):
-        for m in self.bot.get_guild(JsonTools.getData('Gaming GenBase', 'guildID')).emojis:
-            if m.name == 'BoiGif':
-                if arg == self.bot.user:
-                    await ctx.message.add_reaction(m)
-                    await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention} You roast me I roast you',
-                                                       delete=False)
-                elif arg == ctx.author:
-                    await ctx.message.add_reaction(m)
-                    return
-                else:
-                    await ctx.message.delete()
-                    async for message in ctx.channel.history(limit=50):
-                        if message.author == arg:
-                            await message.add_reaction(m)
-                            return
+        if MessageTools.correct_command_use(ctx, False):
+            # Find the custom emoji needed uploaded in my server
+            for m in self.bot.get_guild(JsonTools.getData('477829362771689484', 'guildID')).emojis:
+                if m.name == 'BoiGif':
+                    if arg == self.bot.user:
+                        await ctx.message.add_reaction(m)
+                        await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention}, You roast me I roast you',
+                                                           delete=False)
+                    elif arg == ctx.author:
+                        await ctx.message.add_reaction(m)
+                    else:
+                        async for message in ctx.channel.history(limit=50):
+                            if message.author == arg:
+                                await message.add_reaction(m)
 
     @commands.command()
     async def purge(self, ctx, num: int):
-        if MessageTools.correct_command_use(ctx, admin_command=True):
-            await ctx.channel.purge(limit=num)
+        if MessageTools.correct_command_use(ctx, mod_command=True):
             await ctx.message.delete()
-            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention} ', delete=True)
+            await ctx.channel.purge(limit=num)
 
     @commands.command()
     async def tictactoe(self, ctx):
-        if MessageTools.correct_command_use(ctx, admin_command=False):
+        if MessageTools.correct_command_use(ctx, mod_command=False):
             def check_reaction(reaction, user):
                 if reaction.emoji == '📲':
                     return reaction.message.id == sent_home_embed.id and user != ctx.author

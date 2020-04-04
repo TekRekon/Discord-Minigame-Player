@@ -1,43 +1,34 @@
 from discord.ext import commands
 import discord
+from Cogs.Tools import JsonTools, MessageTools
 
 
 class OneWordStoryEnforcer(commands.Cog):
-    oneWordStoryChannel = None
-    prevAuthor = None
 
     def __init__(self, bot):
         self.bot = bot
-        OneWordStoryEnforcer.oneWordStoryChannel = self.bot.get_channel(552130564031774760)
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        author = message.author
-        channel = message.channel
-        content = message.content
-        try:
-            if message.channel != '.embed':
-                if channel == OneWordStoryEnforcer.oneWordStoryChannel:
-                    if ' ' in content or author == OneWordStoryEnforcer.prevAuthor:
-                        if author != self.bot.user:
-                            await message.delete()
-                            warn_message = await channel.send("You may only type ONE word after another person has gone"
-                                                              + author.mention)
-                            await warn_message.delete(delay=2)
-                    else:
-                        if author != self.bot.user:
-                            OneWordStoryEnforcer.prevAuthor = author
-                            await message.delete()
-                            await channel.send(embed=discord.Embed(description=author.mention + ' ' + content,
-                                                                   color=0xff0000))
+        if message.channel.type != discord.ChannelType.private:
+            guildID = str(message.guild.id)
+            author = message.author
+            channel = message.channel
+            content = message.content
+            oneWordChannel = self.bot.get_channel(JsonTools.getData(guildID, 'oneWordChannel'))
+            prevAuthor = JsonTools.getData(guildID, 'oneWordPrevAuthor')
 
-        # Catch + Handle Error If User Blocked Bot based off of ability to mention
-        except discord.errors.Forbidden:
-            await message.delete()
-            warn_message = await OneWordStoryEnforcer.oneWordStoryChannel.send("Please unblock " + self.bot.user.mention
-                                                                               + " to participate in this channel "
-                                                                               + author.mention)
-            await warn_message.delete(delay=5)
+            if channel == oneWordChannel and author != self.bot.user:
+                await message.delete()
+                if ' ' in content or author.id == prevAuthor:
+                    await MessageTools.sendSimpleEmbed(channel=oneWordChannel, text='You may only type ONE word '
+                                                       'after another person has gone', delete=True)
+                elif content.startswith(JsonTools.getData(guildID, 'prefix')) and len(content) > 1:
+                    await MessageTools.sendSimpleEmbed(channel=oneWordChannel, text='You may only type ONE word '
+                                                       'after another person has gone', delete=True)
+                else:
+                    JsonTools.changeData(guildID, 'oneWordPrevAuthor', author.id)
+                    await channel.send(embed=discord.Embed(description=author.name.mention + ' ' + message.content, color=0xff0000))
 
 
 def setup(bot):

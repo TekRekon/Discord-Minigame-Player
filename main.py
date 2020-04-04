@@ -1,16 +1,10 @@
 from discord.ext import commands
-import json
-import os
-from boto.s3.connection import S3Connection
-token = S3Connection(os.environ['TOKEN'])
+from Cogs.Tools import JsonTools
 
 
 # A callable to retrieve the current guild's prefix
 def prefix(bot, message):
-    with open('data.json', 'r') as f:
-        data = json.load(f)
-        f.close()
-    return data[message.guild.name]['prefix']
+    return JsonTools.getData(str(message.guild.id), 'prefix')
 
 
 # pass in the callable to support per-server prefixes
@@ -45,4 +39,4 @@ async def on_ready():
 
     print('Rigged for silent running')
 
-bot.run(token)
+bot.run('NTEzODMyNzk3NjM5NTQwNzM5.Xn_2cg.wXn3h9HJl-AcVA2s1gnh0hRQE7U')
