@@ -3,15 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/AutoFormatNewGit.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/AutoFormatNewGit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/ConfigBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/ConfigBot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/DailyPoll.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/DailyPoll.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/Fun.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Fun.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/OneWordStoryEnforcer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/OneWordStoryEnforcer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JsonTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Tools/JsonTools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MessageTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Tools/MessageTools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/CarouselStatus.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/CarouselStatus.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,11 +18,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="119">
-                  <caret line="7" selection-start-line="7" selection-end-line="7" />
+                <state relative-caret-position="203">
+                  <caret line="15" selection-start-line="15" selection-end-line="15" />
                   <folding>
                     <element signature="e#0#32#0" expanded="true" />
                   </folding>
@@ -39,10 +31,10 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Cogs/AutoFormatNewGit.py">
+            <entry file="file://$PROJECT_DIR$/Cogs/CarouselStatus.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="153">
-                  <caret line="9" column="28" lean-forward="true" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
+                <state relative-caret-position="306">
+                  <caret line="18" column="47" selection-start-line="18" selection-start-column="47" selection-end-line="18" selection-end-column="47" />
                   <folding>
                     <element signature="e#0#32#0" expanded="true" />
                   </folding>
@@ -50,11 +42,23 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Cogs/OnDemandEmbed.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="187">
+                  <caret line="11" column="20" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="20" />
+                  <folding>
+                    <element signature="e#0#32#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Cogs/DailyPoll.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="210">
-                  <caret line="24" selection-start-line="24" selection-end-line="24" />
+                  <caret line="15" column="29" selection-start-line="15" selection-end-line="16" />
                   <folding>
                     <element signature="e#0#32#0" expanded="true" />
                   </folding>
@@ -78,16 +82,16 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/data.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="527">
-                  <caret line="31" column="1" lean-forward="true" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
+                <state relative-caret-position="374">
+                  <caret line="22" column="30" lean-forward="true" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Cogs/Tools/JsonTools.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="357">
@@ -134,7 +138,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Cogs/CarouselStatus.py" />
         <option value="$PROJECT_DIR$/Cogs/DailyPoll.py" />
         <option value="$PROJECT_DIR$/Cogs/AutoStar.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
@@ -146,7 +149,9 @@
         <option value="$PROJECT_DIR$/Cogs/OneWordStoryEnforcer.py" />
         <option value="$PROJECT_DIR$/Cogs/Fun.py" />
         <option value="$PROJECT_DIR$/data.json" />
+        <option value="$PROJECT_DIR$/Cogs/OnDemandEmbed.py" />
         <option value="$PROJECT_DIR$/Cogs/AutoFormatNewGit.py" />
+        <option value="$PROJECT_DIR$/Cogs/CarouselStatus.py" />
       </list>
     </option>
   </component>
@@ -280,20 +285,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00024" summary="delete messages in #1word story# that are repetitive">
-      <created>1552001220063</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1552001220063</updated>
-    </task>
-    <task id="LOCAL-00025" summary="delete messages in #1word story# that are repetitive">
-      <created>1552001682891</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1552001682891</updated>
     </task>
     <task id="LOCAL-00026" summary="delete messages in #1word story# that are repetitive">
       <created>1552002046220</created>
@@ -624,11 +615,26 @@
       <option name="project" value="LOCAL" />
       <updated>1585929638003</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="Code cleanup">
+      <created>1586017566124</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1586017566125</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Code cleanup">
+      <created>1586018785313</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1586018785313</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="916" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14203085" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -721,7 +727,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Just another #daily_poll fix (hopefully)" />
     <MESSAGE value="Remove log spam for role_updates" />
     <MESSAGE value="Make code more efficient" />
     <MESSAGE value="Modify code to merge with 2 servers" />
@@ -746,7 +751,8 @@
     <MESSAGE value="Add tictactoe command" />
     <MESSAGE value="Add purge command" />
     <MESSAGE value="Add env vars for token" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add env vars for token" />
+    <MESSAGE value="Code cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code cleanup" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Cogs/AutoStar.py" />
@@ -762,16 +768,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Cogs/CarouselStatus.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="19" lean-forward="true" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Cogs/ConfigBot.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -813,20 +809,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/Cogs/Tools/JsonTools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="357">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="30" lean-forward="true" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Cogs/AutoFormatNewGit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Cogs/AutoFormatNewGit.py">
+    <entry file="file://$PROJECT_DIR$/Cogs/OnDemandEmbed.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="28" lean-forward="true" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
+        <state relative-caret-position="187">
+          <caret line="11" column="20" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="20" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
@@ -836,24 +846,30 @@
     <entry file="file://$PROJECT_DIR$/Cogs/DailyPoll.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
+          <caret line="15" column="29" selection-start-line="15" selection-end-line="16" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data.json">
+    <entry file="file://$PROJECT_DIR$/Cogs/CarouselStatus.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="31" column="1" lean-forward="true" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
+        <state relative-caret-position="306">
+          <caret line="18" column="47" selection-start-line="18" selection-start-column="47" selection-end-line="18" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Cogs/Tools/JsonTools.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        <state relative-caret-position="203">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
