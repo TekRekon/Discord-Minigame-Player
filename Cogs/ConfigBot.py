@@ -11,6 +11,25 @@ class ConfigBot(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+
+        # Check for an original exception, if present
+        error = getattr(error, 'original', error)
+
+        if isinstance(error, discord.errors.Forbidden):
+            # Raises another Forbidden error if error message sent in channel without access
+            pass
+        elif isinstance(error, discord.ext.commands.errors.BadArgument) or isinstance(error, ValueError):
+            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: Not valid input. Use .help for assistance',
+                                               delete=True)
+        elif isinstance(error, commands.DisabledCommand):
+            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: {ctx.command} has been disabled',
+                                               delete=True)
+        elif isinstance(error, asyncio.TimeoutError):
+            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Operation timed out',
+                                               delete=False)
+
+    @commands.Cog.listener()
     async def on_guild_join(self, guild):
         JsonTools.addGuild(guild)
 
@@ -33,7 +52,6 @@ class ConfigBot(commands.Cog):
     @commands.command()
     async def config(self, ctx):
         try:
-            await ctx.message.delete()
             if MessageTools.correct_command_use(ctx=ctx, mod_command=True):
                 def check_reaction(reaction, user):
                     return user == ctx.author and reaction.emoji in ConfigBot.reactions and reaction.message.id == \
@@ -96,6 +114,8 @@ class ConfigBot(commands.Cog):
             await MessageTools.sendSimpleEmbed(channel=ctx.message.channel, text=f'{ctx.author.mention} Operation '
                                                f'timed out', delete=True)
             ConfigBot.config.use_settings = False
+
+
 
     # @commands.command()
     # async def test(self, ctx, arg):

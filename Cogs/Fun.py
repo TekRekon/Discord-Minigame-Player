@@ -8,6 +8,8 @@ import random
 
 class Fun(commands.Cog):
 
+    classAttribute = " "
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -35,6 +37,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def roast(self, ctx, arg: discord.Member):
+        print('was good')
         if MessageTools.correct_command_use(ctx, False):
             # Find the custom emoji needed uploaded in my server
             for m in self.bot.get_guild(JsonTools.getData('477829362771689484', 'guildID')).emojis:

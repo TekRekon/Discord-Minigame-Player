@@ -47,8 +47,8 @@ def addGuild(guild):
     """
     with open('data.json', 'r') as f:
         data = json.load(f)
-    data.update({guild.id.text: {'guildName': guild.name, "noCommandChannels": [], "mods": [guild.owner_id],
-                              "prefix": "."}})
+    data.update({str(guild.id): {'guildName': guild.name, "noCommandChannels": [], "mods": [guild.owner_id],
+                              "prefix": ".", "oneWordPrevAuthor": str(0), "oneWordChannel": str(0)}})
     with open('data.json', 'w') as g:
         json.dump(data, g, indent=4)
 
