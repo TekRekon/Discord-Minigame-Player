@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="Add stuff">
-      <change afterPath="$PROJECT_DIR$/Cogs/Awair.py" afterDir="false" />
+    <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Cogs/Awair.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Awair.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -134,13 +132,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00027" summary="add daily_poll cog">
-      <created>1552266548330</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1552266548330</updated>
     </task>
     <task id="LOCAL-00028" summary="Testing 123">
       <created>1552347119644</created>
@@ -478,7 +469,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586050660247</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="Add stuff">
+      <created>1586389943695</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1586389943697</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -510,7 +508,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Remove log spam for role_updates" />
     <MESSAGE value="Make code more efficient" />
     <MESSAGE value="Modify code to merge with 2 servers" />
     <MESSAGE value="Star appends only in certain servers" />
@@ -535,7 +532,8 @@
     <MESSAGE value="Add purge command" />
     <MESSAGE value="Add env vars for token" />
     <MESSAGE value="Code cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Code cleanup" />
+    <MESSAGE value="Add stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add stuff" />
   </component>
   <component name="masterDetails">
     <states>

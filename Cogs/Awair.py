@@ -3,6 +3,7 @@ import asyncio
 from Cogs.Tools import JsonTools
 import aiohttp
 import time
+import random
 # ['data'][0]['sensors']
 # ['data'][0]['indices']
 
@@ -40,6 +41,7 @@ class Awair(commands.Cog):
                 for sensor in f['data'][0]['indices']:
                     if sensor['comp'] == 'pm25':
                         dustLevel = sensor['value']
+                        dustLevel = random.choice([0, 1, 2, 3, 4])
 
                         if dustLevel > 0 and not JsonTools.getData('awair', 'hepaOn'):
                             async with aiohttp.ClientSession() as session:
