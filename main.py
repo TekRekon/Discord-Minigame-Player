@@ -37,6 +37,9 @@ async def on_ready():
     bot.load_extension('Cogs.Fun')
     print('Fun initiated')
 
+    bot.load_extension('Cogs.Awair')
+    print("Awair initiated")
+
     print('Rigged for silent running')
 
 bot.run('NTEzODMyNzk3NjM5NTQwNzM5.Xn_2cg.wXn3h9HJl-AcVA2s1gnh0hRQE7U')
