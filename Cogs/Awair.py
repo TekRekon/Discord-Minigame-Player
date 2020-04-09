@@ -25,6 +25,7 @@ class Awair(commands.Cog):
     @staticmethod
     async def autoHepaToggler():
         while True:
+            print('looping')
             # Check to make sure we don't go over the call limit + conserve calls by only working during the day
             if 9 <= time.localtime().tm_hour < 21 and JsonTools.getData('awair', 'calls') < 301:
 
