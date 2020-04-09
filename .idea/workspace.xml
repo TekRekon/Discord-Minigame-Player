@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/Awair.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Awair.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cogs/Fun.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Fun.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -128,13 +127,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00032" summary="update code">
-      <created>1552422468752</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1552422468752</updated>
     </task>
     <task id="LOCAL-00033" summary="update code">
       <created>1552430359683</created>
@@ -472,7 +464,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586449271599</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="Add stuff">
+      <created>1586473256462</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1586473256462</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -527,9 +526,9 @@
     <MESSAGE value="Add purge command" />
     <MESSAGE value="Add env vars for token" />
     <MESSAGE value="Code cleanup" />
-    <MESSAGE value="Add stuff" />
     <MESSAGE value="Fix noop never awaited error" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix noop never awaited error" />
+    <MESSAGE value="Add stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add stuff" />
   </component>
   <component name="masterDetails">
     <states>

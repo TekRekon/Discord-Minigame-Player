@@ -28,6 +28,7 @@ class Awair(commands.Cog):
             print('looping')
             # Check to make sure we don't go over the call limit + conserve calls by only working during the day
             if 9 <= time.localtime().tm_hour < 21 and JsonTools.getData('awair', 'calls') < 301:
+                print(f'time correct: Hour {time.localtime().tm_hour}')
 
                 # Increment call count
                 JsonTools.changeData('awair', 'calls', JsonTools.getData('awair', 'calls')+1)
@@ -36,15 +37,19 @@ class Awair(commands.Cog):
                 f = await Awair.getSensorData()
                 for sensor in f['data'][0]['indices']:
                     if sensor['comp'] == 'pm25':
+                        print('found sensor')
                         dustLevel = sensor['value']
+                        print('assigned sensor')
 
                         if dustLevel > 0 and not JsonTools.getData('awair', 'hepaOn'):
+                            print('turning on hepa')
                             async with aiohttp.ClientSession() as session:
                                 await session.post('https://maker.ifttt.com/trigger/hepa_on/with/key/dcUi_OJn4aUvDWuT3TO1jB')
                             JsonTools.changeData('awair', 'hepaOn', True)
                             print(f'{dustLevel} --> Hepa On')
 
                         elif dustLevel < 1 and JsonTools.getData('awair', 'hepaOn'):
+                            print('turning off hepa')
                             async with aiohttp.ClientSession() as session:
                                 await session.post('https://maker.ifttt.com/trigger/hepa_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
                             JsonTools.changeData('awair', 'hepaOn', False)
@@ -53,6 +58,7 @@ class Awair(commands.Cog):
                         print(f'Level: {dustLevel} and Hepa is {JsonTools.getData("awair", "hepaOn")}')
 
             elif JsonTools.getData('awair', 'calls') > 0 and time.localtime().tm_hour == 21:
+                print('it is now 9 oclock, turning off')
                 JsonTools.changeData('awair', 'hepaOn', False)
                 JsonTools.changeData('awair', 'calls', 0)
                 async with aiohttp.ClientSession() as session:
