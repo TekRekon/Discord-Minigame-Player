@@ -27,10 +27,10 @@
         "oneWordPrevAuthor": 285879705989677058
     },
     "constants": {
-        "prevQuestion": "If you could choose between using a time machine to go back in time or to go into the future, which would you choose?"
+        "prevQuestion": "What topic are you most interested in seeing covered in our Weekly Roundup blog series?"
     },
     "awair": {
-        "calls": 2,
+        "calls": 8,
         "hepaOn": false
     }
 }

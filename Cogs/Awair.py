@@ -14,30 +14,28 @@ class Awair(commands.Cog):
         self.bot = bot
         self.bot.loop.create_task(self.autoHepaToggler())
 
-    # @staticmethod
-    # async def getSensorData():
-    #     async with aiohttp.ClientSession(headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as session:
-    #         async with session.get(url='https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true') as r:
-    #             return await r.json()
+    @staticmethod
+    async def getSensorData():
+        async with aiohttp.ClientSession(headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as session:
+            async with session.get(url='https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true') as r:
+                if r.status == 200:
+                    result = await r.json()
+                    return result
 
     @staticmethod
     async def autoHepaToggler():
         while True:
-            # < 21
             # Check to make sure we don't go over the call limit + conserve calls by only working during the day
-            if 9 <= time.localtime().tm_hour and JsonTools.getData('awair', 'calls') < 301:
+            if 9 <= time.localtime().tm_hour < 21 and JsonTools.getData('awair', 'calls') < 301:
 
                 # Increment call count
                 JsonTools.changeData('awair', 'calls', JsonTools.getData('awair', 'calls')+1)
 
                 # Get sensor dust level
-                async with aiohttp.ClientSession(headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as session:
-                    async with session.get(url='https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true') as r:
-                        f = await r.json()
+                f = await Awair.getSensorData()
                 for sensor in f['data'][0]['indices']:
                     if sensor['comp'] == 'pm25':
                         dustLevel = sensor['value']
-                        dustLevel = random.choice([0, 1, 2, 3, 4])
 
                         if dustLevel > 0 and not JsonTools.getData('awair', 'hepaOn'):
                             async with aiohttp.ClientSession() as session:
@@ -51,7 +49,7 @@ class Awair(commands.Cog):
                             JsonTools.changeData('awair', 'hepaOn', False)
                             print(f'{dustLevel} --> Hepa Off')
 
-                        print(f'Level: {dustLevel} and Hepa {JsonTools.getData("awair", "hepaOn")}')
+                        print(f'Level: {dustLevel} and Hepa is {JsonTools.getData("awair", "hepaOn")}')
 
             elif JsonTools.getData('awair', 'calls') > 0 and time.localtime().tm_hour == 21:
                 JsonTools.changeData('awair', 'hepaOn', False)
@@ -60,7 +58,7 @@ class Awair(commands.Cog):
                     await session.post('https://maker.ifttt.com/trigger/hepa_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
                 print(f'Time: {time.localtime().tm_hour} --> Hepa Off')
 
-            await asyncio.sleep(20)
+            await asyncio.sleep(144)
 
 
 def setup(bot):

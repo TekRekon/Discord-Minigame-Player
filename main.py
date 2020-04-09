@@ -13,29 +13,29 @@ bot = commands.Bot(command_prefix=prefix)
 
 @bot.event
 async def on_ready():
-    # bot.load_extension('Cogs.DailyPoll')
-    # print('DailyPoll initiated')
-    #
-    # bot.load_extension('Cogs.CarouselStatus')
-    # print('CarouselStatus initiated')
-    #
-    # bot.load_extension('Cogs.OneWordStoryEnforcer')
-    # print('OneWordStoryEnforcer Initiated')
-    #
-    # bot.load_extension('Cogs.AutoFormatNewGit')
-    # print('AutoFormatNewGit Initiated')
-    #
-    # bot.load_extension('Cogs.RoleEnforcer')
-    # print('RoleEnforcer initiated')
-    #
-    # bot.load_extension('Cogs.OnDemandEmbed')
-    # print('OnDemandEmbed initiated')
-    #
-    # bot.load_extension('Cogs.ConfigBot')
-    # print('jsonExperiment initiated')
-    #
-    # bot.load_extension('Cogs.Fun')
-    # print('Fun initiated')
+    bot.load_extension('Cogs.DailyPoll')
+    print('DailyPoll initiated')
+
+    bot.load_extension('Cogs.CarouselStatus')
+    print('CarouselStatus initiated')
+
+    bot.load_extension('Cogs.OneWordStoryEnforcer')
+    print('OneWordStoryEnforcer Initiated')
+
+    bot.load_extension('Cogs.AutoFormatNewGit')
+    print('AutoFormatNewGit Initiated')
+
+    bot.load_extension('Cogs.RoleEnforcer')
+    print('RoleEnforcer initiated')
+
+    bot.load_extension('Cogs.OnDemandEmbed')
+    print('OnDemandEmbed initiated')
+
+    bot.load_extension('Cogs.ConfigBot')
+    print('jsonExperiment initiated')
+
+    bot.load_extension('Cogs.Fun')
+    print('Fun initiated')
 
     bot.load_extension('Cogs.Awair')
     print("Awair initiated")
