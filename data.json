@@ -30,7 +30,7 @@
         "prevQuestion": "If you could choose between using a time machine to go back in time or to go into the future, which would you choose?"
     },
     "awair": {
-        "calls": 41,
-        "hepaOn": false
+        "calls": 53,
+        "hepaOn": true
     }
 }

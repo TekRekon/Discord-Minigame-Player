@@ -17,18 +17,11 @@ class Awair(commands.Cog):
     @staticmethod
     async def getSensorData():
         async with aiohttp.ClientSession() as session:
-            async with session.get('https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true', headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as r:
-                return await r.json()
-
-    @staticmethod
-    async def getUserData():
-        async with aiohttp.ClientSession() as session:
-            async with session.get('https://developer-apis.awair.is/v1/users/self/devices', headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as r:
+            async with session.get(url='https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true', headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as r:
                 return await r.json()
 
     @staticmethod
     async def autoHepaToggler():
-        loop = asyncio.get_event_loop()
         while True:
             # Check to make sure we don't go over the call limit + conserve calls by only working during the day
             if 9 <= time.localtime().tm_hour < 21 and JsonTools.getData('awair', 'calls') < 301:
@@ -64,7 +57,7 @@ class Awair(commands.Cog):
                     await session.post('https://maker.ifttt.com/trigger/hepa_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
                 print(f'Time: {time.localtime().tm_hour} --> Hepa Off')
 
-            await asyncio.sleep(144)
+            await asyncio.sleep(20)
 
 
 def setup(bot):
