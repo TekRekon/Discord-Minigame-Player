@@ -14,23 +14,26 @@ class Awair(commands.Cog):
         self.bot = bot
         self.bot.loop.create_task(self.autoHepaToggler())
 
-    @staticmethod
-    async def getSensorData():
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url='https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true', headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as r:
-                return await r.json()
+    # @staticmethod
+    # async def getSensorData():
+    #     async with aiohttp.ClientSession(headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as session:
+    #         async with session.get(url='https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true') as r:
+    #             return await r.json()
 
     @staticmethod
     async def autoHepaToggler():
         while True:
+            # < 21
             # Check to make sure we don't go over the call limit + conserve calls by only working during the day
-            if 9 <= time.localtime().tm_hour < 21 and JsonTools.getData('awair', 'calls') < 301:
+            if 9 <= time.localtime().tm_hour and JsonTools.getData('awair', 'calls') < 301:
 
                 # Increment call count
                 JsonTools.changeData('awair', 'calls', JsonTools.getData('awair', 'calls')+1)
 
                 # Get sensor dust level
-                f = await Awair.getSensorData()
+                async with aiohttp.ClientSession(headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as session:
+                    async with session.get(url='https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true') as r:
+                        f = await r.json()
                 for sensor in f['data'][0]['indices']:
                     if sensor['comp'] == 'pm25':
                         dustLevel = sensor['value']
