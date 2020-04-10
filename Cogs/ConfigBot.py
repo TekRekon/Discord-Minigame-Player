@@ -16,8 +16,11 @@ class ConfigBot(commands.Cog):
         # Check for an original exception, if present
         error = getattr(error, 'original', error)
 
+        # TODO Handle insufficient permissions error
+
         if isinstance(error, discord.errors.Forbidden):
             # Raises another Forbidden error if error message sent in channel without access
+            print('error')
             pass
         elif isinstance(error, discord.ext.commands.errors.BadArgument) or isinstance(error, ValueError):
             await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: Not valid input. Use .help for assistance',
@@ -37,9 +40,9 @@ class ConfigBot(commands.Cog):
         data = JsonTools.getDataParsable()
         settings_embed = discord.Embed(title=f'Hey {ctx.author.name}, what needs editing?', color=0xff0000)
         settings_embed.add_field(name='\u200b',
-                                 value='🇦**:** Edit my command prefix: `' + data[ctx.guild.name]['prefix'] + '`',
+                                 value='🇦**:** Edit my command prefix: `' + data[str(ctx.guild.id)]['prefix'] + '`',
                                  inline=False)
-        user_mods = [self.bot.get_user(x) for x in data[ctx.guild.name]['mods']]
+        user_mods = [self.bot.get_user(x) for x in data[str(ctx.guild.id)]['mods']]
         settings_embed.add_field(name='\u200b',
                                  value='🇧**:** Edit your mods: `' + str([x.name for x in user_mods]) + '`',
                                  inline=False)
@@ -49,10 +52,12 @@ class ConfigBot(commands.Cog):
         settings_embed.set_footer(text='React to continue')
         return settings_embed
 
+    # TODO Add a quit option
     @commands.command()
     async def config(self, ctx):
         try:
             if MessageTools.correct_command_use(ctx=ctx, mod_command=True):
+                await ctx.message.delete()
                 def check_reaction(reaction, user):
                     return user == ctx.author and reaction.emoji in ConfigBot.reactions and reaction.message.id == \
                            sent_prompt.id
@@ -76,7 +81,7 @@ class ConfigBot(commands.Cog):
                                                 color=0xff0000))
                         command_change_response = await self.bot.wait_for('message', timeout=60.0, check=check_message)
                         if len(command_change_response.content) < 6:
-                            JsonTools.changeData(ctx.guild.name, 'prefix', command_change_response.content)
+                            JsonTools.changeData(str(ctx.guild.id), 'prefix', command_change_response.content)
                         await sent_prompt.delete()
                         await command_change_response.delete()
 
@@ -95,8 +100,8 @@ class ConfigBot(commands.Cog):
                             mod_add_response = await self.bot.wait_for('message', timeout=60.0, check=check_message)
                             await sent_prompt.delete()
                             for member in mod_add_response.mentions:
-                                if member.id not in JsonTools.getData(ctx.guild.name, 'mods'):
-                                    JsonTools.addListVar(ctx.guild.name, 'mods', member.id)
+                                if member.id not in JsonTools.getData(str(ctx.guild.id), 'mods'):
+                                    JsonTools.addListVar(str(ctx.guild.id), 'mods', member.id)
                             await mod_add_response.delete()
                         if reaction.emoji == '🇧':
                             sent_prompt = await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} '
@@ -104,8 +109,8 @@ class ConfigBot(commands.Cog):
                             mod_add_response = await self.bot.wait_for('message', timeout=60.0, check=check_message)
                             await sent_prompt.delete()
                             for member in mod_add_response.mentions:
-                                if member.id in JsonTools.getData(ctx.guild.name, 'mods'):
-                                    JsonTools.removeListVar(ctx.guild.name, 'mods', member.id)
+                                if member.id in JsonTools.getData(str(ctx.guild.id), 'mods'):
+                                    JsonTools.removeListVar(str(ctx.guild.id), 'mods', member.id)
                             await mod_add_response.delete()
             else:
                 await MessageTools.sendSimpleEmbed(channel=ctx.message.channel, text=f'{ctx.author.name}: Command used incorrectly', delete=True)

@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/Awair.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Awair.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/ConfigBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/ConfigBot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cogs/Fun.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Fun.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/Tools/MessageTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Tools/MessageTools.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -128,13 +128,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00034" summary="People can only participate if ᄃӨЯЯЦPƬ.py is unblocked">
-      <created>1552665233715</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1552665233715</updated>
     </task>
     <task id="LOCAL-00035" summary="Improve daily_poll question timing">
       <created>1552669591944</created>
@@ -472,7 +465,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586473455402</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="Update TZ config variables for current_time">
+      <created>1586474547497</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1586474547497</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -504,7 +504,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Modify code to merge with 2 servers" />
     <MESSAGE value="Star appends only in certain servers" />
     <MESSAGE value="Small spelling fix" />
     <MESSAGE value="Add daily poll to other server" />
@@ -529,7 +528,8 @@
     <MESSAGE value="Code cleanup" />
     <MESSAGE value="Fix noop never awaited error" />
     <MESSAGE value="Add stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add stuff" />
+    <MESSAGE value="Update TZ config variables for current_time" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update TZ config variables for current_time" />
   </component>
   <component name="masterDetails">
     <states>

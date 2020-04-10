@@ -16,6 +16,7 @@ def correct_command_use(ctx, mod_command):
     """
     Given context and boolean for mod-only, check if command is used correctly
     """
+    # TODO implement permission_required instead of this method
     data = JsonTools.getDataParsable()
     guildID = str(ctx.guild.id)
     if ctx.message.channel.id not in data[guildID]['noCommandChannels']:
