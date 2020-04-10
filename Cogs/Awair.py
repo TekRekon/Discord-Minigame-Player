@@ -23,6 +23,21 @@ class Awair(commands.Cog):
                     return result
 
     @staticmethod
+    async def switchHepa(state):
+        async with aiohttp.ClientSession() as session:
+            if state:
+                await session.post('https://maker.ifttt.com/trigger/hepa_on/with/key/dcUi_OJn4aUvDWuT3TO1jB')
+            else:
+                await session.post('https://maker.ifttt.com/trigger/hepa_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
+
+    @staticmethod
+    async def reset():
+        async with aiohttp.ClientSession() as session:
+            await session.post('https://maker.ifttt.com/trigger/awair_on/with/key/dcUi_OJn4aUvDWuT3TO1jB')
+            await asyncio.sleep(10)
+            await session.post('https://maker.ifttt.com/trigger/awair_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
+
+    @staticmethod
     async def autoHepaToggler():
         while True:
             # Check to make sure we don't go over the call limit + conserve calls by only working during the day
@@ -31,34 +46,33 @@ class Awair(commands.Cog):
                 # Increment call count
                 JsonTools.changeData('awair', 'calls', JsonTools.getData('awair', 'calls')+1)
 
-                # Get sensor dust level
-                f = await Awair.getSensorData()
-                for sensor in f['data'][0]['indices']:
-                    if sensor['comp'] == 'pm25':
-                        dustLevel = sensor['value']
+                # Get sensor dust/voc level and act on it
+                try:
+                    f = await Awair.getSensorData()
+                    for sensor in f['data'][0]['indices']:
+                        if sensor['comp'] == 'pm25':
+                            dust_level = sensor['value']
+                        if sensor['comp'] == 'voc':
+                            voc_level = sensor['value']
 
-                        if dustLevel > 0 and not JsonTools.getData('awair', 'hepaOn'):
-                            print('turning on hepa')
-                            async with aiohttp.ClientSession() as session:
-                                await session.post('https://maker.ifttt.com/trigger/hepa_on/with/key/dcUi_OJn4aUvDWuT3TO1jB')
+                    if dust_level > 0 or voc_level > 0:
+                        if not JsonTools.getData('awair', 'hepaOn'):
+                            await Awair.switchHepa(True)
                             JsonTools.changeData('awair', 'hepaOn', True)
-                            print(f'{dustLevel} --> Hepa On')
 
-                        elif dustLevel < 1 and JsonTools.getData('awair', 'hepaOn'):
-                            print('turning off hepa')
-                            async with aiohttp.ClientSession() as session:
-                                await session.post('https://maker.ifttt.com/trigger/hepa_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
+                    elif dust_level < 1 or voc_level < 1:
+                        if JsonTools.getData('awair', 'hepaOn'):
+                            await Awair.switchHepa(False)
                             JsonTools.changeData('awair', 'hepaOn', False)
-                            print(f'{dustLevel} --> Hepa Off')
 
-                        print(f'Level: {dustLevel} and Hepa is {JsonTools.getData("awair", "hepaOn")}')
+                # Data returned is empty if device offline. The following tries to reset the device
+                except IndexError:
+                    await Awair.reset()
 
             elif JsonTools.getData('awair', 'calls') > 0 and time.localtime().tm_hour == 21:
                 JsonTools.changeData('awair', 'hepaOn', False)
                 JsonTools.changeData('awair', 'calls', 0)
-                async with aiohttp.ClientSession() as session:
-                    await session.post('https://maker.ifttt.com/trigger/hepa_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
-                print(f'Time: {time.localtime().tm_hour} --> Hepa Off')
+                await Awair.switchHepa(False)
 
             await asyncio.sleep(144)
 

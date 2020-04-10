@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cogs/TicTacToe.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/Awair.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/Awair.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/TicTacToe.py" beforeDir="false" afterPath="$PROJECT_DIR$/Cogs/TicTacToe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -127,13 +129,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00038" summary="Add optional ping for code updates">
-      <created>1552698500345</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1552698500345</updated>
     </task>
     <task id="LOCAL-00039" summary="fix bot_update pings">
       <created>1552698741440</created>
@@ -471,7 +466,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586491207792</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="Start implementing unbeatable tictactoe AI">
+      <created>1586543410435</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1586543410435</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -503,7 +505,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Integrations with another server added" />
     <MESSAGE value="Fix bot carrousel" />
     <MESSAGE value="1) Rig for use with discord.py 1.3.2&#10;2) Optimize code readability and functionality&#10;3) Create role enforcer for members" />
     <MESSAGE value="Bugs resolved; Bot optimized and ready to go" />
@@ -528,7 +529,8 @@
     <MESSAGE value="Fix error iterating through data.json" />
     <MESSAGE value="Separate tictactoe command for organization" />
     <MESSAGE value="Quick adjustment in data" />
-    <option name="LAST_COMMIT_MESSAGE" value="Quick adjustment in data" />
+    <MESSAGE value="Start implementing unbeatable tictactoe AI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start implementing unbeatable tictactoe AI" />
   </component>
   <component name="masterDetails">
     <states>
