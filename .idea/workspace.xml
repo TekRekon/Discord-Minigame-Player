@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="" />
+    <list default="true" id="94d183e4-3b88-4d21-8915-2888e2fc0276" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cogs/TicTacToe.py" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +49,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\DiscordBot\Cogs" />
       <recent name="C:\Users\lukaS\DiscordBot" />
       <recent name="C:\Users\lukaS\DiscordBot\Cogs\Tools" />
       <recent name="C:\DiscordBot" />
@@ -123,13 +127,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1551650156618</updated>
-    </task>
-    <task id="LOCAL-00037" summary="Only react with ⭐ to messages">
-      <created>1552691062189</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1552691062189</updated>
     </task>
     <task id="LOCAL-00038" summary="Add optional ping for code updates">
       <created>1552698500345</created>
@@ -467,7 +464,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586491160045</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="Quick adjustment in data">
+      <created>1586491207792</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1586491207792</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -499,7 +503,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Add daily poll to other server" />
     <MESSAGE value="Integrations with another server added" />
     <MESSAGE value="Fix bot carrousel" />
     <MESSAGE value="1) Rig for use with discord.py 1.3.2&#10;2) Optimize code readability and functionality&#10;3) Create role enforcer for members" />
@@ -524,7 +527,8 @@
     <MESSAGE value="Update TZ config variables for current_time" />
     <MESSAGE value="Fix error iterating through data.json" />
     <MESSAGE value="Separate tictactoe command for organization" />
-    <option name="LAST_COMMIT_MESSAGE" value="Separate tictactoe command for organization" />
+    <MESSAGE value="Quick adjustment in data" />
+    <option name="LAST_COMMIT_MESSAGE" value="Quick adjustment in data" />
   </component>
   <component name="masterDetails">
     <states>
