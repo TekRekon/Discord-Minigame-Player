@@ -33,9 +33,9 @@ class Awair(commands.Cog):
     @staticmethod
     async def reset():
         async with aiohttp.ClientSession() as session:
-            await session.post('https://maker.ifttt.com/trigger/awair_on/with/key/dcUi_OJn4aUvDWuT3TO1jB')
-            await asyncio.sleep(10)
             await session.post('https://maker.ifttt.com/trigger/awair_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
+            await asyncio.sleep(10)
+            await session.post('https://maker.ifttt.com/trigger/awair_on/with/key/dcUi_OJn4aUvDWuT3TO1jB')
 
     @staticmethod
     async def autoHepaToggler():
@@ -73,6 +73,9 @@ class Awair(commands.Cog):
                 JsonTools.changeData('awair', 'hepaOn', False)
                 JsonTools.changeData('awair', 'calls', 0)
                 await Awair.switchHepa(False)
+                async with aiohttp.ClientSession() as session:
+                    await session.post('https://maker.ifttt.com/trigger/awair_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
+                    await asyncio.sleep(3600)
 
             await asyncio.sleep(144)
 
