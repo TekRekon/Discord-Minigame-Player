@@ -10,15 +10,15 @@ class CarouselStatus(commands.Cog):
         self.bot.loop.create_task(self.carousel_status())
 
     async def carousel_status(self):
-        statusNames = ['Made By TekRekon',
+        playingNames = ['Made By TekRekon',
                        'K̴̢̢̲̼̺̖̩̼̫̃̈́͛̑͌̄̚͠Í̵̢̬̺̠̼͖̲̫̲̦͘͝L̵̰̔L̶̛̘̟̖̪̺̜̈́̏̈́̄̾̎͘͝ ̵̡̎̏̑͌̈́́̈́̿̕͠͝͝E̸̛̝͕̹̝̰̲̣̗͊̑̏̂̀͜ͅͅṾ̴̖̪̥͍̫̓̇̈́͐͐͐̐̌͋͘͠ͅE̸͛̃͆̆̇̔̀̍̋̕͠͝ͅŖ̵̧̫̼̮͓̗̻̠͊̎̔̆̆̈̂̓ͅͅY̷̢̙̱̠̰̰̳͚͎̟̼̜͐̇̇̃̈͌͛̓͆͗Ö̴͎̲̥̺̦͎͓͎̳͉̹̪́̇̆̈́̋̀̊͛̒N̶̢̢̩̺̿̀͂̓͗̃̍̕͘E̸̢̟̟͕̫͚̯̟̞̮̫͓̔',
                        f'{len(self.bot.guilds)} servers',
                        f'Latency: {round(self.bot.latency*1000, 2)}ms']
+
         while True:
-            for x in statusNames:
-                await self.bot.change_presence(status=discord.Status.online,
-                                               activity=discord.Game(x), afk=False)
-                await asyncio.sleep(5)
+            for x in playingNames:
+                await self.bot.change_presence(status=discord.Status.online, activity=discord.Game(x), afk=False)
+                await asyncio.sleep(3)
 
 
 def setup(bot):

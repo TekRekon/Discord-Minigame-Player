@@ -67,7 +67,10 @@ class Awair(commands.Cog):
 
                 # Data returned is empty if device offline. The following tries to reset the device
                 except IndexError:
+                    print('reseting awair')
                     await Awair.reset()
+                except TypeError:
+                    print('<ignoring> Data was a NoneType')
 
             elif JsonTools.getData('awair', 'calls') > 0 and time.localtime().tm_hour == 21:
                 JsonTools.changeData('awair', 'hepaOn', False)
