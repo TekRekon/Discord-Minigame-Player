@@ -40,7 +40,6 @@ class TicTacToe(commands.Cog):
                 elif board[i] in ['X', 'O']:
                     board[i] = TicTacToe.convert(board[i])
 
-
     @staticmethod
     def minimax(board, depth, isMaximizing, bot_mark, p_mark):
         result = TicTacToe.checkBoardWin(board)
@@ -132,6 +131,7 @@ class TicTacToe(commands.Cog):
             await sent_embed.add_reaction('🤖')
             await sent_embed.add_reaction('💢')
             reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
+            await sent_embed.delete()
 
             alt_mark = cycle(['X', 'O'])
             p1 = ctx.author
@@ -157,9 +157,8 @@ class TicTacToe(commands.Cog):
                         print('player turn')
                         print(board)
                         TicTacToe.convertBoard(board, False)
+                        embed = discord.Embed(description=f'{p1.mention}({TicTacToe.convert(current_mark)}) Make your move \n \n {board[0]}|{board[1]}|{board[2]} \n {board[3]}|{board[4]}|{board[5]} \n {board[6]}|{board[7]}|{board[8]}', color=0xff0000)
                         embed.set_author(name='Tic Tac Toe (Unbeatable Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
-                        embed.description = embed.description = f'{p1.mention}({TicTacToe.convert(current_mark)}) Make your move \n \n {board[0]}|{board[1]}|{board[2]} \n {board[3]}|{board[4]}|{board[5]} \n {board[6]}|{board[7]}|{board[8]}'
-                        await sent_embed.edit(embed=embed)
                         sent_embed = await ctx.send(embed=embed)
                         for emoji in reactions:
                             await sent_embed.add_reaction(emoji)
@@ -195,84 +194,3 @@ class TicTacToe(commands.Cog):
                         working = False
                         embed.description = f'{current_player.mention}({TicTacToe.convert(current_mark)}) Wins \n \n {board[0]}|{board[1]}|{board[2]} \n {board[3]}|{board[4]}|{board[5]} \n {board[6]}|{board[7]}|{board[8]}'
                         await ctx.send(embed=embed)
-
-            # if reaction.emoji == '🤖':
-            #     p2 = self.bot.user
-            #     pList = [p1, p2]
-            #     random.shuffle(pList)
-            #     alt_player = cycle(pList)
-            #
-            #     while working:
-            #         current_player = next(alt_player)
-            #         current_mark = next(alt_mark)
-            #
-            #         # Player's turn
-            #         if current_player == p1:
-            #             embed = discord.Embed(
-            #                 description=f'{p1.mention}({current_mark}) Make your move \n \n {board[1]}|{board[2]}|{board[3]} \n {board[4]}|{board[5]}|{board[6]} \n {board[7]}|{board[8]}|{board[9]}', color=0xff0000)
-            #             embed.set_author(name='Tic Tac Toe', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
-            #             sent_embed = await ctx.send(embed=embed)
-            #             for emoji in reactions:
-            #                 await sent_embed.add_reaction(emoji)
-            #             reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
-            #             await sent_embed.delete()
-            #             reactions.remove(reaction.emoji)
-            #             for key in board:
-            #                 if board[key] == reaction.emoji:
-            #                     board[key] = current_mark
-            #                     break
-            #             if TicTacToe.checkBoardWin(board) is None:
-            #                 working = False
-            #                 embed.description = f'Tie between {current_player.mention}({current_mark}) and {next(alt_player).mention}({next(alt_mark)}) \n \n {board[1]}|{board[2]}|{board[3]} \n {board[4]}|{board[5]}|{board[6]} \n {board[7]}|{board[8]}|{board[9]}'
-            #                 await ctx.send(embed=embed)
-            #             elif TicTacToe.checkBoardWin(board):
-            #                 working = False
-            #                 embed.description = f'{current_player.mention}({current_mark}) Wins \n \n {board[1]}|{board[2]}|{board[3]} \n {board[4]}|{board[5]}|{board[6]} \n {board[7]}|{board[8]}|{board[9]}'
-            #                 await ctx.send(embed=embed)
-            #
-            #         # AI's turn
-            #         if current_player == p2:
-            #             bot_reaction = random.choice(reactions)
-            #
-            #             # Bot inputs chosen reaction
-            #             reactions.remove(bot_reaction)
-            #             for key in board:
-            #                 if board[key] == bot_reaction:
-            #                     board[key] = current_mark
-            #                     break
-            #             if TicTacToe.checkBoardWin(board) is None:
-            #                 working = False
-            #                 embed.description = f'Tie between {current_player.mention}({current_mark}) and {next(alt_player).mention}({next(alt_mark)}) \n \n {board[1]}|{board[2]}|{board[3]} \n {board[4]}|{board[5]}|{board[6]} \n {board[7]}|{board[8]}|{board[9]}'
-            #                 await ctx.send(embed=embed)
-            #             elif TicTacToe.checkBoardWin(board):
-            #                 working = False
-            #                 embed.description = f'{current_player.mention}({current_mark}) Wins \n \n {board[1]}|{board[2]}|{board[3]} \n {board[4]}|{board[5]}|{board[6]} \n {board[7]}|{board[8]}|{board[9]}'
-            #                 await ctx.send(embed=embed)
-            #
-            # if reaction.emoji == '📲':
-            #     p2 = user
-            #     alt_player = cycle([p1, p2])
-            #     current_player = random.choice[p1, p2]
-            #
-            #     while working:
-            #         current_player = next(alt_player)
-            #         current_mark = next(alt_mark)
-            #         game_embed = discord.Embed(description=f'{current_player.mention}({current_mark})   Make your move \n \n {board[1]}|{board[2]}|{board[3]} \n {board[4]}|{board[5]}|{board[6]} \n {board[7]}|{board[8]}|{board[9]}', color=0xff0000)
-            #         game_embed.set_author(name='Tic Tac Toe', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
-            #         sent_game_embed = await ctx.send(embed=game_embed)
-            #         for emoji in reactions:
-            #             await sent_game_embed.add_reaction(emoji)
-            #         reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
-            #         reactions.remove(reaction.emoji)we3
-            #
-            #         for key in board:
-            #             if board[key] == reaction.emoji:
-            #                 board[key] = current_mark
-            #                 break
-            #         await sent_game_embed.delete()
-
-                    # Check for a win
-
-
-def setup(bot):
-    bot.add_cog(TicTacToe(bot))
