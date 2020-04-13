@@ -173,7 +173,7 @@ class Connect4(commands.Cog):
                     # Player's turn
                     if current_player == p1:
                         ###########################
-                        Connect4.convertBoard(board, False)
+                        Connect4.convertBoard(board, simple=False)
                         #############################
                         embed.set_author(name='Tic Tac Toe (Unbeatable Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
                         embed.description = f'{p1.mention}({Connect4.convert(current_mark)}) Make your move \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
@@ -193,9 +193,9 @@ class Connect4(commands.Cog):
 
                     # AI's turn
                     if current_player == p2:
-                        Connect4.convertBoard(board, True)
+                        Connect4.convertBoard(board, simple=True)
                         index = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark))
-                        Connect4.convertBoard(board, False)
+                        Connect4.convertBoard(board, simple=False)
                         reactions.remove(board[index])
                         board[index] = Connect4.convert(current_mark)
                         next(alt_mark)
