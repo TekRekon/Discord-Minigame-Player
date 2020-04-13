@@ -6,7 +6,7 @@ import random
 import math
 
 
-class TicTacToe(commands.Cog):
+class Connect4(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -14,35 +14,42 @@ class TicTacToe(commands.Cog):
     @staticmethod
     def convert(emoji):
         if emoji == 'X':
-            return '❌'
+            return '🔴'
         elif emoji == 'O':
-            return '⭕'
-        elif emoji == '⭕':
+            return '🟡'
+        elif emoji == '🟡': # Yellow
             return 'O'
-        elif emoji == '❌':
+        elif emoji == '🔴': # Red
             return 'X'
+        elif emoji == '⚪': # White
+            return ' '
+        elif emoji == ' ':
+            return '⚪'
         else:
             return emoji
 
     @staticmethod
     def convertBoard(board, simple):
-        reactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮']
         if simple:
             for i in range(len(board)):
-                if board[i] in reactions:
-                    board[i] = ' '
-                elif board[i] in ['❌', '⭕']:
-                    board[i] = TicTacToe.convert(board[i])
+                for j in range(len(board[i])):
+                    if board[i][j] == '⚪':
+                        board[i][j] = ' '
+                    elif board[i][j] in ['🟡', '🔴']:
+                        board[i][j] = Connect4.convert(board[i][j])
+
         else:
             for i in range(len(board)):
-                if board[i] == ' ':
-                    board[i] = reactions[i]
-                elif board[i] in ['X', 'O']:
-                    board[i] = TicTacToe.convert(board[i])
+                for j in range(len(board[i])):
+                    if board[i][j] == ' ':
+                        board[i][j] = '⚪'
+                    elif board[i][j] in ['X', 'O']:
+                        board[i][j] = Connect4.convert(board[i][j])
+
 
     @staticmethod
     def minimax(board, depth, isMaximizing, bot_mark, p_mark):
-        result = TicTacToe.checkBoardWin(board)
+        result = Connect4.checkBoardWin(board)
         if result == 'TIE':
             return 0
         elif result == bot_mark and isMaximizing:
@@ -60,7 +67,7 @@ class TicTacToe(commands.Cog):
                 if board[i] not in ['X', 'O']:
                     oldKey = board[i]
                     board[i] = bot_mark
-                    bestScore = max(bestScore, TicTacToe.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark))
+                    bestScore = max(bestScore, Connect4.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark))
                     board[i] = oldKey
             return bestScore
         else:
@@ -69,7 +76,7 @@ class TicTacToe(commands.Cog):
                 if board[i] not in ['X', 'O']:
                     oldKey = board[i]
                     board[i] = p_mark
-                    bestScore = min(bestScore, TicTacToe.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark))
+                    bestScore = min(bestScore, Connect4.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark))
                     board[i] = oldKey
             return bestScore
 
@@ -81,7 +88,7 @@ class TicTacToe(commands.Cog):
             if board[i] not in ['X', 'O']:
                 oldMark = board[i]
                 board[i] = botMark
-                score = TicTacToe.minimax(board, 0, False, botMark, pMark)
+                score = Connect4.minimax(board, 0, False, botMark, pMark)
                 board[i] = oldMark
                 if score > bestScore:
                     bestScore = score
@@ -114,31 +121,36 @@ class TicTacToe(commands.Cog):
             return 'NO_END'
 
     @commands.command()
-    async def tictactoe(self, ctx):
+    async def connect4(self, ctx):
         if MessageTools.correct_command_use(ctx, mod_command=False):
 
             def check_reaction(reaction, user):
                 if reaction.emoji in ['📲', '🤖', '💢']:
                     return reaction.message.id == sent_embed.id and user == ctx.author
                 if reaction.emoji in reactions:
-                    return reaction.message.id == sent_embed.id and user == current_player
+                    for i, emoji in enumerate(reactions):
+                        if emoji == reaction.emoji:
+                            print(f'reaction: {emoji} is equal to one in list: {reaction.emoji}')
+                            if board[0][i] == '⚪':
+                                print(f'{board[0][1]} is empty')
+                                print(f'{reaction.message.id} and {sent_embed_id}')
+                                return reaction.message.id == sent_embed_id and user == current_player
+                print('False')
                 return False
 
             embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game \n 🤖: Add a bot \n 💢: Add an unbeatable bot', color=0xff0000)
-            embed.set_author(name='Tic Tac Toe', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
+            embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
             sent_embed = await ctx.send(embed=embed)
             await sent_embed.add_reaction('📲')
             await sent_embed.add_reaction('🤖')
             await sent_embed.add_reaction('💢')
             reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
-            await sent_embed.delete()
-
+            await sent_embed.clear_reactions()
+            reactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬']
             alt_mark = cycle(['X', 'O'])
             p1 = ctx.author
             working = True
-            board = ['🇦', '🇧', '🇨',
-                     '🇩', '🇪', '🇫',
-                     '🇬', '🇭', '🇮']
+            board = [[' ']*7 for i in range(6)]
 
             if reaction.emoji == '💢':
 
@@ -146,51 +158,63 @@ class TicTacToe(commands.Cog):
                 pList = [p1, p2]
                 random.shuffle(pList)
                 alt_player = cycle(pList)
-                reactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮']
+                embed.set_author(name='Connect Four (Unbeatable Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
+                embed.description = 'Loading...'
+                await sent_embed.edit(embed=embed)
+                for emoji in reactions:
+                    await sent_embed.add_reaction(emoji)
+                sent_embed_id = sent_embed.id
+                sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
 
                 while working:
-                    current_player = next(alt_player)
+                    current_player = p1 # next(alt_player)
                     current_mark = next(alt_mark)
 
                     # Player's turn
                     if current_player == p1:
-                        print('player turn')
-                        print(board)
-                        TicTacToe.convertBoard(board, False)
-                        embed = discord.Embed(description=f'{p1.mention}({TicTacToe.convert(current_mark)}) Make your move \n \n {board[0]}|{board[1]}|{board[2]} \n {board[3]}|{board[4]}|{board[5]} \n {board[6]}|{board[7]}|{board[8]}', color=0xff0000)
+                        ###########################
+                        Connect4.convertBoard(board, False)
+                        #############################
                         embed.set_author(name='Tic Tac Toe (Unbeatable Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
-                        sent_embed = await ctx.send(embed=embed)
-                        for emoji in reactions:
-                            await sent_embed.add_reaction(emoji)
+                        embed.description = f'{p1.mention}({Connect4.convert(current_mark)}) Make your move \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                        await sent_embed.edit(embed=embed)
 
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
-                        await sent_embed.delete()
-                        reactions.remove(reaction.emoji)
-                        for i in range(len(board)):
-                            if board[i] == reaction.emoji:
-                                board[i] = TicTacToe.convert(current_mark)
-                                break
+                        await sent_embed.remove_reaction(reaction.emoji, user)
+                        for i, emoji in enumerate(reactions):
+                            print(f'i:{i}, emoji:{emoji}, reaction:{reaction.emoji}')
+                            print(reaction.emoji == emoji)
+                            if emoji == reaction.emoji:
+                                print('emoji is reaction.emoji')
+                                for list in reversed(board):
+                                    if list[i] == '⚪':
+                                        list[i] = Connect4.convert(current_mark)
+                                        break
 
                     # AI's turn
                     if current_player == p2:
-                        TicTacToe.convertBoard(board, True)
-                        print('ai turn')
-                        print(board)
-                        index = TicTacToe.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark))
-                        TicTacToe.convertBoard(board, False)
+                        Connect4.convertBoard(board, True)
+                        index = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark))
+                        Connect4.convertBoard(board, False)
                         reactions.remove(board[index])
-                        board[index] = TicTacToe.convert(current_mark)
+                        board[index] = Connect4.convert(current_mark)
                         next(alt_mark)
 
                     # Evaluate Board
-                    TicTacToe.convertBoard(board, True)
-                    result = TicTacToe.checkBoardWin(board)
-                    TicTacToe.convertBoard(board, False)
+                    Connect4.convertBoard(board, True)
+                    result = Connect4.checkBoardWin(board)
+                    Connect4.convertBoard(board, False)
                     if result == 'TIE':
                         working = False
-                        embed.description = f'Tie between {current_player.mention}({TicTacToe.convert(current_mark)}) and {next(alt_player).mention}({TicTacToe.convert(next(alt_mark))}) \n \n {board[0]}|{board[1]}|{board[2]} \n {board[3]}|{board[4]}|{board[5]} \n {board[6]}|{board[7]}|{board[8]}'
-                        await ctx.send(embed=embed)
+                        embed.description = f'Tie between {current_player.mention}({Connect4.convert(current_mark)}) and {next(alt_player).mention}({Connect4.convert(next(alt_mark))}) \n \n {board[0]}|{board[1]}|{board[2]} \n {board[3]}|{board[4]}|{board[5]} \n {board[6]}|{board[7]}|{board[8]}'
+                        await sent_embed.edit(embed=embed)
+                        await sent_embed.clear_reactions()
                     elif result in ['X', 'O']:
                         working = False
-                        embed.description = f'{current_player.mention}({TicTacToe.convert(current_mark)}) Wins \n \n {board[0]}|{board[1]}|{board[2]} \n {board[3]}|{board[4]}|{board[5]} \n {board[6]}|{board[7]}|{board[8]}'
-                        await ctx.send(embed=embed)
+                        embed.description = f'{current_player.mention}({Connect4.convert(current_mark)}) Wins \n \n {board[0]}|{board[1]}|{board[2]} \n {board[3]}|{board[4]}|{board[5]} \n {board[6]}|{board[7]}|{board[8]}'
+                        await sent_embed.edit(embed=embed)
+                        await sent_embed.clear_reactions()
+
+
+def setup(bot):
+    bot.add_cog(Connect4(bot))

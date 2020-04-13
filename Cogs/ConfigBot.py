@@ -28,9 +28,9 @@ class ConfigBot(commands.Cog):
         elif isinstance(error, commands.DisabledCommand):
             await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: {ctx.command} has been disabled',
                                                delete=True)
-        elif isinstance(error, asyncio.TimeoutError):
-            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Operation timed out',
-                                               delete=False)
+        # elif isinstance(error, asyncio.TimeoutError):
+        #     await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Operation timed out',
+        #                                        delete=False)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):

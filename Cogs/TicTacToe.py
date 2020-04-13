@@ -40,7 +40,6 @@ class TicTacToe(commands.Cog):
                 elif board[i] in ['X', 'O']:
                     board[i] = TicTacToe.convert(board[i])
 
-
     @staticmethod
     def minimax(board, depth, isMaximizing, bot_mark, p_mark):
         result = TicTacToe.checkBoardWin(board)
@@ -133,19 +132,14 @@ class TicTacToe(commands.Cog):
             await sent_embed.add_reaction('💢')
             reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
             await sent_embed.clear_reactions()
-            availableReactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮']
-            embed.set_author(name='Tic Tac Toe (Unbeatable Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
-            embed.description = 'Loading...'
-            await sent_embed.edit(embed=embed)
-            for emoji in availableReactions:
-                await sent_embed.add_reaction(emoji)
-            sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
             alt_mark = cycle(['X', 'O'])
             p1 = ctx.author
             working = True
             board = ['🇦', '🇧', '🇨',
                      '🇩', '🇪', '🇫',
                      '🇬', '🇭', '🇮']
+            availableReactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮']
+
 
             if reaction.emoji == '💢':
 
@@ -153,6 +147,12 @@ class TicTacToe(commands.Cog):
                 pList = [p1, p2]
                 random.shuffle(pList)
                 alt_player = cycle(pList)
+                embed.set_author(name='Tic Tac Toe (Unbeatable Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
+                embed.description = 'Loading...'
+                await sent_embed.edit(embed=embed)
+                for emoji in availableReactions:
+                    await sent_embed.add_reaction(emoji)
+                sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
 
                 while working:
                     current_player = next(alt_player)
@@ -164,13 +164,9 @@ class TicTacToe(commands.Cog):
                         embed.set_author(name='Tic Tac Toe (Unbeatable Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
                         embed.description = f'{p1.mention}({TicTacToe.convert(current_mark)}) Make your move \n \n {board[0]}|{board[1]}|{board[2]} \n {board[3]}|{board[4]}|{board[5]} \n {board[6]}|{board[7]}|{board[8]}'
                         await sent_embed.edit(embed=embed)
-                        print(sent_embed.reactions)
                         for reaction in sent_embed.reactions:
                             if reaction.emoji not in availableReactions:
-                                print(f'{reaction.emoji} not in {availableReactions}')
                                 await sent_embed.clear_reaction(reaction.emoji)
-                            else:
-                                print(f'{reaction.emoji} in {availableReactions}')
 
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
                         availableReactions.remove(reaction.emoji)
