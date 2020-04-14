@@ -58,19 +58,17 @@ class TicTacToe(commands.Cog):
             bestScore = -math.inf
             for i in range(len(board)):
                 if board[i] not in ['X', 'O']:
-                    oldKey = board[i]
                     board[i] = bot_mark
-                    bestScore = max(bestScore, TicTacToe.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark))
-                    board[i] = oldKey
+                    bestScore = TicTacToe.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark)
+                    board[i] = ' '
             return bestScore
         else:
             bestScore = math.inf
             for i in range(len(board)):
                 if board[i] not in ['X', 'O']:
-                    oldKey = board[i]
                     board[i] = p_mark
-                    bestScore = min(bestScore, TicTacToe.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark))
-                    board[i] = oldKey
+                    bestScore = TicTacToe.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark)
+                    board[i] = ' '
             return bestScore
 
     @staticmethod
