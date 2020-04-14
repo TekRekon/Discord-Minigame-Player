@@ -67,22 +67,26 @@ class Connect4(commands.Cog):
             print('bot Won')
             return 10
         elif result == p_mark:
-            print('bot tied')
+            print('bot lost')
             return -10
+
+        print('bot NO_END')
 
         if isMaximizing:
             score = -math.inf
-            for move in Connect4.getValidLocations(board):
-                board[move[0]][move[1]] = bot_mark
-                score = Connect4.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark)
-                board[move[0]][move[1]] = ' '
+            if len(Connect4.getValidLocations(board)) != 0:
+                for move in Connect4.getValidLocations(board):
+                    board[move[0]][move[1]] = bot_mark
+                    score = Connect4.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark)
+                    board[move[0]][move[1]] = ' '
             return score
         else:
             score = math.inf
-            for move in Connect4.getValidLocations(board):
-                board[move[0]][move[1]] = p_mark
-                score = Connect4.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark)
-                board[move[0]][move[1]] = ' '
+            if len(Connect4.getValidLocations(board)) != 0:
+                for move in Connect4.getValidLocations(board):
+                    board[move[0]][move[1]] = p_mark
+                    score = Connect4.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark)
+                    board[move[0]][move[1]] = ' '
             return score
 
     @staticmethod
@@ -104,47 +108,72 @@ class Connect4(commands.Cog):
         for n, list in enumerate(board):
             for i, cell in enumerate(list):
                 try:
-                    print(f'Trying list:({n}-{list}) and cell: ({i}-{cell})')
-                    print(f'{board[n][i]} == {board[n][i+1]} == {board[n][i+2]} == {board[n][i+3]}')
-                    print((board[n][i] == board[n][i+1] == board[n][i+2] == board[n][i+3]))
-                    if (board[n][i] == board[n-1][i+1] == board[n-2][i+2] == board[n-3][i+3]):
-                        print(f'X Won with DIAGONAL <{board[n][i]} at {n}, {i}>')
-                    if (board[n][i] == board[n-1][i-1] == board[n-2][i-2] == board[n-3][i-3]):
-                        print(f'X Won with DIAGONAL <{board[n][i]} at {n}, {i}>')
-                    if (board[n][i] == board[n+1][i] == board[n+2][i] == board[n+3][i]):
-                        print(f'X Won with VERTICAL <{board[n][i]} at {n}, {i}>')
-                    if (board[n][i] == board[n][i+1] == board[n][i+2] == board[n][i+3]):
-                        print(f'X Won with HORIZONTAL <{board[n][i]} at {n}, {i}>')
-
-                        # print(board[0])
-                        # print(board[1])
-                        # print(board[2])
-                        # print(board[3])
-                        # print(board[4])
-                        # print(board[5])
-
+                    if (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2] == board[n - 3][i + 3]) and cell in ['X', 'O'] and i < 4 and n > 2:
+                        print(f'Won with UP-RIGHT DIAGONAL <{board[n][i]} at {n}, {i}> printing cell:{cell}')
+                        print(board[0])
+                        print(board[1])
+                        print(board[2])
+                        print(board[3])
+                        print(board[4])
+                        print(board[5])
+                        return cell
+                except IndexError:
+                    pass
+                try:
+                    if (board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2] == board[n - 3][i - 3]) and cell in ['X', 'O'] and i > 2 and n > 2:
+                        print(f'Won with UP-LEFT DIAGONAL <{board[n][i]} at {n}, {i}>  printing cell:{cell}')
+                        print(board[0])
+                        print(board[1])
+                        print(board[2])
+                        print(board[3])
+                        print(board[4])
+                        print(board[5])
+                        return cell
+                except IndexError:
+                    pass
+                try:
+                    if (board[n][i] == board[n + 1][i] == board[n + 2][i] == board[n + 3][i]) and cell in ['X', 'O'] and n > 2:
+                        print(f'Won with VERTICAL <{board[n][i]} at {n}, {i}>  printing cell:{cell}')
+                        print(board[0])
+                        print(board[1])
+                        print(board[2])
+                        print(board[3])
+                        print(board[4])
+                        print(board[5])
+                        return cell
+                except IndexError:
+                    pass
+                try:
+                    if (board[n][i] == board[n][i + 1] == board[n][i + 2] == board[n][i + 3]) and cell in ['X', 'O'] and i < 4:
+                        print(f'Won with HORIZONTAL <{board[n][i]} at {n}, {i}>  printing cell:{cell}')
+                        print(board[0])
+                        print(board[1])
+                        print(board[2])
+                        print(board[3])
+                        print(board[4])
+                        print(board[5])
+                        return cell
                 except IndexError:
                     pass
 
         for n, list in enumerate(board):
             for i, cell in enumerate(list):
                 if board[n][i] == ' ':
-                    print('Keep playing')
-                    # print(board[0])
-                    # print(board[1])
-                    # print(board[2])
-                    # print(board[3])
-                    # print(board[4])
-                    # print(board[5])
+                    print('NO_END')
+                    print(board[0])
+                    print(board[1])
+                    print(board[2])
+                    print(board[3])
+                    print(board[4])
+                    print(board[5])
                     return 'NO_END'
-
         print('TIE')
-        # print(board[0])
-        # print(board[1])
-        # print(board[2])
-        # print(board[3])
-        # print(board[4])
-        # print(board[5])
+        print(board[0])
+        print(board[1])
+        print(board[2])
+        print(board[3])
+        print(board[4])
+        print(board[5])
         return 'TIE'
 
     @commands.command()
@@ -152,20 +181,13 @@ class Connect4(commands.Cog):
         if MessageTools.correct_command_use(ctx, mod_command=False):
 
             board = [[' ']*7 for i in range(6)]
-            board = [['O', 'O', 'O', 'X', 'O', ' ', ' '],
-                     ['X', 'X', 'X', 'O', 'O', 'X', 'O'],
-                     ['O', 'O', 'O', 'X', 'O', 'O', 'O'],
-                     ['X', 'X', 'X', 'O', 'X', 'X', 'X'],
-                     ['O', 'O', 'O', 'X', 'O', 'O', 'O'],
-                     ['X', 'X', 'X', 'X', 'O', 'X', 'X']]
-            Connect4.checkBoardWin(board)
-            board = [['O', 'O', 'O', 'X', 'O', 'X', ' '],
-                     ['X', 'X', 'X', 'O', 'X', 'X', 'O'],
-                     ['O', 'O', 'O', 'X', 'O', 'O', 'O'],
-                     ['X', 'X', 'X', 'O', 'X', 'X', 'X'],
-                     ['O', 'O', 'O', 'X', 'O', 'O', 'O'],
-                     ['X', 'X', 'X', 'X', 'O', 'X', 'X']]
-            Connect4.checkBoardWin(board)
+            board = [['X', 'X', 'X', 'O', 'O', 'O', ' '],
+                    ['O', 'O', 'O', 'X', 'X', 'X', 'O'],
+                    ['X', 'X', 'X', 'O', 'O', 'X', 'O'],
+                    ['O', 'O', 'O', 'X', 'X', 'X', 'O'],
+                    ['X', 'X', 'X', 'O', 'O', 'O', 'X'],
+                    ['O', 'O', 'O', 'X', 'X', 'O', 'X']]
+
 
             def check_reaction(reaction, user):
                 if reaction.emoji in ['📲', '🤖', '💢']:
