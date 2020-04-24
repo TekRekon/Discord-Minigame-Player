@@ -3,7 +3,6 @@ import asyncio
 from Cogs.Tools import JsonTools
 import aiohttp
 import time
-import random
 # ['data'][0]['sensors']
 # ['data'][0]['indices']
 
@@ -18,7 +17,10 @@ class Awair(commands.Cog):
     async def getSensorData():
         async with aiohttp.ClientSession(headers={'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjUwMjgifQ.xWoxiowcYJlamDta5SXaageYOMh0DR4c86xkxltFalQ'}) as session:
             async with session.get(url='https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true') as r:
-                if r.status == 200:
+                if r.status == 429:
+                    print('Calls to Awair are being rate limited')
+                    return None
+                else:
                     result = await r.json()
                     return result
 
@@ -40,11 +42,8 @@ class Awair(commands.Cog):
     @staticmethod
     async def autoHepaToggler():
         while True:
-            # Check to make sure we don't go over the call limit + conserve calls by only working during the day
-            if 9 <= time.localtime().tm_hour < 21 and JsonTools.getData('awair', 'calls') < 301:
-
-                # Increment call count
-                JsonTools.changeData('awair', 'calls', JsonTools.getData('awair', 'calls')+1)
+            # Conserve calls by only working during the day
+            if 9 <= time.localtime().tm_hour < 21:
 
                 # Get sensor dust/voc level and act on it
                 try:
@@ -56,14 +55,9 @@ class Awair(commands.Cog):
                             voc_level = sensor['value']
 
                     if dust_level > 0 or voc_level > 0:
-                        if not JsonTools.getData('awair', 'hepaOn'):
-                            await Awair.switchHepa(True)
-                            JsonTools.changeData('awair', 'hepaOn', True)
-
-                    elif dust_level < 1 or voc_level < 1:
-                        if JsonTools.getData('awair', 'hepaOn'):
-                            await Awair.switchHepa(False)
-                            JsonTools.changeData('awair', 'hepaOn', False)
+                        await Awair.switchHepa(True)
+                    else:
+                        await Awair.switchHepa(False)
 
                 # Data returned is empty if device offline. The following tries to reset the device
                 except IndexError:
@@ -72,9 +66,9 @@ class Awair(commands.Cog):
                 except TypeError:
                     print('<ignoring> Data was a NoneType')
 
-            elif JsonTools.getData('awair', 'calls') > 0 and time.localtime().tm_hour == 21:
-                JsonTools.changeData('awair', 'hepaOn', False)
-                JsonTools.changeData('awair', 'calls', 0)
+            elif time.localtime().tm_hour == 21:
+                print('not valid time/calls to many')
+                Awair.hepaOn = True
                 await Awair.switchHepa(False)
                 async with aiohttp.ClientSession() as session:
                     await session.post('https://maker.ifttt.com/trigger/awair_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
