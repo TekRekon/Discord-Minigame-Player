@@ -4,7 +4,6 @@ from Cogs.Tools import MessageTools
 from itertools import cycle
 import random
 import math
-# TODO needs work its a dumpster fire
 
 class Connect4(commands.Cog):
 
@@ -29,14 +28,22 @@ class Connect4(commands.Cog):
             return emoji
 
     @staticmethod
-    def getValidLocations(board):
+    def getValidLocations(board, playerPiece, botPiece):
+        Connect4.convertBoard(board, simple=True)
         validMoves = []
         for i in range(0, 7):
             column = [row[i] for row in board]
             for n in reversed(range(0, 6)):
                 if list(column)[n] == ' ':
+                    board[n][i] = playerPiece
+                    if Connect4.checkBoardWin(board) == playerPiece:
+                        validMoves = [[n, i]]
+                        board[n][i] = ' '
+                        return validMoves
+                    board[n][i] = ' '
                     validMoves.append([n, i])
                     break
+
         return validMoves
 
     @staticmethod
@@ -67,7 +74,7 @@ class Connect4(commands.Cog):
 
         if isMaximizing:
             bestScore = -math.inf
-            for move in Connect4.getValidLocations(board):
+            for move in Connect4.getValidLocations(board, p_mark, bot_mark):
                 board[move[0]][move[1]] = bot_mark
                 bestScore = max(bestScore, Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
                 alpha = max(alpha, bestScore)
@@ -77,7 +84,7 @@ class Connect4(commands.Cog):
             return bestScore
         else:
             bestScore = math.inf
-            for move in Connect4.getValidLocations(board):
+            for move in Connect4.getValidLocations(board, p_mark, bot_mark):
                 board[move[0]][move[1]] = p_mark
                 bestScore = min(bestScore, Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
                 beta = min(beta, bestScore)
@@ -88,11 +95,15 @@ class Connect4(commands.Cog):
 
     @staticmethod
     def bestMove(board, botMark, pMark):
+        Connect4.convertBoard(board, simple=True)
         bestScore = -math.inf
         bestMove = []
-        for move in Connect4.getValidLocations(board):
+        for move in Connect4.getValidLocations(board, pMark, botMark):
             board[move[0]][move[1]] = botMark
-            score = Connect4.minimax(board, 6, False, botMark, pMark, -math.inf, math.inf)
+
+            # EDIT DEPTH HERE #
+            score = Connect4.minimax(board, 7, False, botMark, pMark, -math.inf, math.inf)
+
             board[move[0]][move[1]] = ' '
             if score > bestScore:
                 bestScore = score
@@ -101,6 +112,7 @@ class Connect4(commands.Cog):
 
     @staticmethod
     def checkBoardWin(board):
+        Connect4.convertBoard(board, simple=True)
         for n, list in enumerate(board):
             for i, cell in enumerate(list):
                 if i < 4 and n > 2 and (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2] == board[n - 3][i + 3]) and cell in ['X', 'O']:
@@ -123,6 +135,7 @@ class Connect4(commands.Cog):
         try:
             if MessageTools.correct_command_use(ctx, mod_command=False):
 
+                reactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬']
                 board = [[' ']*7 for i in range(6)]
                 board = [[' ', ' ', ' ', ' ', ' ', ' ', ' '],
                          [' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -150,7 +163,6 @@ class Connect4(commands.Cog):
                 await sent_embed.add_reaction('💢')
                 reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
                 await sent_embed.clear_reactions()
-                reactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬']
                 alt_mark = cycle(['X', 'O'])
                 p1 = ctx.author
                 working = True
@@ -196,28 +208,23 @@ class Connect4(commands.Cog):
 
                         # AI's turn
                         if current_player == p2:
-                            ##########
-                            Connect4.convertBoard(board, simple=True)
-                            ###########
                             move = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark))
-                            #########
-                            Connect4.convertBoard(board, simple=False)
-                            #######
-                            board[move[0]][move[1]] = Connect4.convert(current_mark)
+                            board[move[0]][move[1]] = current_mark
                             next(alt_mark)
 
                         # Evaluate Board
-                        Connect4.convertBoard(board, True)
                         result = Connect4.checkBoardWin(board)
                         Connect4.convertBoard(board, False)
                         if result == 'TIE':
                             working = False
                             embed.description = f'Tie between {current_player.mention}({Connect4.convert(current_mark)}) and {next(alt_player).mention}({Connect4.convert(next(alt_mark))}) \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
                         elif result in ['X', 'O']:
                             working = False
                             embed.description = f'{current_player.mention}({Connect4.convert(current_mark)}) Wins \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
         except TimeoutError:

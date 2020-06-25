@@ -146,7 +146,7 @@ class TicTacToe(commands.Cog):
                     depth = 100
                     mode = 'Unbeatable'
                 elif reaction.emoji == '🤖':
-                    depth = 2
+                    depth = 5
                     mode = 'Normal'
                 else:
                     depth = 1
