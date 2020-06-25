@@ -19,23 +19,23 @@ async def on_ready():
     bot.load_extension('Cogs.CarouselStatus')
     print('CarouselStatus initiated')
 
-    bot.load_extension('Cogs.OneWordStoryEnforcer')
-    print('OneWordStoryEnforcer Initiated')
+    # bot.load_extension('Cogs.OneWordStoryEnforcer')
+    # print('OneWordStoryEnforcer Initiated')
 
-    bot.load_extension('Cogs.AutoFormatNewGit')
-    print('AutoFormatNewGit Initiated')
+    # bot.load_extension('Cogs.AutoFormatNewGit')
+    # print('AutoFormatNewGit Initiated')
 
-    bot.load_extension('Cogs.RoleEnforcer')
-    print('RoleEnforcer initiated')
+    # bot.load_extension('Cogs.RoleEnforcer')
+    # print('RoleEnforcer initiated')
 
     bot.load_extension('Cogs.OnDemandEmbed')
     print('OnDemandEmbed initiated')
 
-    bot.load_extension('Cogs.ConfigBot')
-    print('jsonExperiment initiated')
+    # bot.load_extension('Cogs.ConfigBot')
+    # print('jsonExperiment initiated')
 
-    bot.load_extension('Cogs.Fun')
-    print('Fun initiated')
+    # bot.load_extension('Cogs.Fun')
+    # print('Fun initiated')
 
     bot.load_extension('Cogs.Awair')
     print("Awair initiated")
@@ -43,8 +43,8 @@ async def on_ready():
     bot.load_extension('Cogs.TicTacToe')
     print("TicTacToe initiated")
 
-    bot.load_extension('Cogs.Connect4')
-    print("Connect4 initiated")
+    # bot.load_extension('Cogs.Connect4')
+    # print("Connect4 initiated")
 
     print('Rigged for silent running')
 
