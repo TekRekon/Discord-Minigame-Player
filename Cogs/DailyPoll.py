@@ -12,7 +12,7 @@ class DailyPoll(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        DailyPoll.dailyPollChannel = self.bot.get_channel(553760889778733073)
+        DailyPoll.dailyPollChannel = self.bot.get_channel(725540024912707686)
         self.bot.loop.create_task(self.print_daily_poll())
 
     @staticmethod
