@@ -37,7 +37,6 @@ class Connect4(commands.Cog):
                 if list(column)[n] == ' ':
                     validMoves.append([n, i])
                     break
-        print(f'valid moves are: {validMoves}')
         return validMoves
 
     @staticmethod
@@ -56,16 +55,12 @@ class Connect4(commands.Cog):
 
     @staticmethod
     def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
-        print(f'Current depth: {depth}')
         result = Connect4.checkBoardWin(board)
         if result == 'TIE':
-            print('bot tied')
             return 0
         elif result == bot_mark:
-            print('bot Won')
             return 10
         elif result == p_mark:
-            print('bot lost')
             return -10
         elif depth == 0:
             return 0
@@ -97,7 +92,7 @@ class Connect4(commands.Cog):
         bestMove = []
         for move in Connect4.getValidLocations(board):
             board[move[0]][move[1]] = botMark
-            score = Connect4.minimax(board, 5, False, botMark, pMark, -math.inf, math.inf)
+            score = Connect4.minimax(board, 6, False, botMark, pMark, -math.inf, math.inf)
             board[move[0]][move[1]] = ' '
             if score > bestScore:
                 bestScore = score
@@ -195,6 +190,9 @@ class Connect4(commands.Cog):
                                         if list[i] == '⚪':
                                             list[i] = Connect4.convert(current_mark)
                                             break
+                            embed.description = f'{p2.mention}({Connect4.convert(next(alt_mark))}) is thinking... \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            await sent_embed.edit(embed=embed)
+                            next(alt_mark)
 
                         # AI's turn
                         if current_player == p2:
