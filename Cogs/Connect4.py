@@ -4,7 +4,7 @@ from Cogs.Tools import MessageTools
 from itertools import cycle
 import random
 import math
-
+# TODO needs work its a dumpster fire
 
 class Connect4(commands.Cog):
 
