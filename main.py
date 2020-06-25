@@ -43,8 +43,8 @@ async def on_ready():
     bot.load_extension('Cogs.TicTacToe')
     print("TicTacToe initiated")
 
-    # bot.load_extension('Cogs.Connect4')
-    # print("Connect4 initiated")
+    bot.load_extension('Cogs.Connect4')
+    print("Connect4 initiated")
 
     print('Rigged for silent running')
 

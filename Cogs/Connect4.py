@@ -37,6 +37,7 @@ class Connect4(commands.Cog):
                 if list(column)[n] == ' ':
                     validMoves.append([n, i])
                     break
+        print(f'valid moves are: {validMoves}')
         return validMoves
 
     @staticmethod
@@ -44,22 +45,18 @@ class Connect4(commands.Cog):
         if simple:
             for i in range(len(board)):
                 for j in range(len(board[i])):
-                    if board[i][j] == '⚪':
-                        board[i][j] = ' '
-                    elif board[i][j] in ['🔵', '🔴']:
+                    if board[i][j] in ['🔵', '🔴', '⚪']:
                         board[i][j] = Connect4.convert(board[i][j])
 
         else:
             for i in range(len(board)):
                 for j in range(len(board[i])):
-                    if board[i][j] == ' ':
-                        board[i][j] = '⚪'
-                    elif board[i][j] in ['X', 'O']:
+                    if board[i][j] in ['X', 'O', ' ']:
                         board[i][j] = Connect4.convert(board[i][j])
 
     @staticmethod
     def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
-        print(f'Current depth: {depth}, Max Depth 7')
+        print(f'Current depth: {depth}')
         result = Connect4.checkBoardWin(board)
         if result == 'TIE':
             print('bot tied')
@@ -70,31 +67,29 @@ class Connect4(commands.Cog):
         elif result == p_mark:
             print('bot lost')
             return -10
-        elif depth == 10:
+        elif depth == 0:
             return 0
 
-        print('bot NO_END')
-
         if isMaximizing:
+            bestScore = -math.inf
             for move in Connect4.getValidLocations(board):
                 board[move[0]][move[1]] = bot_mark
-                score = Connect4.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark, alpha, beta)
+                bestScore = max(bestScore, Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
+                alpha = max(alpha, bestScore)
                 board[move[0]][move[1]] = ' '
-                if score >= beta:
-                    return score
-                if score > alpha:
-                    alpha = score
-            return score
+                if beta <= alpha:
+                    break
+            return bestScore
         else:
+            bestScore = math.inf
             for move in Connect4.getValidLocations(board):
                 board[move[0]][move[1]] = p_mark
-                score = Connect4.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark, alpha, beta)
+                bestScore = min(bestScore, Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
+                beta = min(beta, bestScore)
                 board[move[0]][move[1]] = ' '
-                if score <= alpha:
-                    return score
-                if score < beta:
-                    beta = score
-            return score
+                if beta <= alpha:
+                    break
+            return bestScore
 
     @staticmethod
     def bestMove(board, botMark, pMark):
@@ -102,8 +97,7 @@ class Connect4(commands.Cog):
         bestMove = []
         for move in Connect4.getValidLocations(board):
             board[move[0]][move[1]] = botMark
-            score = Connect4.minimax(board, 0, False, botMark, pMark, -math.inf, math.inf)
-            print('did one minimax completely')
+            score = Connect4.minimax(board, 5, False, botMark, pMark, -math.inf, math.inf)
             board[move[0]][move[1]] = ' '
             if score > bestScore:
                 bestScore = score
@@ -115,60 +109,18 @@ class Connect4(commands.Cog):
         for n, list in enumerate(board):
             for i, cell in enumerate(list):
                 if i < 4 and n > 2 and (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2] == board[n - 3][i + 3]) and cell in ['X', 'O']:
-                    print(f'Won with UP-RIGHT DIAGONAL <{board[n][i]} at {n}, {i}> printing cell:{cell}')
-                    print(board[0])
-                    print(board[1])
-                    print(board[2])
-                    print(board[3])
-                    print(board[4])
-                    print(board[5])
                     return cell
                 if i > 2 and n > 2 and (board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2] == board[n - 3][i - 3]) and cell in ['X', 'O']:
-                    print(f'Won with UP-LEFT DIAGONAL <{board[n][i]} at {n}, {i}>  printing cell:{cell}')
-                    print(board[0])
-                    print(board[1])
-                    print(board[2])
-                    print(board[3])
-                    print(board[4])
-                    print(board[5])
                     return cell
                 if n < 3 and (board[n][i] == board[n + 1][i] == board[n + 2][i] == board[n + 3][i]) and cell in ['X', 'O']:
-                    print(f'Won with VERTICAL <{board[n][i]} at {n}, {i}>  printing cell:{cell}')
-                    print(board[0])
-                    print(board[1])
-                    print(board[2])
-                    print(board[3])
-                    print(board[4])
-                    print(board[5])
                     return cell
                 if i < 4 and (board[n][i] == board[n][i + 1] == board[n][i + 2] == board[n][i + 3]) and cell in ['X', 'O']:
-                    print(f'Won with HORIZONTAL <{board[n][i]} at {n}, {i}>  printing cell:{cell}')
-                    print(board[0])
-                    print(board[1])
-                    print(board[2])
-                    print(board[3])
-                    print(board[4])
-                    print(board[5])
                     return cell
 
         for n, list in enumerate(board):
             for i, cell in enumerate(list):
                 if board[n][i] == ' ':
-                    print('NO_END')
-                    print(board[0])
-                    print(board[1])
-                    print(board[2])
-                    print(board[3])
-                    print(board[4])
-                    print(board[5])
                     return 'NO_END'
-        print('TIE')
-        print(board[0])
-        print(board[1])
-        print(board[2])
-        print(board[3])
-        print(board[4])
-        print(board[5])
         return 'TIE'
 
     @commands.command()
@@ -195,7 +147,7 @@ class Connect4(commands.Cog):
                                     return reaction.message.id == sent_embed_id and user == current_player
                     return False
 
-                embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game \n 🤖: Add a bot \n 💢: Add an unbeatable bot', color=0xff0000)
+                embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game (not implemented) \n 🤖: Add a bot (not implemented) \n 💢: Add an I don\'t know if you can beat it bot', color=0xff0000)
                 embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
                 sent_embed = await ctx.send(embed=embed)
                 await sent_embed.add_reaction('📲')
@@ -214,7 +166,7 @@ class Connect4(commands.Cog):
                     pList = [p1, p2]
                     random.shuffle(pList)
                     alt_player = cycle(pList)
-                    embed.set_author(name='Connect Four (Unbeatable Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
+                    embed.set_author(name='Connect Four (Maybe beatable? mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
                     embed.description = 'Loading...'
                     await sent_embed.edit(embed=embed)
                     for emoji in reactions:
@@ -232,6 +184,7 @@ class Connect4(commands.Cog):
                             Connect4.convertBoard(board, simple=False)
                             #############################
                             embed.description = f'{p1.mention}({Connect4.convert(current_mark)}) Make your move \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.set_footer(text='Move not registering? Try double tapping')
                             await sent_embed.edit(embed=embed)
 
                             reaction, user = await self.bot.wait_for('reaction_add', timeout=300.0, check=check_reaction)
@@ -245,14 +198,10 @@ class Connect4(commands.Cog):
 
                         # AI's turn
                         if current_player == p2:
-                            print('AI move')
                             ##########
                             Connect4.convertBoard(board, simple=True)
                             ###########
-                            print(board)
-                            print(Connect4.getValidLocations(board))
                             move = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark))
-                            print('got ai move')
                             #########
                             Connect4.convertBoard(board, simple=False)
                             #######
@@ -274,7 +223,7 @@ class Connect4(commands.Cog):
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
         except TimeoutError:
-            print('TIMEOUT ERROR')
+            print('TIMEOUT ERROR in connect4')
             pass
 
 
