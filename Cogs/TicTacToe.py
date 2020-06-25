@@ -117,7 +117,7 @@ class TicTacToe(commands.Cog):
                     return reaction.message.id == sent_embed.id and user == current_player
                 return False
 
-            embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game \n 🤖: Add a bot \n 💢: Add an unbeatable bot', color=0xff0000)
+            embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game (not implemented) \n 🤖: Add a bot (not implemented) \n 💢: Add an unbeatable bot', color=0xff0000)
             embed.set_author(name='Tic Tac Toe', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
             sent_embed = await ctx.send(embed=embed)
             await sent_embed.add_reaction('📲')
@@ -266,7 +266,7 @@ class TicTacToe(commands.Cog):
             #                 await sent_game_embed.add_reaction(emoji)
             #             reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
             #             reactions.remove(reaction.emoji)we3
-            # 
+            #
             #             for key in board:
             #                 if board[key] == reaction.emoji:
             #                     board[key] = current_mark
