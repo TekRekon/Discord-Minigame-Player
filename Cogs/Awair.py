@@ -48,6 +48,7 @@ class Awair(commands.Cog):
                 # Get sensor dust/voc level and act on it
                 try:
                     f = await Awair.getSensorData()
+                    print(f['data'][0]['indices'])
                     for sensor in f['data'][0]['indices']:
                         if sensor['comp'] == 'pm25':
                             dust_level = sensor['value']
