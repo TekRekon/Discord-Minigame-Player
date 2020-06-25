@@ -146,8 +146,10 @@ class Connect4(commands.Cog):
 
 
                 def check_reaction(reaction, user):
-                    if reaction.emoji in ['📲', '🤖', '💢']:
+                    if reaction.emoji in ['🤖', '💢']:
                         return reaction.message.id == sent_embed.id and user == ctx.author
+                    if reaction.emoji == '📲':
+                        return reaction.message.id == sent_embed.id and user != ctx.author
                     if reaction.emoji in reactions:
                         for i, emoji in enumerate(reactions):
                             if emoji == reaction.emoji:
@@ -227,6 +229,69 @@ class Connect4(commands.Cog):
                             embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
+
+                # if reaction.emoji == '📲':
+                #
+                #     p2 = self.bot.user
+                #     pList = [p1, p2]
+                #     random.shuffle(pList)
+                #     alt_player = cycle(pList)
+                #     embed.set_author(name='Connect Four (Maybe beatable? mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
+                #     embed.description = 'Loading...'
+                #     await sent_embed.edit(embed=embed)
+                #     for emoji in reactions:
+                #         await sent_embed.add_reaction(emoji)
+                #     sent_embed_id = sent_embed.id
+                #     sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
+                #
+                #     while working:
+                #         current_player = next(alt_player)
+                #         current_mark = next(alt_mark)
+                #
+                #         # Player's turn
+                #         if current_player == p1:
+                #             ###########################
+                #             Connect4.convertBoard(board, simple=False)
+                #             #############################
+                #             embed.description = f'{p1.mention}({Connect4.convert(current_mark)}) Make your move \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                #             embed.set_footer(text='Move not registering? Try double tapping')
+                #             await sent_embed.edit(embed=embed)
+                #
+                #             reaction, user = await self.bot.wait_for('reaction_add', timeout=300.0, check=check_reaction)
+                #             await sent_embed.remove_reaction(reaction.emoji, user)
+                #             for i, emoji in enumerate(reactions):
+                #                 if emoji == reaction.emoji:
+                #                     for list in reversed(board):
+                #                         if list[i] == '⚪':
+                #                             list[i] = Connect4.convert(current_mark)
+                #                             break
+                #             embed.description = f'{p2.mention}({Connect4.convert(next(alt_mark))}) is thinking... \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                #             await sent_embed.edit(embed=embed)
+                #             next(alt_mark)
+                #
+                #         # AI's turn
+                #         if current_player == p2:
+                #             move = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark))
+                #             board[move[0]][move[1]] = current_mark
+                #             next(alt_mark)
+                #
+                #         # Evaluate Board
+                #         result = Connect4.checkBoardWin(board)
+                #         Connect4.convertBoard(board, False)
+                #         if result == 'TIE':
+                #             working = False
+                #             embed.description = f'Tie between {current_player.mention}({Connect4.convert(current_mark)}) and {next(alt_player).mention}({Connect4.convert(next(alt_mark))}) \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                #             embed.set_footer(text='')
+                #             await sent_embed.edit(embed=embed)
+                #             await sent_embed.clear_reactions()
+                #         elif result in ['X', 'O']:
+                #             working = False
+                #             embed.description = f'{current_player.mention}({Connect4.convert(current_mark)}) Wins \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                #             embed.set_footer(text='')
+                #             await sent_embed.edit(embed=embed)
+                #             await sent_embed.clear_reactions()
+
+
         except TimeoutError:
             print('TIMEOUT ERROR in connect4')
             pass
