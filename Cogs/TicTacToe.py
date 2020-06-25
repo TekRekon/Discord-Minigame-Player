@@ -41,33 +41,29 @@ class TicTacToe(commands.Cog):
                     board[i] = TicTacToe.convert(board[i])
 
     @staticmethod
-    def minimax(board, depth, isMaximizing, bot_mark, p_mark):
+    def minimax(board, isMaximizing, bot_mark, p_mark):
         result = TicTacToe.checkBoardWin(board)
         if result == 'TIE':
             return 0
-        elif result == bot_mark and isMaximizing:
-            return 10-depth
-        elif result == p_mark and not isMaximizing:
-            return -10+depth
         elif result == bot_mark:
             return 10
         elif result == p_mark:
-            return -10
+            return -100
 
         if isMaximizing:
             bestScore = -math.inf
             for i in range(len(board)):
-                if board[i] not in ['X', 'O']:
+                if board[i] == ' ':
                     board[i] = bot_mark
-                    bestScore = TicTacToe.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark)
+                    bestScore = max(TicTacToe.minimax(board, not isMaximizing, bot_mark, p_mark), bestScore)
                     board[i] = ' '
             return bestScore
         else:
             bestScore = math.inf
             for i in range(len(board)):
-                if board[i] not in ['X', 'O']:
+                if board[i] == ' ':
                     board[i] = p_mark
-                    bestScore = TicTacToe.minimax(board, depth + 1, not isMaximizing, bot_mark, p_mark)
+                    bestScore = min(TicTacToe.minimax(board, not isMaximizing, bot_mark, p_mark), bestScore)
                     board[i] = ' '
             return bestScore
 
@@ -76,11 +72,10 @@ class TicTacToe(commands.Cog):
         bestScore = -math.inf
         move = 0
         for i in range(len(board)):
-            if board[i] not in ['X', 'O']:
-                oldMark = board[i]
+            if board[i] == ' ':
                 board[i] = botMark
-                score = TicTacToe.minimax(board, 0, False, botMark, pMark)
-                board[i] = oldMark
+                score = TicTacToe.minimax(board, False, botMark, pMark)
+                board[i] = ' '
                 if score > bestScore:
                     bestScore = score
                     move = i
