@@ -104,8 +104,10 @@ class Connect4(commands.Cog):
                     # Positional Values
                     if board[n][i] == bot_mark:
                         botScore += Connect4.getPosValue(n, i)
+                        print('triggered botScore pos')
                     if board[n][i] == p_mark:
                         pScore += Connect4.getPosValue(n, i)
+                        print('triggred player pos')
 
                     # (3) up right
                     # (3) up left
@@ -115,23 +117,25 @@ class Connect4(commands.Cog):
                             or (i > 1 and n > 1 and (board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2])) \
                             or (n < 4 and (board[n][i] == board[n + 1][i] == board[n + 2][i])) \
                             or (i < 5 and (board[n][i] == board[n][i + 1] == board[n][i + 2])):
+                        print(f'triggered triple for {cell}')
                         if cell == bot_mark:
                             botScore += 200
                         else:
                             pScore += 200
 
-                # (2) up right
-                # (2) up left
-                # (2) vertical
-                # (2) horizontal
-                if (i < 6 and n > 0 and (board[n][i] == board[n - 1][i + 1])) \
-                        or (i > 0 and n > 0 and (board[n][i] == board[n - 1][i - 1])) \
-                        or (n < 5 and (board[n][i] == board[n + 1][i])) \
-                        or (i < 6 and (board[n][i] == board[n][i + 1])):
-                    if cell == bot_mark:
-                        botScore += 50
-                    else:
-                        pScore += 50
+                    # (2) up right
+                    # (2) up left
+                    # (2) vertical
+                    # (2) horizontal
+                    if (i < 6 and n > 0 and (board[n][i] == board[n - 1][i + 1])) \
+                            or (i > 0 and n > 0 and (board[n][i] == board[n - 1][i - 1])) \
+                            or (n < 5 and (board[n][i] == board[n + 1][i])) \
+                            or (i < 6 and (board[n][i] == board[n][i + 1])):
+                        print(f'triggered double for {cell}')
+                        if cell == bot_mark:
+                            botScore += 50
+                        else:
+                            pScore += 50
         return botScore - pScore
 
     @staticmethod
@@ -228,7 +232,9 @@ class Connect4(commands.Cog):
                 embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game (not implemented) \n 🤖: **Spectate two bots fight** \n 💢: **Add a smart AI**', color=0xff0000)
                 embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
                 sent_embed = await ctx.send(embed=embed)
-                await sent_embed.add_reaction('📲', '🤖', '💢')
+                await sent_embed.add_reaction('📲')
+                await sent_embed.add_reaction('🤖')
+                await sent_embed.add_reaction('💢')
                 reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
                 await sent_embed.clear_reactions()
                 alt_mark = cycle(['X', 'O'])
@@ -298,6 +304,7 @@ class Connect4(commands.Cog):
                             botTime = end - start
 
                         # Evaluate Board #
+                        Connect4.convertBoard(board, simple=True)
                         result = Connect4.checkBoardWin(board)
                         Connect4.convertBoard(board, simple=False)
                         if result == 'TIE':
@@ -317,16 +324,16 @@ class Connect4(commands.Cog):
                 if reaction.emoji == '🤖':
 
                     # Constants #
-                    depth = 5
+                    depth1 = 5
+                    depth2 = 5
                     bot1Time = 10
                     temp1 = 0
-                    bot2time = 10
+                    bot2Time = 10
                     temp2= 0
-                    p1 = self.bot.user
-                    p2 = self.bot.user
-                    pList = [p1, p2]
+                    pList = ['p1', 'p2']
                     random.shuffle(pList)
                     alt_player = cycle(pList)
+
 
                     # Loading Connect4 #
                     embed.set_author(name='Connect Four (Spectator Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
@@ -338,50 +345,63 @@ class Connect4(commands.Cog):
                     # Actual Game #
                     while working:
                         current_player = next(alt_player)
+                        print (f'currentP = {current_player}')
                         current_mark = next(alt_mark)
-                        currentHeursitic = Connect4.boardHeuristic(board, Connect4.convert(next(alt_mark)), Connect4.convert(next(alt_mark)))
+                        Connect4.convertBoard(board, simple=True)
 
                         # AI 1 turn
-                        if current_player == p1:
-                            Connect4.convertBoard(board, simple=True)
+                        if current_player == 'p1':
+                            if bot1Time < 3:
+                                temp1 +=1
+                                if temp1 == 2:
+                                    depth1 += 1
+                                    temp1 = 0
                             start = time.time()
-                            move = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark), depth=depth)
+                            move = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark), depth=depth1)
                             board[move[0]][move[1]] = current_mark
                             next(alt_mark)
                             end = time.time()
                             bot1Time = end - start
 
-                            if botTime < 3:
-                                temp +=1
-                                if temp == 2:
-                                    depth += 1
-                                    temp = 0
-                            embed.description = f'{p2.mention}({Connect4.convert(next(alt_mark))}) is thinking... \n \n Current bot score: **{currentHeursitic}** \n \n You took **{round(end-start, 1)} seconds** \n \n I\'m planning ahead with depth **{depth}** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            Connect4.convertBoard(board, simple=False)
+                            print('editing for p2')
+                            embed.description = f'**P2** ({Connect4.convert(next(alt_mark))}) is thinking... \n \n **P1** took **{round(bot1Time, 1)} seconds** \n \n **P2** planning with depth **{depth2}** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
                             await sent_embed.edit(embed=embed)
                             next(alt_mark)
 
                         # AI 2 turn
-                        elif current_player == p2:
-                            Connect4.convertBoard(board, simple=True)
+                        elif current_player == 'p2':
+                            if bot2Time < 3:
+                                temp2 +=1
+                                if temp2 == 2:
+                                    depth2 += 1
+                                    temp2 = 0
                             start = time.time()
-                            move = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark), depth=depth)
+                            move = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark), depth=depth2)
                             board[move[0]][move[1]] = current_mark
                             next(alt_mark)
                             end = time.time()
-                            botTime = end - start
+                            bot2Time = end - start
+
+                            Connect4.convertBoard(board, simple=False)
+                            print('editing for p1')
+                            embed.description = f'**P1**({Connect4.convert(next(alt_mark))}) is thinking... \n \n **P2** took **{round(bot2Time, 1)} seconds** \n \n **P1** planning with depth **{depth1}** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            await sent_embed.edit(embed=embed)
+                            next(alt_mark)
 
                         # Evaluate Board #
+                        Connect4.convertBoard(board, simple=True)
                         result = Connect4.checkBoardWin(board)
                         Connect4.convertBoard(board, simple=False)
                         if result == 'TIE':
                             working = False
-                            embed.description = f'Tie between {current_player.mention}({Connect4.convert(current_mark)}) and {next(alt_player).mention}({Connect4.convert(next(alt_mark))}) \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.description = f'Tie between {current_player}({Connect4.convert(current_mark)}) and {next(alt_player)}({Connect4.convert(next(alt_mark))}) \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
                             embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
                         elif result in ['X', 'O']:
                             working = False
-                            embed.description = f'{current_player.mention}({Connect4.convert(current_mark)}) Wins \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.description = f'{current_player}({Connect4.convert(current_mark)}) Wins \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
                             embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
