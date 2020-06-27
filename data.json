@@ -29,8 +29,7 @@
     "726559202411282485": {
         "guildID": "Testing",
         "prefix": ".",
-        "noCommandChannels": [
-        ]
+        "noCommandChannels": []
     },
     "constants": {
         "prevQuestion": "Today is National Ice Cream Cake Day! How do you feel about ice cream cake?"
@@ -44,5 +43,8 @@
         "prefix": ".",
         "oneWordPrevAuthor": "0",
         "oneWordChannel": "0"
+    },
+    "Moves": {
+        "ConnectGame with TekRekon#8032": []
     }
 }
