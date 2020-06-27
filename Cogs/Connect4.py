@@ -139,9 +139,9 @@ class Connect4(commands.Cog):
                             or (i < 4 and (board[n][i] == board[n][i + 2] == board[n][i + 3])) \
                             or (i < 4 and (board[n][i] == board[n][i + 1] == board[n][i + 3])):
                         if cell == bot_mark:
-                            botScore += 200
+                            botScore += 250
                         else:
-                            pScore += 210
+                            pScore += 260
 
                     # (3) up right
                     # (3) up left
@@ -237,6 +237,10 @@ class Connect4(commands.Cog):
                         return 'TIE'
         return 'NO_END'
 
+    # async def editMSG(self, board, botTurn, embed, sentEmbed):
+    #
+    #
+
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def connect4(self, ctx):
@@ -261,7 +265,7 @@ class Connect4(commands.Cog):
                         for i, emoji in enumerate(reactions):
                             if emoji == reaction.emoji:
                                 if board[0][i] == '⚪':
-                                    return reaction.message.id == sent_embed_id and user == current_player
+                                    return reaction.message.id == sent_embed.id and user == current_player
                     return False
 
                 embed = discord.Embed(
@@ -291,6 +295,17 @@ class Connect4(commands.Cog):
                     pList = [p1, p2]
                     random.shuffle(pList)
                     alt_player = cycle(pList)
+                    longestTime = 0
+                    lowestScore = 0
+                    highestScore = 0
+                    odd = False
+                    if (next(alt_player) == self.bot.user):
+                        odd = True
+                        print('Bot is odd')
+                    next(alt_player)
+                    print('human is odd')
+
+
 
                     # Loading Connect4 #
                     embed.set_author(name='Connect Four (Smart Mode)',
@@ -299,7 +314,6 @@ class Connect4(commands.Cog):
                     await sent_embed.edit(embed=embed)
                     for emoji in reactions:
                         await sent_embed.add_reaction(emoji)
-                    sent_embed_id = sent_embed.id
                     sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
 
                     # Actual Game #
@@ -312,6 +326,13 @@ class Connect4(commands.Cog):
                             next(alt_mark)
                         else:
                             currentHeursitic = Connect4.boardHeuristic(board, next(alt_mark), next(alt_mark))
+
+                        if currentHeursitic < lowestScore:
+                            lowestScore = currentHeursitic
+                        elif currentHeursitic > highestScore:
+                            highestScore = currentHeursitic
+                        if botTime > longestTime:
+                            longestTime = botTime
 
                         # Player's turn
                         if current_player == p1:
@@ -361,7 +382,7 @@ class Connect4(commands.Cog):
                             await sent_embed.clear_reactions()
                         elif result in ['X', 'O']:
                             working = False
-                            embed.description = f'{current_player.mention}({Connect4.convert(current_mark)}) Wins \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.description = f'{current_player.mention}({Connect4.convert(current_mark)}) Wins \n {next(alt_player).mention}({Connect4.convert(next(alt_mark))}) Loses \n My **highest score** was **{highestScore}** \n My **lowest score** was **{lowestScore}** \n My **longest move** took **{round(longestTime, 1)} seconds** \n I ended with depth **{depth}** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
                             embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
@@ -396,7 +417,7 @@ class Connect4(commands.Cog):
 
                         # AI 1 turn
                         if current_player == 'P1':
-                            if bot1Time < 4:
+                            if bot1Time < 5:
                                 temp1 += 1
                                 if temp1 == 2:
                                     depth1 += 1

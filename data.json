@@ -26,6 +26,12 @@
         "oneWordChannel": 695703812043702354,
         "oneWordPrevAuthor": 285879705989677058
     },
+    "726559202411282485": {
+        "guildID": "Testing",
+        "prefix": ".",
+        "noCommandChannels": [
+        ]
+    },
     "constants": {
         "prevQuestion": "Today is National Ice Cream Cake Day! How do you feel about ice cream cake?"
     },
