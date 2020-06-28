@@ -125,70 +125,117 @@ class Connect4(commands.Cog):
                     # Single Piece Value
                     pieceValue += Connect4.getPosValue(n, i)
 
-
-
-                    # (3) vertical hole * 2
-
                     if i < 4:
-                        # (3) horizontal hole * 2
-                        if i < 4 and board[n][i + 1] == ' ' and board[n][i] == board[n][i + 2] == board[n][i + 3]:
-                            pieceValue += 250
-                        if i < 4 and board[n][i + 2] == ' ' and board[n][i] == board[n][i + 1] == board[n][i + 3]:
-                            pieceValue += 250
+                        # (3) horizontal holes
+                        if board[n][i + 1] == ' ' and board[n][i] == board[n][i + 2] == board[n][i + 3]:
+                            pieceValue += 200
+                        elif board[n][i + 2] == ' ' and board[n][i] == board[n][i + 1] == board[n][i + 3]:
+                            pieceValue += 200
+
+                        # (3) horizontal
+                        if board[n][i] == board[n][i + 1] == board[n][i + 2]:
+                            if i != 3:
+                                if board[n][i + 3] == ' ':
+                                    pieceValue += 200
+                            if i != 0:
+                                if board[n][i - 1] == ' ':
+                                    pieceValue += 200
+
                         if n > 2:
-                            # (3) up right hole *2
+                            # (3) up right holes
                             if board[n - 1][i + 1] == ' ' and board[n][i] == board[n - 2][i + 2] == board[n - 3][i + 3]:
-                                pieceValue += 250
-                            if board[n - 2][i + 2] == ' ' and (board[n][i] == board[n - 1][i + 1] == board[n - 3][i + 3]):
-                                pieceValue += 250
+                                pieceValue += 200
+                            elif board[n - 2][i + 2] == ' ' and (board[n][i] == board[n - 1][i + 1] == board[n - 3][i + 3]):
+                                pieceValue += 200
+
+                            # (3) up right
+                            if board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2]:
+                                if n != 5 and i != 0:
+                                    if board[n + 1][i - 1] == ' ':
+                                        pieceValue += 200
+                                if board[n - 3][i + 3] == ' ':
+                                    pieceValue += 200
+
+                            # (3) up left
+                            if board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2]:
+                                if n != 5 and i != 6:
+                                    if board[n + 1][i + 1] == ' ':
+                                        pieceValue += 200
+                                if board[n - 3][i - 3] == ' ':
+                                    pieceValue += 200
 
                     if i > 2 and n > 2:
-                        # (3) up left hole * 2
+                        # (3) up left holes
                         if board[n - 1][i - 1] == ' ' and board[n][i] == board[n - 2][i - 2] == board[n - 3][i - 3]:
-                            pieceValue += 250
-                        if board[n - 2][i - 2] == ' ' and board[n][i] == board[n - 1][i - 1] == board[n - 3][i - 3]:
-                            pieceValue += 250
-                    if n < 3:
-                        if board[n + 1][i] == ' ' and board[n][i] == board[n + 2][i] == board[n + 3][i]:
-                            pieceValue += 250
-                        if board[n + 2][i] == ' ' and board[n][i] == board[n + 1][i] == board[n + 3][i]:
-                            pieceValue += 250
+                            pieceValue += 200
+                        elif board[n - 2][i - 2] == ' ' and board[n][i] == board[n - 1][i - 1] == board[n - 3][i - 3]:
+                            pieceValue += 200
 
-
-
-                    # (3) up right
-                    # (3) up left
                     # (3) vertical
-                    # (3) horizontal
-                    if (i < 5 and n > 1 and (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2])):
-                    if (i > 1 and n > 1 and (board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2])):
-                    if (n < 4 and (board[n][i] == board[n + 1][i] == board[n + 2][i])):
-                    if (i < 5 and (board[n][i] == board[n][i + 1] == board[n][i + 2])):
-                        pieceValue += 200
+                    if n < 4 and board[n][i] == board[n + 1][i] == board[n + 2][i]:
+                        if n != 0:
+                            if board[n - 1][i] == ' ':
+                                pieceValue += 180
 
-                    # (2) up right
-                    # (2) up left
-                    # (2) vertical
-                    # (2) horizontal
-                    if (i < 6 and n > 0 and (board[n][i] == board[n - 1][i + 1])) \
-                            or (i > 0 and n > 0 and (board[n][i] == board[n - 1][i - 1])) \
-                            or (n < 5 and (board[n][i] == board[n + 1][i])) \
-                            or (i < 6 and (board[n][i] == board[n][i + 1])):
-                        if cell == bot_mark:
-                            botScore += 50
-                        else:
-                            pScore += 60
+                    if n > 0:
+                        if i < 6:
+                            # (2) up right
+                            if board[n][i] == board[n - 1][i + 1]:
+                                if n != 1 and i != 5:
+                                    if board[n - 2][i + 2] == ' ':
+                                        pieceValue += 50
+                                if n != 5 and i != 0:
+                                    if board[n + 1][i - 1] == ' ':
+                                        pieceValue += 50
+
+                        if i > 0:
+                            # (2) up left
+                            if board[n][i] == board[n - 1][i - 1]:
+                                if n != 1 and i != 1:
+                                    if board[n - 2][i - 2] == ' ':
+                                        pieceValue += 50
+                                    if i != 6 and n != 5:
+                                        if board[n + 1][i + 1] == ' ':
+                                            pieceValue += 50
+
+                    if n < 5:
+                        # (2) vertical
+                        if board[n][i] == board[n + 1][i]:
+                            if n > 0:
+                                if board[n - 1][i] == ' ':
+                                    pieceValue += 25
+
+                    if i < 6:
+                        # (2) horizontal
+                       if board[n][i] == board[n][i + 1]:
+                           if i != 5:
+                               if board[n][i + 2] == ' ':
+                                   pieceValue += 50
+                           if i != 0:
+                               if board[n][i - 1] == ' ':
+                                   pieceValue += 50
+
+                    if cell == bot_mark:
+                        botScore += pieceValue
+                    elif cell == p_mark:
+                        pScore += pieceValue
+        print(f'returning {botScore} - {pScore} = {botScore-pScore}')
         return botScore - pScore
 
     @staticmethod
     def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
         result = Connect4.checkBoardWin(board)
+        print(f'result: {result}')
+        print(f'{board[0]} \n {board[1]} \n {board[2]} \n {board[3]} \n {board[4]} \n {board[5]}')
         if result == 'TIE':
+            print('bot tie')
             return 0
         elif result == bot_mark:
-            return 100000
+            print('bot win')
+            return 100000000000000000000000000000
         elif result == p_mark:
-            return -100000000000
+            print('p win')
+            return -100000000000000000000000000000
         elif depth == 0:
             return Connect4.boardHeuristic(board, bot_mark, p_mark)
 
@@ -197,8 +244,7 @@ class Connect4(commands.Cog):
             moves, bool = Connect4.getValidLocations(board, p_mark, bot_mark)
             for move in moves:
                 board[move[0]][move[1]] = bot_mark
-                bestScore = max(bestScore,
-                                Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
+                bestScore = max(bestScore, Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
                 alpha = max(alpha, bestScore)
                 board[move[0]][move[1]] = ' '
                 if beta <= alpha:
@@ -209,8 +255,7 @@ class Connect4(commands.Cog):
             moves, bool = Connect4.getValidLocations(board, p_mark, bot_mark)
             for move in moves:
                 board[move[0]][move[1]] = p_mark
-                bestScore = min(bestScore,
-                                Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
+                bestScore = min(bestScore, Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
                 beta = min(beta, bestScore)
                 board[move[0]][move[1]] = ' '
                 if beta <= alpha:
@@ -236,11 +281,9 @@ class Connect4(commands.Cog):
         for n, list in enumerate(board):
             for i, cell in enumerate(list):
                 if cell in ['X', 'O']:
-                    if i < 4 and n > 2 and (
-                            board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2] == board[n - 3][i + 3]):
+                    if i < 4 and n > 2 and (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2] == board[n - 3][i + 3]):
                         return cell
-                    if i > 2 and n > 2 and (
-                            board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2] == board[n - 3][i - 3]):
+                    if i > 2 and n > 2 and (board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2] == board[n - 3][i - 3]):
                         return cell
                     if n < 3 and (board[n][i] == board[n + 1][i] == board[n + 2][i] == board[n + 3][i]):
                         return cell
@@ -249,10 +292,6 @@ class Connect4(commands.Cog):
                     if n == 0 and ' ' not in board[n]:
                         return 'TIE'
         return 'NO_END'
-
-    # async def editMSG(self, board, botTurn, embed, sentEmbed):
-    #
-    #
 
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
@@ -328,9 +367,9 @@ class Connect4(commands.Cog):
 
                     # Actual Game #
                     while working:
+                        Connect4.convertBoard(board, simple=True)
                         current_player = next(alt_player)
                         current_mark = next(alt_mark)
-                        Connect4.convertBoard(board, simple=True)
                         if current_player == self.bot.user:
                             currentHeursitic = Connect4.boardHeuristic(board, current_mark, next(alt_mark))
                             next(alt_mark)
