@@ -52,6 +52,16 @@ def addGuild(guild):
     with open('data.json', 'w') as g:
         json.dump(data, g, indent=4)
 
+def addDict(dict):
+    """
+    Initialize a new empty dictionary
+    """
+    with open('data.json', 'r') as f:
+        data = json.load(f)
+    data.update({dict: {}})
+    with open('data.json', 'w') as g:
+        json.dump(data, g, indent=4)
+
 
 def removeListVar(dict, list_key, del_var):
     """

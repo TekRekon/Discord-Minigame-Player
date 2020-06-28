@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-from Cogs.Tools import MessageTools
+from Cogs.Tools import MessageTools, JsonTools
 from itertools import cycle
 import random
 import math
@@ -43,7 +43,7 @@ class Connect4(commands.Cog):
                     if Connect4.checkBoardWin(board) == playerPiece:
                         validMoves = [[n, i]]
                         board[n][i] = ' '
-                        return validMoves
+                        return validMoves, True
 
                     # Double turn win anticipation
                     board[n][i] = botPiece
@@ -62,9 +62,9 @@ class Connect4(commands.Cog):
                     break
 
         if (len(validMoves)) == 0:
-            return badMoves
+            return badMoves, False
 
-        return validMoves
+        return validMoves, False
 
     @staticmethod
     def convertBoard(board, simple):
@@ -82,35 +82,36 @@ class Connect4(commands.Cog):
 
     @staticmethod
     def getPosValue(i, j):
+        multipier = 2
         if i == 5 or i == 0:
             if j == 3:
-                return 7
+                return 7*multipier
             if j == 2 or j == 4:
-                return 5
+                return 5*multipier
             if j == 1 or j == 5:
-                return 4
+                return 4*multipier
             else:
-                return 3
+                return 3*multipier
 
         if i == 4 or i == 1:
             if j == 3:
-                return 10
+                return 10*multipier
             if j == 2 or j == 4:
-                return 8
+                return 8*multipier
             if j == 1 or j == 5:
-                return 6
+                return 6*multipier
             else:
-                return 4
+                return 4*multipier
 
         else:
             if j == 3:
-                return 13
+                return 13*multipier
             if j == 2 or j == 4:
-                return 11
+                return 11*multipier
             if j == 1 or j == 5:
-                return 8
+                return 8*multipier
             else:
-                return 5
+                return 5*multipier
 
     @staticmethod
     def boardHeuristic(board, bot_mark, p_mark):
@@ -119,42 +120,51 @@ class Connect4(commands.Cog):
         for n, list in enumerate(board):
             for i, cell in enumerate(list):
                 if cell in ['X', 'O']:
+                    pieceValue = 0
 
-                    # Positional Values
-                    if board[n][i] == bot_mark:
-                        botScore += Connect4.getPosValue(n, i)
-                    if board[n][i] == p_mark:
-                        pScore += Connect4.getPosValue(n, i)
+                    # Single Piece Value
+                    pieceValue += Connect4.getPosValue(n, i)
 
-                    # (3) up right hole *2
-                    # (3) up left hole * 2
+
+
                     # (3) vertical hole * 2
-                    # (3) horizontal hole * 2
-                    if (i < 4 and n > 2 and (board[n][i] == board[n - 2][i + 2] == board[n - 3][i + 3])) \
-                            or (i < 4 and n > 2 and (board[n][i] == board[n - 1][i + 1] == board[n - 3][i + 3])) \
-                            or (i > 2 and n > 2 and (board[n][i] == board[n - 2][i - 2] == board[n - 3][i - 3])) \
-                            or (i > 2 and n > 2 and (board[n][i] == board[n - 1][i - 1] == board[n - 3][i - 3])) \
-                            or (n < 3 and (board[n][i] == board[n + 2][i] == board[n + 3][i])) \
-                            or (n < 3 and (board[n][i] == board[n + 1][i] == board[n + 3][i])) \
-                            or (i < 4 and (board[n][i] == board[n][i + 2] == board[n][i + 3])) \
-                            or (i < 4 and (board[n][i] == board[n][i + 1] == board[n][i + 3])):
-                        if cell == bot_mark:
-                            botScore += 250
-                        else:
-                            pScore += 260
+
+                    if i < 4:
+                        # (3) horizontal hole * 2
+                        if i < 4 and board[n][i + 1] == ' ' and board[n][i] == board[n][i + 2] == board[n][i + 3]:
+                            pieceValue += 250
+                        if i < 4 and board[n][i + 2] == ' ' and board[n][i] == board[n][i + 1] == board[n][i + 3]:
+                            pieceValue += 250
+                        if n > 2:
+                            # (3) up right hole *2
+                            if board[n - 1][i + 1] == ' ' and board[n][i] == board[n - 2][i + 2] == board[n - 3][i + 3]:
+                                pieceValue += 250
+                            if board[n - 2][i + 2] == ' ' and (board[n][i] == board[n - 1][i + 1] == board[n - 3][i + 3]):
+                                pieceValue += 250
+
+                    if i > 2 and n > 2:
+                        # (3) up left hole * 2
+                        if board[n - 1][i - 1] == ' ' and board[n][i] == board[n - 2][i - 2] == board[n - 3][i - 3]:
+                            pieceValue += 250
+                        if board[n - 2][i - 2] == ' ' and board[n][i] == board[n - 1][i - 1] == board[n - 3][i - 3]:
+                            pieceValue += 250
+                    if n < 3:
+                        if board[n + 1][i] == ' ' and board[n][i] == board[n + 2][i] == board[n + 3][i]:
+                            pieceValue += 250
+                        if board[n + 2][i] == ' ' and board[n][i] == board[n + 1][i] == board[n + 3][i]:
+                            pieceValue += 250
+
+
 
                     # (3) up right
                     # (3) up left
                     # (3) vertical
                     # (3) horizontal
-                    if (i < 5 and n > 1 and (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2])) \
-                            or (i > 1 and n > 1 and (board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2])) \
-                            or (n < 4 and (board[n][i] == board[n + 1][i] == board[n + 2][i])) \
-                            or (i < 5 and (board[n][i] == board[n][i + 1] == board[n][i + 2])):
-                        if cell == bot_mark:
-                            botScore += 200
-                        else:
-                            pScore += 210
+                    if (i < 5 and n > 1 and (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2])):
+                    if (i > 1 and n > 1 and (board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2])):
+                    if (n < 4 and (board[n][i] == board[n + 1][i] == board[n + 2][i])):
+                    if (i < 5 and (board[n][i] == board[n][i + 1] == board[n][i + 2])):
+                        pieceValue += 200
 
                     # (2) up right
                     # (2) up left
@@ -178,13 +188,14 @@ class Connect4(commands.Cog):
         elif result == bot_mark:
             return 100000
         elif result == p_mark:
-            return -100000
+            return -100000000000
         elif depth == 0:
             return Connect4.boardHeuristic(board, bot_mark, p_mark)
 
         if isMaximizing:
             bestScore = -math.inf
-            for move in Connect4.getValidLocations(board, p_mark, bot_mark):
+            moves, bool = Connect4.getValidLocations(board, p_mark, bot_mark)
+            for move in moves:
                 board[move[0]][move[1]] = bot_mark
                 bestScore = max(bestScore,
                                 Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
@@ -195,7 +206,8 @@ class Connect4(commands.Cog):
             return bestScore
         else:
             bestScore = math.inf
-            for move in Connect4.getValidLocations(board, p_mark, bot_mark):
+            moves, bool = Connect4.getValidLocations(board, p_mark, bot_mark)
+            for move in moves:
                 board[move[0]][move[1]] = p_mark
                 bestScore = min(bestScore,
                                 Connect4.minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
@@ -209,14 +221,15 @@ class Connect4(commands.Cog):
     def bestMove(board, botMark, pMark, depth):
         bestScore = -math.inf
         bestMove = []
-        for move in Connect4.getValidLocations(board, pMark, botMark):
+        moves, shortened = Connect4.getValidLocations(board, pMark, botMark)
+        for move in moves:
             board[move[0]][move[1]] = botMark
             score = Connect4.minimax(board, depth, False, botMark, pMark, -math.inf, math.inf)
             board[move[0]][move[1]] = ' '
             if score > bestScore:
                 bestScore = score
                 bestMove = [move[0], move[1]]
-        return bestMove
+        return bestMove, shortened
 
     @staticmethod
     def checkBoardWin(board):
@@ -289,7 +302,6 @@ class Connect4(commands.Cog):
                     # Constants #
                     depth = 5
                     ####################################################################################################
-                    temp = 0
                     botTime = 10
                     p2 = self.bot.user
                     pList = [p1, p2]
@@ -298,13 +310,11 @@ class Connect4(commands.Cog):
                     longestTime = 0
                     lowestScore = 0
                     highestScore = 0
+                    wasShortened = False
                     odd = False
                     if (next(alt_player) == self.bot.user):
                         odd = True
-                        print('Bot is odd')
                     next(alt_player)
-                    print('human is odd')
-
 
 
                     # Loading Connect4 #
@@ -341,8 +351,7 @@ class Connect4(commands.Cog):
                             embed.set_footer(text='Move not registering? Try double tapping')
                             await sent_embed.edit(embed=embed)
                             start = time.time()
-                            reaction, user = await self.bot.wait_for('reaction_add', timeout=300.0,
-                                                                     check=check_reaction)
+                            reaction, user = await self.bot.wait_for('reaction_add', timeout=300.0, check=check_reaction)
                             end = time.time()
                             await sent_embed.remove_reaction(reaction.emoji, user)
                             for i, emoji in enumerate(reactions):
@@ -351,11 +360,8 @@ class Connect4(commands.Cog):
                                         if list[i] == '⚪':
                                             list[i] = Connect4.convert(current_mark)
                                             break
-                            if botTime < 4:
-                                temp += 1
-                                if temp == 2:
-                                    depth += 1
-                                    temp = 0
+                            if botTime < 4 and not wasShortened:
+                                depth += 1
                             embed.description = f'{p2.mention}({Connect4.convert(next(alt_mark))}) is thinking... \n \n Current bot score: **{currentHeursitic}** \n \n You took **{round(end - start, 1)} seconds** \n \n I\'m planning ahead with depth **{depth}** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
                             await sent_embed.edit(embed=embed)
                             next(alt_mark)
@@ -363,9 +369,9 @@ class Connect4(commands.Cog):
                         # AI's turn
                         elif current_player == p2:
                             start = time.time()
-                            move = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark),
-                                                     depth=depth)
+                            move, shortened = Connect4.bestMove(board=board, botMark=current_mark, pMark=next(alt_mark), depth=depth)
                             board[move[0]][move[1]] = current_mark
+                            wasShortened = shortened
                             next(alt_mark)
                             end = time.time()
                             botTime = end - start
