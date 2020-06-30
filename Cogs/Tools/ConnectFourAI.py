@@ -1,28 +1,75 @@
 import math
 
-# print('{:064b}'.format(move))
 
-# bitboard = [0, 0]
-#
-# height = [0, 7, 14, 21, 28, 35, 42]
-# counter = 0
-# moves = []
-#
-# def makeMove(col, counter):
-#     move = 1 << height[col]
-#     height[col] += 1
-#     bitboard[counter & 1] ^= move
-#     moves.append(col)
-#     counter += 1
-#
-# makeMove(0, counter)
-# makeMove(1, counter)
-# makeMove(0, counter)
-#
-#
-# for n in bitboard:
-#     print('{:064b}'.format(n))
-# print(moves)
+bitboards = [0, 0]
+height = [0, 7, 14, 21, 28, 35, 42]
+counter = 0
+prevMoves = []
+firstPlayer = None
+
+def makeMove(col):
+    global counter
+    global height
+    global bitboards
+    move = 1 << height[col]
+    height[col] += 1
+    bitboards[counter & 1] ^= move
+    prevMoves.append(col)
+    counter += 1
+
+def undoMove():
+    global counter
+    global height
+    global bitboards
+    counter -= 1
+    col = prevMoves[counter]
+    height[col] -= 1
+    move = 1 << height[col]
+    bitboards[counter & 1] ^= move
+
+def isWin(bitboard):
+    directions = [1, 7, 6, 8]
+    for direction in directions:
+        bb = bitboard & (bitboard >> direction)
+        if bb & (bb >> (2 * direction)) != 0:
+            return True
+    return False
+
+def listValidMoves():
+    moves = []
+    TOP = 0b01000000100000010000001000000100000010000001000000
+    for i in range(0, 7):
+        if ((TOP & (1 << height[i])) == 0):
+            moves.append(i)
+    return moves
+
+def encrypt(string, length):
+    return ' '.join(string[i:i+length] for i in range(1, len(string), length))
+
+makeMove(6)
+makeMove(6)
+makeMove(6)
+makeMove(6)
+makeMove(6)
+makeMove(6)
+print(listValidMoves())
+
+
+for n in bitboards:
+    bit = '{:064b}'.format(n)
+    print(encrypt(str(bit), 7))
+print(prevMoves)
+
+# class Main {
+# public static void main(String[] args) {
+# long move = 1L << 0;
+# for(int i = 0; i < Long.numberOfLeadingZeros((long)move); i++) {
+# System.out.print('0');
+# }
+# System.out.println(Long.toBinaryString((long)move));
+# System.out.println(move);
+# }
+# }
 
 
 def convert(emoji):
@@ -43,7 +90,6 @@ def convert(emoji):
 
 
 def getValidLocations(board, playerPiece, botPiece):
-    convertBoard(board, simple=True)
     validMoves = []
     badMoves = []
     for i in range(0, 7):
@@ -99,6 +145,8 @@ def convertBoard(board, simple):
             for j in range(len(board[i])):
                 if board[i][j] in ['X', 'O', ' ']:
                     board[i][j] = convert(board[i][j])
+
+
 
 
 def getPosValue(i, j):
