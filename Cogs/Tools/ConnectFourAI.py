@@ -3,7 +3,7 @@ import math
 # print('{:064b}'.format(move))
 
 # bitboard = [0, 0]
-# 
+#
 # height = [0, 7, 14, 21, 28, 35, 42]
 # counter = 0
 # moves = []

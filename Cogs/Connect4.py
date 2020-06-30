@@ -88,8 +88,10 @@ class Connect4(commands.Cog):
                         ConnectFourAI.convertBoard(board, simple=True)
                         current_player = next(alt_player)
                         current_mark = next(alt_mark)
+                        current_emoji = ConnectFourAI.convert(current_mark)
                         other_player = next(alt_player)
                         other_mark = next(alt_mark)
+                        other_emoji = ConnectFourAI.convert(other_mark)
                         next(alt_player)
                         next(alt_mark)
                         if current_player == self.bot.user:
@@ -107,13 +109,13 @@ class Connect4(commands.Cog):
                         # Player's turn
                         if current_player == p1:
                             ConnectFourAI.convertBoard(board, simple=False)
-                            embed.description = f'{p1.mention}({ConnectFourAI.convert(current_mark)}) Make your move \n \n Current bot score: **{currentHeursitic}** \n \n I took **{round(botTime, 2)} seconds** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.description = f'{p1.mention}({current_emoji}) Make your move \n \n Current bot score: **{currentHeursitic}** \n \n I took **{botTime} seconds** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
                             embed.set_footer(text='Move not registering? Try double tapping')
                             await sent_embed.edit(embed=embed)
                             start = time.time()
                             reaction, user = await self.bot.wait_for('reaction_add', timeout=300.0, check=check_reaction)
                             end = time.time()
-                            pTime = end - start
+                            pTime = round(end - start, 2)
                             await sent_embed.remove_reaction(reaction.emoji, user)
                             for i, emoji in enumerate(reactions):
                                 if emoji == reaction.emoji:
@@ -128,7 +130,7 @@ class Connect4(commands.Cog):
                         # AI's turn
                         elif current_player == p2:
                             ConnectFourAI.convertBoard(board, simple=False)
-                            embed.description = f'{p2.mention}({ConnectFourAI.convert(other_mark)}) is thinking... \n \n Current bot score: **{currentHeursitic}** \n \n Your previous move value: **{moveValue}** \n \n You took **{round(pTime, 2)} seconds** \n \n I\'m planning ahead with depth **{depth}** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.description = f'{p2.mention}({current_emoji}) is thinking... \n \n Current bot score: **{currentHeursitic}** \n \n You took **{pTime} seconds** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
                             ConnectFourAI.convertBoard(board, simple=True)
                             await sent_embed.edit(embed=embed)
                             start = time.time()
@@ -136,7 +138,7 @@ class Connect4(commands.Cog):
                             board[move[0]][move[1]] = current_mark
                             thinking_shortened = shortened
                             end = time.time()
-                            botTime = end - start
+                            botTime = round(end - start, 2)
 
                         # Evaluate Board #
                         ConnectFourAI.convertBoard(board, simple=True)
@@ -144,13 +146,13 @@ class Connect4(commands.Cog):
                         ConnectFourAI.convertBoard(board, simple=False)
                         if result == 'TIE':
                             working = False
-                            embed.description = f'Tie between {current_player.mention}({ConnectFourAI.convert(current_mark)}) and {other_player.mention}({ConnectFourAI.convert(other_mark)}) \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.description = f'Tie between {current_player.mention}({current_emoji}) and {other_player.mention}({other_emoji}) \n \n My **highest score** was **{highestScore}** \n My **lowest score** was **{lowestScore}** \n My **longest move** took **{longestTime} seconds** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
                             embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
                         elif result in ['X', 'O']:
                             working = False
-                            embed.description = f'{current_player.mention}({ConnectFourAI.convert(current_mark)}) Wins \n {other_player.mention}({ConnectFourAI.convert(other_mark)}) Loses \n My **highest score** was **{highestScore}** \n My **lowest score** was **{lowestScore}** \n My **longest move** took **{round(longestTime, 2)} seconds** \n I ended with depth **{depth}** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
+                            embed.description = f'{current_player.mention}({current_emoji}) Wins \n {other_player.mention}({other_emoji}) Loses \n \n My **highest score** was **{highestScore}** \n My **lowest score** was **{lowestScore}** \n My **longest move** took **{longestTime} seconds** \n \n {"|".join(reactions)} \n {"|".join(board[0])} \n {"|".join(board[1])} \n {"|".join(board[2])} \n {"|".join(board[3])} \n {"|".join(board[4])} \n {"|".join(board[5])}'
                             embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
