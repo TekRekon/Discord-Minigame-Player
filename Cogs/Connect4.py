@@ -92,8 +92,10 @@ class Connect4(commands.Cog):
                         next(alt_player)
                         next(alt_mark)
 
+                        ConnectFourAI.convertBoard(board, simple=False)
                         joinedBoard = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
-                        ConnectFourAI.convertBoard(joinedBoard, simple=False)
+                        ConnectFourAI.convertBoard(board, simple=True)
+                        print(joinedBoard)
 
                         if current_player == self.bot.user:
                             currentHeursitic = ConnectFourAI.boardHeuristic(board, current_mark, other_mark)
@@ -141,6 +143,8 @@ class Connect4(commands.Cog):
                             botTime = round(end - start, 2)
 
                         # Evaluate Board #
+                        ConnectFourAI.convertBoard(board, simple=False)
+                        joinedBoard = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
                         ConnectFourAI.convertBoard(board, simple=True)
                         result = ConnectFourAI.checkBoardWin(board)
                         if result == 'TIE':
