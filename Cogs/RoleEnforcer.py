@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord.utils
 
 
 class RoleEnforcer(commands.Cog):
@@ -18,6 +19,7 @@ class RoleEnforcer(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
         guild = self.bot.get_guild(477829362771689484)
         RoleEnforcer.djRole = guild.get_role(490183595386863636)
         RoleEnforcer.getsAdsRole = guild.get_role(515548066871246888)
@@ -40,18 +42,16 @@ class RoleEnforcer(commands.Cog):
         if old_member.roles.sort() != new_member.roles.sort():
             for role in RoleEnforcer.memberRequiredRoles:
                 if role not in new_member.roles:
-                    await new_member.user.add_roles(role)
-                    await RoleEnforcer.botReportsChannel.send(content='WARNING ' + new_member.mention + ": " + role.name
-                                                                      + ' is a REQUIRED role')
+                    await new_member.add_roles(role)
+                    await RoleEnforcer.botReportsChannel.send(content='WARNING ' + new_member.mention + ": " + role.name + ' is a REQUIRED role')
 
         # Enforce Mod-Required Roles
         if RoleEnforcer.moderatorRole in new_member.roles:
             for role in RoleEnforcer.modRequiredRoles:
                 if role not in new_member.roles:
                     await new_member.add_roles(role)
-                    await RoleEnforcer.botReportsChannel.send(content='WARNING ' + new_member.mention
-                                                                      + ': Moderators are required to have the '
-                                                                      + role.name + ' role')
+                    # await new_member.remove_roles(*[RoleEnforcer.moderatorRole, RoleEnforcer.getsAdsRole, RoleEnforcer.djRole])
+                    await RoleEnforcer.botReportsChannel.send(content='WARNING ' + new_member.mention + ': Moderators are required to have the ' + role.name + ' role')
 
 
 def setup(bot):

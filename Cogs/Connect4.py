@@ -95,7 +95,6 @@ class Connect4(commands.Cog):
                         ConnectFourAI.convertBoard(board, simple=False)
                         joinedBoard = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
                         ConnectFourAI.convertBoard(board, simple=True)
-                        print(joinedBoard)
 
                         if current_player == self.bot.user:
                             currentHeursitic = ConnectFourAI.boardHeuristic(board, current_mark, other_mark)
@@ -137,6 +136,8 @@ class Connect4(commands.Cog):
                             await sent_embed.edit(embed=embed)
                             start = time.time()
                             move, shortened = ConnectFourAI.bestMove(board=board, botMark=current_mark, pMark=other_mark, depth=depth)
+                            print(f'was shortened: {shortened}')
+                            print(f'bot move: {move[0]}, {move[1]}')
                             board[move[0]][move[1]] = current_mark
                             thinking_shortened = shortened
                             end = time.time()

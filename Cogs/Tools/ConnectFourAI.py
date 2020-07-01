@@ -7,6 +7,7 @@ import math
 # prevMoves = []
 # firstPlayer = None
 #
+#
 # def makeMove(col):
 #     global counter
 #     global height
@@ -16,6 +17,7 @@ import math
 #     bitboards[counter & 1] ^= move
 #     prevMoves.append(col)
 #     counter += 1
+#
 #
 # def undoMove():
 #     global counter
@@ -27,6 +29,7 @@ import math
 #     move = 1 << height[col]
 #     bitboards[counter & 1] ^= move
 #
+#
 # def isWin(bitboard):
 #     directions = [1, 7, 6, 8]
 #     for direction in directions:
@@ -34,6 +37,7 @@ import math
 #         if bb & (bb >> (2 * direction)) != 0:
 #             return True
 #     return False
+#
 #
 # def listValidMoves():
 #     moves = []
@@ -43,8 +47,10 @@ import math
 #             moves.append(i)
 #     return moves
 #
+#
 # def encrypt(string, length):
 #     return ' '.join(string[i:i+length] for i in range(1, len(string), length))
+#
 #
 # for n in bitboards:
 #     bit = '{:064b}'.format(n)
@@ -61,7 +67,6 @@ import math
 # System.out.println(move);
 # }
 # }
-
 
 def convert(emoji):
     if emoji == 'X':
@@ -136,8 +141,6 @@ def convertBoard(board, simple):
             for j in range(len(board[i])):
                 if board[i][j] in ['X', 'O', ' ']:
                     board[i][j] = convert(board[i][j])
-
-
 
 
 def getPosValue(i, j):
