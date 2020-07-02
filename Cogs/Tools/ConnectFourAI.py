@@ -102,11 +102,11 @@ def getValidLocations(board, playerPiece, botPiece):
                     return validMoves, True
 
                 # Single turn loss anticipation
-                board[n][i] = playerPiece
-                if checkBoardWin(board) == playerPiece:
-                    validMoves = [[n, i]]
-                    board[n][i] = ' '
-                    return validMoves, True
+                # board[n][i] = playerPiece
+                # if checkBoardWin(board) == playerPiece:
+                #     validMoves = [[n, i]]
+                #     board[n][i] = ' '
+                #     return validMoves, True
 
                 # Double turn loss anticipation
                 board[n][i] = botPiece
