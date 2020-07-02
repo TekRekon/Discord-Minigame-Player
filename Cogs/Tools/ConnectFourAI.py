@@ -265,43 +265,43 @@ def boardHeuristic(board, bot_mark, p_mark):
                         if board[n - 1][i] == ' ':
                             pieceValue += 180
 
-                if n > 0:
-                    if i < 6:
-                        # (2) up right
-                        if board[n][i] == board[n - 1][i + 1]:
-                            if n != 1 and i != 5:
-                                if board[n - 2][i + 2] == ' ':
-                                    pieceValue += 50
-                            if n != 5 and i != 0:
-                                if board[n + 1][i - 1] == ' ':
-                                    pieceValue += 50
+                # if n > 0:
+                #     if i < 6:
+                #         # (2) up right
+                #         if board[n][i] == board[n - 1][i + 1]:
+                #             if n != 1 and i != 5:
+                #                 if board[n - 2][i + 2] == ' ':
+                #                     pieceValue += 50
+                #             if n != 5 and i != 0:
+                #                 if board[n + 1][i - 1] == ' ':
+                #                     pieceValue += 50
 
-                    if i > 0:
-                        # (2) up left
-                        if board[n][i] == board[n - 1][i - 1]:
-                            if n != 1 and i != 1:
-                                if board[n - 2][i - 2] == ' ':
-                                    pieceValue += 50
-                                if i != 6 and n != 5:
-                                    if board[n + 1][i + 1] == ' ':
-                                        pieceValue += 50
+                    # if i > 0:
+                    #     # (2) up left
+                    #     if board[n][i] == board[n - 1][i - 1]:
+                    #         if n != 1 and i != 1:
+                    #             if board[n - 2][i - 2] == ' ':
+                    #                 pieceValue += 50
+                    #             if i != 6 and n != 5:
+                    #                 if board[n + 1][i + 1] == ' ':
+                    #                     pieceValue += 50
 
-                if n < 5:
-                    # (2) vertical
-                    if board[n][i] == board[n + 1][i]:
-                        if n > 0:
-                            if board[n - 1][i] == ' ':
-                                pieceValue += 25
+                # if n < 5:
+                #     # (2) vertical
+                #     if board[n][i] == board[n + 1][i]:
+                #         if n > 0:
+                #             if board[n - 1][i] == ' ':
+                #                 pieceValue += 25
 
-                if i < 6:
-                    # (2) horizontal
-                    if board[n][i] == board[n][i + 1]:
-                        if i != 5:
-                            if board[n][i + 2] == ' ':
-                                pieceValue += 50
-                        if i != 0:
-                            if board[n][i - 1] == ' ':
-                                pieceValue += 50
+                # if i < 6:
+                #     # (2) horizontal
+                #     if board[n][i] == board[n][i + 1]:
+                #         if i != 5:
+                #             if board[n][i + 2] == ' ':
+                #                 pieceValue += 50
+                #         if i != 0:
+                #             if board[n][i - 1] == ' ':
+                #                 pieceValue += 50
 
                 if cell == bot_mark:
                     botScore += pieceValue
