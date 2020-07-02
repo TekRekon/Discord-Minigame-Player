@@ -1,5 +1,6 @@
 import math
 
+nodesExplored = 0
 
 # bitboards = [0, 0]
 # height = [0, 7, 14, 21, 28, 35, 42]
@@ -119,12 +120,37 @@ def getValidLocations(board, playerPiece, botPiece):
                             board[j][k] = ' '
                             break
                 if [n, i] not in badMoves:
-                    validMoves.append([n, i])
+                    # Toward-Middle-of-Board Based Move Ordering #
+                    for k in range(0, len(validMoves)+1):
+                        if k+1 >= len(validMoves)+1:
+                            validMoves.append([n, i])
+                            break
+                        if abs(i - 3) <= abs(validMoves[k][1] - 3):
+                            validMoves.insert(k, [n, i])
+                            break
                 board[n][i] = ' '
                 break
 
     if (len(validMoves)) == 0:
         return badMoves, False
+
+    # Heuristic-Based Move Ordering (Doesn't rlly work) #
+    # sortedValidMoves = []
+    # sortedMoveValues = []
+    # for move in validMoves:
+    #     board[move[0]][move[1]] = botPiece
+    #     currentHeuristic = boardHeuristic(board, botPiece, playerPiece)
+    #     for i in range(0, len(sortedMoveValues)+1):
+    #         if i+1 >= len(sortedMoveValues)+1:
+    #             sortedMoveValues.append(currentHeuristic)
+    #             sortedValidMoves.append(move)
+    #             break
+    #         if currentHeuristic <= sortedMoveValues[i]:
+    #             sortedMoveValues.insert(i, currentHeuristic)
+    #             sortedValidMoves.insert(i, move)
+    #             break
+    #     board[move[0]][move[1]] = ' '
+
 
     return validMoves, False
 
@@ -281,13 +307,12 @@ def boardHeuristic(board, bot_mark, p_mark):
                     botScore += pieceValue
                 elif cell == p_mark:
                     pScore += pieceValue
-    # print(f'returning {botScore} - {pScore} = {botScore-pScore}')
     return botScore - pScore
 
 
 def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
+    global nodesExplored
     result = checkBoardWin(board)
-    # print(f'result: {result}')
     # print(f'{board[0]} \n {board[1]} \n {board[2]} \n {board[3]} \n {board[4]} \n {board[5]}')
     if result == 'TIE':
         return 0
@@ -297,6 +322,8 @@ def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
         return -100000000000000000000000000000
     elif depth == 0:
         return boardHeuristic(board, bot_mark, p_mark)
+
+    nodesExplored += 1
 
     if isMaximizing:
         bestScore = -math.inf
@@ -323,6 +350,7 @@ def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
 
 
 def bestMove(board, botMark, pMark, depth):
+    global nodesExplored
     bestScore = -math.inf
     bestMove = []
     moves, shortened = getValidLocations(board, pMark, botMark)
@@ -333,7 +361,7 @@ def bestMove(board, botMark, pMark, depth):
         if score > bestScore:
             bestScore = score
             bestMove = [move[0], move[1]]
-    return bestMove, shortened
+    return bestMove, shortened, nodesExplored
 
 
 def checkBoardWin(board):

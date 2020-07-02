@@ -56,7 +56,7 @@ class Connect4(commands.Cog):
                 if reaction.emoji == '💢':
 
                     # Player vs AI Variables #
-                    depth = 5
+                    depth = 6
                     botTime = 10
                     pTime = 0
                     p2 = self.bot.user
@@ -64,6 +64,7 @@ class Connect4(commands.Cog):
                     random.shuffle(pList)
                     alt_player = cycle(pList)
                     longestTime = 0
+                    prevNodes = 0
                     lowestScore = 0
                     highestScore = 0
                     thinking_shortened = False
@@ -111,7 +112,7 @@ class Connect4(commands.Cog):
                         # Player's turn
                         if current_player == p1:
                             ConnectFourAI.convertBoard(board, simple=False)
-                            embed.description = f'{p1.mention}({current_emoji}) Make your move \n \n Current bot score: **{currentHeursitic}** \n \n I took **{botTime} seconds** \n \n {joinedBoard[0]} \n {joinedBoard[1]} \n {joinedBoard[2]} \n {joinedBoard[3]} \n {joinedBoard[4]} \n {joinedBoard[5]} \n {joinedBoard[6]}'
+                            embed.description = f'{p1.mention}({current_emoji}) Make your move \n \n Current bot score: **{currentHeursitic}** \n \n I took **{botTime} seconds** \n \n I explored **{prevNodes} nodes** \n \n depth = {depth} \n \n {joinedBoard[0]} \n {joinedBoard[1]} \n {joinedBoard[2]} \n {joinedBoard[3]} \n {joinedBoard[4]} \n {joinedBoard[5]} \n {joinedBoard[6]}'
                             embed.set_footer(text='Move not registering? Try double tapping')
                             await sent_embed.edit(embed=embed)
                             start = time.time()
@@ -125,7 +126,7 @@ class Connect4(commands.Cog):
                                         if list[i] == '⚪':
                                             list[i] = ConnectFourAI.convert(current_mark)
                                             break
-                            if botTime < 4 and not thinking_shortened:
+                            if botTime < 6 and not thinking_shortened:
                                 depth += 1
 
 
@@ -135,9 +136,8 @@ class Connect4(commands.Cog):
                             embed.description = f'{p2.mention}({current_emoji}) is thinking... \n \n Current bot score: **{currentHeursitic}** \n \n You took **{pTime} seconds** \n \n {joinedBoard[0]} \n {joinedBoard[1]} \n {joinedBoard[2]} \n {joinedBoard[3]} \n {joinedBoard[4]} \n {joinedBoard[5]} \n {joinedBoard[6]}'
                             await sent_embed.edit(embed=embed)
                             start = time.time()
-                            move, shortened = ConnectFourAI.bestMove(board=board, botMark=current_mark, pMark=other_mark, depth=depth)
-                            print(f'was shortened: {shortened}')
-                            print(f'bot move: {move[0]}, {move[1]}')
+                            move, shortened, nodesExplored = ConnectFourAI.bestMove(board=board, botMark=current_mark, pMark=other_mark, depth=depth)
+                            prevNodes = nodesExplored
                             board[move[0]][move[1]] = current_mark
                             thinking_shortened = shortened
                             end = time.time()
