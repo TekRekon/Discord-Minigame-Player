@@ -56,7 +56,7 @@ class Connect4(commands.Cog):
                 if reaction.emoji == '💢':
 
                     # Player vs AI Variables #
-                    depth = 7
+                    depth = 6
                     botTime = 10
                     pTime = 0
                     p2 = self.bot.user
