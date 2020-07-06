@@ -22,11 +22,9 @@ class OneWordStoryEnforcer(commands.Cog):
             if channel == oneWordChannel and author != self.bot.user:
                 await message.delete()
                 if ' ' in content or author.id == prevAuthor:
-                    await MessageTools.sendSimpleEmbed(channel=oneWordChannel, text='You may only type ONE word '
-                                                       'after another person has gone', delete=True)
+                    await MessageTools.sendSimpleEmbed(channel=oneWordChannel, text='You may only type ONE word after another person has gone', delete=True)
                 elif content.startswith(JsonTools.getData(guildID, 'prefix')) and len(content) > 1:
-                    await MessageTools.sendSimpleEmbed(channel=oneWordChannel, text='You may only type ONE word '
-                                                       'after another person has gone', delete=True)
+                    await MessageTools.sendSimpleEmbed(channel=oneWordChannel, text='You may only type ONE word after another person has gone', delete=True)
                 else:
                     JsonTools.changeData(guildID, 'oneWordPrevAuthor', author.id)
                     await channel.send(embed=discord.Embed(description=author.name.mention + ' ' + message.content, color=0xff0000))

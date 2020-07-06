@@ -32,7 +32,7 @@
         "noCommandChannels": []
     },
     "constants": {
-        "prevQuestion": "The Hamilton movie musical makes it debut on Disney+ tomorrow. Will you be watching?"
+        "prevQuestion": "Did you go to summer camp as a kid?"
     },
     "715634233590415441": {
         "guildName": "Bird = Word",
@@ -43,8 +43,5 @@
         "prefix": ".",
         "oneWordPrevAuthor": "0",
         "oneWordChannel": "0"
-    },
-    "Moves": {
-        "ConnectGame with TekRekon#8032": []
     }
 }
