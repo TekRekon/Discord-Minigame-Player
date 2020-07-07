@@ -31,14 +31,14 @@ async def on_ready():
     bot.load_extension('Cogs.OnDemandEmbed')
     print('OnDemandEmbed initiated')
 
-    bot.load_extension('Cogs.ConfigBot')
-    print('jsonExperiment initiated')
+    # bot.load_extension('Cogs.ConfigBot')
+    # print('jsonExperiment initiated')
 
     bot.load_extension('Cogs.Fun')
     print('Fun initiated')
 
-    # bot.load_extension('Cogs.Awair')
-    # print("Awair initiated")
+    bot.load_extension('Cogs.Awair')
+    print("Awair initiated")
 
     bot.load_extension('Cogs.TicTacToe')
     print("TicTacToe initiated")
