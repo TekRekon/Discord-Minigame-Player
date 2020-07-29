@@ -1,6 +1,5 @@
 from discord.ext import commands
 import asyncio
-from Cogs.Tools import JsonTools
 import aiohttp
 import time
 # ['data'][0]['sensors']
@@ -46,9 +45,11 @@ class Awair(commands.Cog):
             if 9 <= time.localtime().tm_hour < 21:
 
                 # Get sensor dust/voc level and act on it
+                dust_level = None
+                voc_level = None
                 try:
                     f = await Awair.getSensorData()
-                    print(f['data'][0]['indices'])
+                    # print(f['data'][0]['indices'])
                     for sensor in f['data'][0]['indices']:
                         if sensor['comp'] == 'pm25':
                             dust_level = sensor['value']
@@ -68,12 +69,9 @@ class Awair(commands.Cog):
                     print('<ignoring> Data was a NoneType')
 
             elif time.localtime().tm_hour == 21:
-                print('not valid time/calls to many')
-                Awair.hepaOn = True
+                print('night cycle initiated')
                 await Awair.switchHepa(False)
-                async with aiohttp.ClientSession() as session:
-                    await session.post('https://maker.ifttt.com/trigger/awair_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
-                    await asyncio.sleep(3600)
+                await asyncio.sleep(3600)
 
             await asyncio.sleep(144)
 

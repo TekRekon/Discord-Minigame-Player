@@ -32,7 +32,7 @@
         "noCommandChannels": []
     },
     "constants": {
-        "prevQuestion": "Today is National Ice Cream Cake Day! How do you feel about ice cream cake?"
+        "prevQuestion": "How often do you go to your local farmers market?"
     },
     "715634233590415441": {
         "guildName": "Bird = Word",
@@ -43,8 +43,5 @@
         "prefix": ".",
         "oneWordPrevAuthor": "0",
         "oneWordChannel": "0"
-    },
-    "Moves": {
-        "ConnectGame with TekRekon#8032": []
     }
 }
