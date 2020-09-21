@@ -113,6 +113,8 @@ class TicTacToe(commands.Cog):
     async def tictactoe(self, ctx):
         if MessageTools.correct_command_use(ctx, mod_command=False):
 
+            availableReactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮']
+
             def check_reaction(reaction, user):
                 if reaction.emoji in ['🤖', '💢', '☮']:
                     return reaction.message.id == sent_embed.id and user == ctx.author
@@ -138,7 +140,6 @@ class TicTacToe(commands.Cog):
             board = ['🇦', '🇧', '🇨',
                      '🇩', '🇪', '🇫',
                      '🇬', '🇭', '🇮']
-            availableReactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮']
 
 
             if reaction.emoji in ['💢', '🤖', '☮']:

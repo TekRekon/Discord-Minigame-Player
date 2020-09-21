@@ -8,11 +8,13 @@ from Cogs.Tools import JsonTools
 
 class DailyPoll(commands.Cog):
     dailyPollChannel = None
-    dailyPollChannel2 = None
+    everyoneRole = None
 
     def __init__(self, bot):
         self.bot = bot
         DailyPoll.dailyPollChannel = self.bot.get_channel(725540024912707686)
+        guild = self.bot.get_guild(715634233590415441)
+        DailyPoll.everyoneRole = guild.get_role(715634233590415441)
         self.bot.loop.create_task(self.print_daily_poll())
 
     @staticmethod
@@ -26,7 +28,7 @@ class DailyPoll(commands.Cog):
             daily_poll_answers_html = daily_poll_website_string.find_all('td', attrs={'class': 'indivAnswerText'})
             prevQuestion = JsonTools.getData('constants', 'prevQuestion')
             if daily_poll_question != prevQuestion:
-                print(f'new question: {daily_poll_answers} DOES not equal old question: {prevQuestion}')
+                await DailyPoll.dailyPollChannel.send(content=DailyPoll.everyoneRole)
                 JsonTools.changeData('constants', 'prevQuestion', daily_poll_question)
                 for x in daily_poll_answers_html:
                     daily_poll_answers.append(x.text)
