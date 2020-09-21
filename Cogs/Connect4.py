@@ -47,7 +47,6 @@ class Connect4(commands.Cog):
                 embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
                 sent_embed = await ctx.send(embed=embed)
                 await sent_embed.add_reaction('📲')
-                await sent_embed.add_reaction('🤖')
                 await sent_embed.add_reaction('💢')
                 reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
                 await sent_embed.clear_reactions()
