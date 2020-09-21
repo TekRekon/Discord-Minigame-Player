@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 import asyncio
 import aiohttp
 import time
@@ -10,7 +10,7 @@ class Awair(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.bot.loop.create_task(self.autoHepaToggler())
+        self.autoHepaToggler.start()
 
     @staticmethod
     async def getSensorData():
@@ -38,8 +38,8 @@ class Awair(commands.Cog):
             await asyncio.sleep(10)
             await session.post('https://maker.ifttt.com/trigger/awair_on/with/key/dcUi_OJn4aUvDWuT3TO1jB')
 
-    @staticmethod
-    async def autoHepaToggler():
+    @tasks.loop(seconds=144.0)
+    async def autoHepaToggler(self):
         while True:
             # Conserve calls by only working during the day
             if 9 <= time.localtime().tm_hour < 21:
@@ -49,7 +49,6 @@ class Awair(commands.Cog):
                 voc_level = None
                 try:
                     f = await Awair.getSensorData()
-                    # print(f['data'][0]['indices'])
                     for sensor in f['data'][0]['indices']:
                         if sensor['comp'] == 'pm25':
                             dust_level = sensor['value']
@@ -57,8 +56,10 @@ class Awair(commands.Cog):
                             voc_level = sensor['value']
 
                     if dust_level > 0 or voc_level > 0:
+                        print(f'Hepa ON at {time.localtime()}')
                         await Awair.switchHepa(True)
                     else:
+                        print(f'Hepa OFF at {time.localtime()}')
                         await Awair.switchHepa(False)
 
                 # Data returned is empty if device offline. The following tries to reset the device
@@ -69,11 +70,8 @@ class Awair(commands.Cog):
                     print('<ignoring> Data was a NoneType')
 
             elif time.localtime().tm_hour == 21:
-                print('night cycle initiated')
                 await Awair.switchHepa(False)
                 await asyncio.sleep(3600)
-
-            await asyncio.sleep(144)
 
 
 def setup(bot):

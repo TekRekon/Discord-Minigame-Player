@@ -42,7 +42,6 @@ class TicTacToe(commands.Cog):
 
     @staticmethod
     def minimax(board, depth, isMaximizing, bot_mark, p_mark):
-        print (f'doing minimax with depth {depth}')
         result = TicTacToe.checkBoardWin(board)
         if depth == 0:
             return 0

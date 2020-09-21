@@ -28,8 +28,8 @@ async def on_ready():
     # bot.load_extension('Cogs.RoleEnforcer')
     # print('RoleEnforcer initiated')
 
-    bot.load_extension('Cogs.OnDemandEmbed')
-    print('OnDemandEmbed initiated')
+    # bot.load_extension('Cogs.OnDemandEmbed')
+    # print('OnDemandEmbed initiated')
 
     bot.load_extension('Cogs.ConfigBot')
     print('jsonExperiment initiated')
