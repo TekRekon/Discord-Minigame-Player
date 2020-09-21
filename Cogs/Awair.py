@@ -40,38 +40,37 @@ class Awair(commands.Cog):
 
     @tasks.loop(seconds=144.0)
     async def autoHepaToggler(self):
-        while True:
-            # Conserve calls by only working during the day
-            if 9 <= time.localtime().tm_hour < 21:
+        # Conserve calls by only working during the day
+        if 9 <= time.localtime().tm_hour < 21:
 
-                # Get sensor dust/voc level and act on it
-                dust_level = None
-                voc_level = None
-                try:
-                    f = await Awair.getSensorData()
-                    for sensor in f['data'][0]['indices']:
-                        if sensor['comp'] == 'pm25':
-                            dust_level = sensor['value']
-                        if sensor['comp'] == 'voc':
-                            voc_level = sensor['value']
+            # Get sensor dust/voc level and act on it
+            dust_level = None
+            voc_level = None
+            try:
+                f = await Awair.getSensorData()
+                for sensor in f['data'][0]['indices']:
+                    if sensor['comp'] == 'pm25':
+                        dust_level = sensor['value']
+                    if sensor['comp'] == 'voc':
+                        voc_level = sensor['value']
 
-                    if dust_level > 0 or voc_level > 0:
-                        print(f'Hepa ON at {time.localtime()}')
-                        await Awair.switchHepa(True)
-                    else:
-                        print(f'Hepa OFF at {time.localtime()}')
-                        await Awair.switchHepa(False)
+                if dust_level > 0 or voc_level > 0:
+                    print(f'Hepa ON at {time.localtime()}')
+                    await Awair.switchHepa(True)
+                else:
+                    print(f'Hepa OFF at {time.localtime()}')
+                    await Awair.switchHepa(False)
 
-                # Data returned is empty if device offline. The following tries to reset the device
-                except IndexError:
-                    print('indexError in Awair')
-                    # await Awair.reset()
-                except TypeError:
-                    print('<ignoring> Data was a NoneType')
+            # Data returned is empty if device offline. The following tries to reset the device
+            except IndexError:
+                print('indexError in Awair')
+                # await Awair.reset()
+            except TypeError:
+                print('<ignoring> Data was a NoneType')
 
-            elif time.localtime().tm_hour == 21:
-                await Awair.switchHepa(False)
-                await asyncio.sleep(3600)
+        elif time.localtime().tm_hour == 21:
+            await Awair.switchHepa(False)
+            await asyncio.sleep(3600)
 
 
 def setup(bot):
