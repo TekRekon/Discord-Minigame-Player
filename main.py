@@ -13,8 +13,8 @@ bot = commands.Bot(command_prefix=prefix)
 
 @bot.event
 async def on_ready():
-    bot.load_extension('Cogs.DailyPoll')
-    print('DailyPoll initiated')
+    # bot.load_extension('Cogs.DailyPoll')
+    # print('DailyPoll initiated')
 
     bot.load_extension('Cogs.CarouselStatus')
     print('CarouselStatus initiated')
