@@ -43,7 +43,7 @@ class Connect4(commands.Cog):
                     return False
 
                 # Options Menu #
-                embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game (not implemented) \n 🤖: **Spectate two bots fight (not implemented)** \n 💢: **Add a smart AI**', color=0xff0000)
+                embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: **Join the game** \n 💢: **Add a smart AI**', color=0xff0000)
                 embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
                 sent_embed = await ctx.send(embed=embed)
                 await sent_embed.add_reaction('📲')
@@ -160,6 +160,64 @@ class Connect4(commands.Cog):
                             embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
+
+                if reaction.emoji == '📲':
+                    # Player vs player Variables #
+                    pList = [ctx.author, user]
+                    random.shuffle(pList)
+                    alt_player = cycle(pList)
+                    eList = ['🔵', '🔴']
+                    random.shuffle(eList)
+                    alt_emoji = cycle(eList)
+
+
+                    # Loading Connect4 #
+                    embed.set_author(name='Connect Four (Smart Mode)', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
+                    embed.description = 'Loading...'
+                    await sent_embed.edit(embed=embed)
+                    for emoji in reactions:
+                        await sent_embed.add_reaction(emoji)
+                    sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
+
+                    # Actual Game #
+                    while working:
+                        current_player = next(alt_player)
+                        current_emoji = next(alt_emoji)
+
+                        ConnectFourAI.convertBoard(board, simple=False)
+                        joinedBoard = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
+
+                        # Player's turn
+                        embed.description = f'{current_player.mention}({current_emoji}) Make your move \n \n {joinedBoard[0]} \n {joinedBoard[1]} \n {joinedBoard[2]} \n {joinedBoard[3]} \n {joinedBoard[4]} \n {joinedBoard[5]} \n {joinedBoard[6]}'
+                        embed.set_footer(text='Move not registering? Try double tapping')
+                        await sent_embed.edit(embed=embed)
+                        reaction, user = await self.bot.wait_for('reaction_add', timeout=300.0, check=check_reaction)
+                        await sent_embed.remove_reaction(reaction.emoji, user)
+                        for i, emoji in enumerate(reactions):
+                            if emoji == reaction.emoji:
+                                for list in reversed(board):
+                                    if list[i] == '⚪':
+                                        list[i] = current_emoji
+                                        break
+
+                        # Evaluate Board #
+                        joinedBoard = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
+                        ConnectFourAI.convertBoard(board, simple=True)
+                        result = ConnectFourAI.checkBoardWin(board)
+                        ConnectFourAI.convertBoard(board, simple=False)
+                        if result == 'TIE':
+                            working = False
+                            embed.description = f'Tie between {current_player.mention}({current_emoji}) and {next(alt_player).mention}({next(alt_emoji)}) \n \n {joinedBoard[0]} \n {joinedBoard[1]} \n {joinedBoard[2]} \n {joinedBoard[3]} \n {joinedBoard[4]} \n {joinedBoard[5]} \n {joinedBoard[6]}'
+                            embed.set_footer(text='')
+                            await sent_embed.edit(embed=embed)
+                            await sent_embed.clear_reactions()
+                        elif result in ['X', 'O']:
+                            working = False
+                            embed.description = f'{current_player.mention}({current_emoji}) Wins \n {next(alt_player).mention}({next(alt_emoji)}) Loses \n \n {joinedBoard[0]} \n {joinedBoard[1]} \n {joinedBoard[2]} \n {joinedBoard[3]} \n {joinedBoard[4]} \n {joinedBoard[5]} \n {joinedBoard[6]}'
+                            embed.set_footer(text='')
+                            await sent_embed.edit(embed=embed)
+                            await sent_embed.clear_reactions()
+
 
         except TimeoutError:
             print('TIMEOUT ERROR in connect4')
