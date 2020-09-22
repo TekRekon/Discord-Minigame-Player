@@ -10,6 +10,7 @@ class Awair(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.HepaOn = None
         self.autoHepaToggler.start()
 
     @staticmethod
@@ -54,12 +55,12 @@ class Awair(commands.Cog):
                     if sensor['comp'] == 'voc':
                         voc_level = sensor['value']
 
-                if dust_level > 0 or voc_level > 0:
-                    print(f'Hepa ON at {time.localtime()}')
+                if dust_level > 0 or voc_level > 0 and not self.HepaOn:
                     await Awair.switchHepa(True)
-                else:
-                    print(f'Hepa OFF at {time.localtime()}')
+                    self.HepaOn = True
+                elif self.HepaOn:
                     await Awair.switchHepa(False)
+                    self.HepaOn = False
 
             # Data returned is empty if device offline. The following tries to reset the device
             except IndexError:
@@ -69,7 +70,8 @@ class Awair(commands.Cog):
                 print('<ignoring> Data was a NoneType')
 
         elif time.localtime().tm_hour == 21:
-            await Awair.switchHepa(False)
+            if self.HepaOn:
+                await Awair.switchHepa(False)
             await asyncio.sleep(3600)
 
 
