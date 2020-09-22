@@ -27,7 +27,7 @@ class DailyPoll(commands.Cog):
 
         # Send the Poll #
         if daily_poll_question != prevQuestion:
-            # await self.dailyPollChannel.send(content=self.everyoneRole)
+            await self.dailyPollChannel.send(content=self.everyoneRole)
             JsonTools.changeData('constants', 'prevQuestion', daily_poll_question)
             for x in daily_poll_answers_html:
                 daily_poll_answers.append(x.text)
