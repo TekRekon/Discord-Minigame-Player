@@ -217,7 +217,6 @@ class Connect4(commands.Cog):
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
 
-
         except TimeoutError:
             print('TIMEOUT ERROR in connect4')
             pass

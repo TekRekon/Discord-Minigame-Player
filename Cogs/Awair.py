@@ -55,11 +55,13 @@ class Awair(commands.Cog):
                     if sensor['comp'] == 'voc':
                         voc_level = sensor['value']
 
-                if dust_level > 0 or voc_level > 0 and not self.HepaOn:
+                if (dust_level > 0 or voc_level > 0) and not self.HepaOn:
                     await Awair.switchHepa(True)
+                    print(f"{dust_level} and {voc_level}: On")
                     self.HepaOn = True
-                elif self.HepaOn:
+                elif (dust_level == 0 and voc_level == 0) and self.HepaOn:
                     await Awair.switchHepa(False)
+                    print(f"{dust_level} and {voc_level}: Off")
                     self.HepaOn = False
 
             # Data returned is empty if device offline. The following tries to reset the device

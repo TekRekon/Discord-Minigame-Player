@@ -13,6 +13,13 @@ bot = commands.Bot(command_prefix=prefix)
 
 @bot.event
 async def on_ready():
+    print('Rigged for silent running')
+
+
+@bot.command()
+async def load(ctx):
+    await ctx.send("Loading...")
+
     bot.load_extension('Cogs.DailyPoll')
     print('DailyPoll initiated')
 
@@ -49,6 +56,7 @@ async def on_ready():
     bot.load_extension('Cogs.errorHandler')
     print("errorHandler initiated")
 
-    print('Rigged for silent running')
+    await ctx.send("Done.")
+
 
 bot.run('NTEzODMyNzk3NjM5NTQwNzM5.Xxmt_g.fVG5cqBrAn9Z7HAx5_SecAG7DiM')

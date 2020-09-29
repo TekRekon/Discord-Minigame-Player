@@ -108,6 +108,7 @@ class TicTacToe(commands.Cog):
                 return 'TIE'
             return 'NO_END'
 
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.command()
     async def tictactoe(self, ctx):
         if MessageTools.correct_command_use(ctx, mod_command=False):
