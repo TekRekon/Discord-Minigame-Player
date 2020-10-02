@@ -6,6 +6,8 @@ class RoleEnforcer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_ready(self):
         guild = self.bot.get_guild(477829362771689484)
         self.djRole = guild.get_role(490183595386863636)
         self.getsAdsRole = guild.get_role(515548066871246888)

@@ -2,6 +2,7 @@ from discord.ext import commands, tasks
 from bs4 import BeautifulSoup
 import requests
 import discord
+import asyncio
 from Cogs.Tools import JsonTools
 
 
@@ -9,6 +10,9 @@ class DailyPoll(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
         self.dailyPollChannel = self.bot.get_channel(725540024912707686)
         guild = self.bot.get_guild(715634233590415441)
         self.everyoneRole = guild.get_role(715634233590415441)

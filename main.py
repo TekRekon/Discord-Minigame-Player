@@ -16,47 +16,41 @@ async def on_ready():
     print('Rigged for silent running')
 
 
-@bot.command()
-async def load(ctx):
-    await ctx.send("Loading...")
+bot.load_extension('Cogs.DailyPoll')
+print('DailyPoll initiated')
 
-    bot.load_extension('Cogs.DailyPoll')
-    print('DailyPoll initiated')
+bot.load_extension('Cogs.CarouselStatus')
+print('CarouselStatus initiated')
 
-    bot.load_extension('Cogs.CarouselStatus')
-    print('CarouselStatus initiated')
+# bot.load_extension('Cogs.OneWordStoryEnforcer')
+# print('OneWordStoryEnforcer Initiated')
 
-    # bot.load_extension('Cogs.OneWordStoryEnforcer')
-    # print('OneWordStoryEnforcer Initiated')
+# bot.load_extension('Cogs.AutoFormatNewGit')
+# print('AutoFormatNewGit Initiated')
 
-    # bot.load_extension('Cogs.AutoFormatNewGit')
-    # print('AutoFormatNewGit Initiated')
+# bot.load_extension('Cogs.RoleEnforcer')
+# print('RoleEnforcer initiated')
 
-    # bot.load_extension('Cogs.RoleEnforcer')
-    # print('RoleEnforcer initiated')
+# bot.load_extension('Cogs.OnDemandEmbed')
+# print('OnDemandEmbed initiated')
 
-    # bot.load_extension('Cogs.OnDemandEmbed')
-    # print('OnDemandEmbed initiated')
+bot.load_extension('Cogs.ConfigBot')
+print('jsonExperiment initiated')
 
-    bot.load_extension('Cogs.ConfigBot')
-    print('jsonExperiment initiated')
+bot.load_extension('Cogs.Fun')
+print('Fun initiated')
 
-    bot.load_extension('Cogs.Fun')
-    print('Fun initiated')
+bot.load_extension('Cogs.Awair')
+print("Awair initiated")
 
-    bot.load_extension('Cogs.Awair')
-    print("Awair initiated")
+bot.load_extension('Cogs.TicTacToe')
+print("TicTacToe initiated")
 
-    bot.load_extension('Cogs.TicTacToe')
-    print("TicTacToe initiated")
+bot.load_extension('Cogs.Connect4')
+print("Connect4 initiated")
 
-    bot.load_extension('Cogs.Connect4')
-    print("Connect4 initiated")
-
-    bot.load_extension('Cogs.errorHandler')
-    print("errorHandler initiated")
-
-    await ctx.send("Done.")
+bot.load_extension('Cogs.errorHandler')
+print("errorHandler initiated")
 
 
 bot.run('NTEzODMyNzk3NjM5NTQwNzM5.Xxmt_g.fVG5cqBrAn9Z7HAx5_SecAG7DiM')

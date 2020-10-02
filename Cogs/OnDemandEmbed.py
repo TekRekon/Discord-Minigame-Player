@@ -19,6 +19,9 @@ class OnDemandEmbed(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
         OnDemandEmbed.guild = self.bot.get_guild(477829362771689484)
         OnDemandEmbed.userTekRekon = OnDemandEmbed.guild.get_member(285879705989677058)
         OnDemandEmbed.oneWordStoryChannel = self.bot.get_channel(552130564031774760)

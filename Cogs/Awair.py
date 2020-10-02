@@ -10,7 +10,10 @@ class Awair(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.HepaOn = None
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.HepaOn = False
         self.autoHepaToggler.start()
 
     @staticmethod
