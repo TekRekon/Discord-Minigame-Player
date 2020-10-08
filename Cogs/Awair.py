@@ -35,49 +35,35 @@ class Awair(commands.Cog):
             else:
                 await session.post('https://maker.ifttt.com/trigger/hepa_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
 
-    @staticmethod
-    async def reset():
-        async with aiohttp.ClientSession() as session:
-            await session.post('https://maker.ifttt.com/trigger/awair_off/with/key/dcUi_OJn4aUvDWuT3TO1jB')
-            await asyncio.sleep(10)
-            await session.post('https://maker.ifttt.com/trigger/awair_on/with/key/dcUi_OJn4aUvDWuT3TO1jB')
-
-    @tasks.loop(seconds=144.0)
+    @tasks.loop(seconds=300.0)
     async def autoHepaToggler(self):
-        # Conserve calls by only working during the day
-        if 9 <= time.localtime().tm_hour < 21:
+        # Get sensor dust/voc level and act on it
+        dust_level = None
+        voc_level = None
+        try:
+            f = await Awair.getSensorData()
+            for sensor in f['data'][0]['indices']:
+                if sensor['comp'] == 'pm25':
+                    dust_level = sensor['value']
+                if sensor['comp'] == 'voc':
+                    voc_level = sensor['value']
 
-            # Get sensor dust/voc level and act on it
-            dust_level = None
-            voc_level = None
-            try:
-                f = await Awair.getSensorData()
-                for sensor in f['data'][0]['indices']:
-                    if sensor['comp'] == 'pm25':
-                        dust_level = sensor['value']
-                    if sensor['comp'] == 'voc':
-                        voc_level = sensor['value']
-
-                if (dust_level > 0 or voc_level > 0) and not self.HepaOn:
-                    await Awair.switchHepa(True)
-                    print(f"{dust_level} and {voc_level}: On")
-                    self.HepaOn = True
-                elif (dust_level == 0 and voc_level == 0) and self.HepaOn:
-                    await Awair.switchHepa(False)
-                    print(f"{dust_level} and {voc_level}: Off")
-                    self.HepaOn = False
-
-            # Data returned is empty if device offline. The following tries to reset the device
-            except IndexError:
-                print('indexError in Awair')
-                # await Awair.reset()
-            except TypeError:
-                print('<ignoring> Data was a NoneType')
-
-        elif time.localtime().tm_hour == 21:
-            if self.HepaOn:
+            if (dust_level > 0 or voc_level > 0) and not self.HepaOn:
+                await Awair.switchHepa(True)
+                print(f"{dust_level} and {voc_level}: On")
+                self.HepaOn = True
+            elif (dust_level == 0 and voc_level == 0) and self.HepaOn:
                 await Awair.switchHepa(False)
-            await asyncio.sleep(3600)
+                print(f"{dust_level} and {voc_level}: Off")
+                self.HepaOn = False
+
+        # Data returned is empty if device is offline
+        except IndexError:
+            print('indexError in Awair')
+        # Anomaly
+        except TypeError:
+            print('<ignoring> AirData was a NoneType')
+
 
 
 def setup(bot):

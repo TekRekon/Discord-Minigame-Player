@@ -2,7 +2,6 @@ from discord.ext import commands, tasks
 from bs4 import BeautifulSoup
 import requests
 import discord
-import asyncio
 from Cogs.Tools import JsonTools
 
 
