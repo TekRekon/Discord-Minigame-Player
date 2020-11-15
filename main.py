@@ -16,8 +16,8 @@ async def on_ready():
     print('Rigged for silent running')
 
 
-bot.load_extension('Cogs.DailyPoll')
-print('DailyPoll initiated')
+# bot.load_extension('Cogs.DailyPoll')
+# print('DailyPoll initiated')
 
 bot.load_extension('Cogs.CarouselStatus')
 print('CarouselStatus initiated')
@@ -31,8 +31,8 @@ print('CarouselStatus initiated')
 # bot.load_extension('Cogs.RoleEnforcer')
 # print('RoleEnforcer initiated')
 
-# bot.load_extension('Cogs.OnDemandEmbed')
-# print('OnDemandEmbed initiated')
+bot.load_extension('Cogs.OnDemandEmbed')
+print('OnDemandEmbed initiated')
 
 bot.load_extension('Cogs.ConfigBot')
 print('jsonExperiment initiated')
@@ -52,5 +52,7 @@ print("Connect4 initiated")
 bot.load_extension('Cogs.errorHandler')
 print("errorHandler initiated")
 
+# bot.load_extension('Cogs.PostgresTest')
+# print('PostgresTest initiated')
 
 bot.run('NTEzODMyNzk3NjM5NTQwNzM5.Xxmt_g.fVG5cqBrAn9Z7HAx5_SecAG7DiM')

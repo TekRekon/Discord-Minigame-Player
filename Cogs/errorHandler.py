@@ -24,6 +24,8 @@ class errorHandler(commands.Cog):
             await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: {ctx.command} has been disabled', delete=True)
         elif isinstance(error, asyncio.TimeoutError):
             await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Operation timed out', delete=True)
+        elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: This command is missing required arguments', delete=True)
         else:
             await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Unknown error: {error}', delete=False)
 

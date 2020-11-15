@@ -22,10 +22,14 @@ class Awair(commands.Cog):
             async with session.get(url='https://developer-apis.awair.is/v1/users/self/devices/awair-element/794/air-data/latest?fahrenheit=true') as r:
                 if r.status == 429:
                     print('Calls to Awair are being rate limited')
-                    return None
+                    result = await r.json()
+                    return result
                 else:
                     result = await r.json()
                     return result
+
+
+
 
     @staticmethod
     async def switchHepa(state):
@@ -48,13 +52,12 @@ class Awair(commands.Cog):
                 if sensor['comp'] == 'voc':
                     voc_level = sensor['value']
 
+            print(f"{dust_level} and {voc_level}")
             if (dust_level > 0 or voc_level > 0) and not self.HepaOn:
                 await Awair.switchHepa(True)
-                print(f"{dust_level} and {voc_level}: On")
                 self.HepaOn = True
             elif (dust_level == 0 and voc_level == 0) and self.HepaOn:
                 await Awair.switchHepa(False)
-                print(f"{dust_level} and {voc_level}: Off")
                 self.HepaOn = False
 
         # Data returned is empty if device is offline
@@ -62,7 +65,7 @@ class Awair(commands.Cog):
             print('indexError in Awair')
         # Anomaly
         except TypeError:
-            print('<ignoring> AirData was a NoneType')
+            pass
 
 
 

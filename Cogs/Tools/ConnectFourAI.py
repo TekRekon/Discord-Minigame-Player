@@ -1,4 +1,5 @@
 import math
+import psycopg2
 
 nodesExplored = 0
 
@@ -68,6 +69,54 @@ nodesExplored = 0
 # System.out.println(move);
 # }
 # }
+
+
+def addPlayer(ID, name):
+    con = psycopg2.connect("postgres://tmneuvqnzogsxo:d15b738ee44cc1429e2cf014bf3c1df8448fea2b0155a4157e8e2a37dbc0d495@ec2-54-146-142-58.compute-1.amazonaws.com:5432/d3ad8vk1so3cfu")
+    cur = con.cursor()
+
+    cur.execute("SELECT user_id FROM playerConnect4Stats")
+    rows = cur.fetchall()
+
+    if ID not in [i[0] for i in rows]:
+        new_player = (
+            "INSERT INTO playerConnect4Stats (user_id, username, wins, losses) "
+            "VALUES (%s, %s, %s, %s)"
+        )
+
+        data = (ID, name, 0, 0)
+
+        cur.execute(new_player, data)
+
+        con.commit()
+
+        cur.execute("SELECT user_id, username, wins, losses FROM playerConnect4Stats")
+
+        rows = cur.fetchall()
+        for r in rows:
+            print(f"ID: {r[0]}, NAME: {r[1]}, WINS: {r[2]}, LOSS: {r[3]}")
+
+    cur.close()
+    con.close()
+
+def editPlayerScore(ID, won):
+    con = psycopg2.connect("postgres://tmneuvqnzogsxo:d15b738ee44cc1429e2cf014bf3c1df8448fea2b0155a4157e8e2a37dbc0d495@ec2-54-146-142-58.compute-1.amazonaws.com:5432/d3ad8vk1so3cfu")
+    cur = con.cursor()
+    if won:
+        cur.execute("UPDATE playerConnect4Stats SET wins = wins + 1 WHERE user_id = %s", [ID])
+    else:
+        cur.execute("UPDATE playerConnect4Stats SET losses = losses + 1 WHERE user_id = %s", [ID])
+
+    con.commit()
+
+    cur.execute("SELECT user_id, username, wins, losses FROM playerConnect4Stats")
+
+    rows = cur.fetchall()
+    for r in rows:
+        print(f"ID: {r[0]}, NAME: {r[1]}, WINS: {r[2]}, LOSS: {r[3]}")
+
+    cur.close()
+    con.close()
 
 def convert(emoji):
     if emoji == 'X':
@@ -202,13 +251,22 @@ def getPosValue(i, j):
             return 5*multipier
 
 
-def boardHeuristic(board, bot_mark, p_mark):
+def boardHeuristic(board, bot_mark, p_mark, odd):
     pScore = 0
     botScore = 0
+    wantedRows = [2, 4, 6]
+    playerWantedRows = [3, 1]
+    if odd:
+        wantedRows = [3, 1]
+        playerWantedRows = [2, 4, 6]
+
     for n, list in enumerate(board):
         for i, cell in enumerate(list):
             if cell in ['X', 'O']:
                 pieceValue = 0
+                currentWantedRows = wantedRows
+                if cell == p_mark:
+                    wantedRows = playerWantedRows
 
                 # Single Piece Value
                 pieceValue += getPosValue(n, i)
@@ -217,53 +275,79 @@ def boardHeuristic(board, bot_mark, p_mark):
                     # (3) horizontal holes
                     if board[n][i + 1] == ' ' and board[n][i] == board[n][i + 2] == board[n][i + 3]:
                         pieceValue += 200
-                    elif board[n][i + 2] == ' ' and board[n][i] == board[n][i + 1] == board[n][i + 3]:
+
+                    if board[n][i + 2] == ' ' and board[n][i] == board[n][i + 1] == board[n][i + 3]:
                         pieceValue += 200
+
+                    if n in currentWantedRows:
+                        pieceValue += 150
 
                     # (3) horizontal
                     if board[n][i] == board[n][i + 1] == board[n][i + 2]:
                         if i != 3:
                             if board[n][i + 3] == ' ':
                                 pieceValue += 200
+
                         if i != 0:
                             if board[n][i - 1] == ' ':
                                 pieceValue += 200
+
+                        if n in currentWantedRows:
+                            pieceValue += 300
 
                     if n > 2:
                         # (3) up right holes
                         if board[n - 1][i + 1] == ' ' and board[n][i] == board[n - 2][i + 2] == board[n - 3][i + 3]:
                             pieceValue += 200
-                        elif board[n - 2][i + 2] == ' ' and (board[n][i] == board[n - 1][i + 1] == board[n - 3][i + 3]):
+                            if (n-1) in currentWantedRows:
+                                pieceValue += 150
+                        if board[n - 2][i + 2] == ' ' and (board[n][i] == board[n - 1][i + 1] == board[n - 3][i + 3]):
                             pieceValue += 200
+                            if (n-2) in currentWantedRows:
+                                pieceValue += 150
 
                         # (3) up right
                         if board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2]:
                             if n != 5 and i != 0:
                                 if board[n + 1][i - 1] == ' ':
                                     pieceValue += 200
+                                    if (n+1) in currentWantedRows:
+                                        pieceValue += 150
                             if board[n - 3][i + 3] == ' ':
                                 pieceValue += 200
+                                if (n-3) in currentWantedRows:
+                                    pieceValue += 150
 
                         # (3) up left
                         if board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2]:
                             if n != 5 and i != 6:
                                 if board[n + 1][i + 1] == ' ':
+                                    if (n+1) in currentWantedRows:
+                                        pieceValue += 150
                                     pieceValue += 200
                             if board[n - 3][i - 3] == ' ':
                                 pieceValue += 200
+                                if (n+3) in currentWantedRows:
+                                    pieceValue += 150
 
                 if i > 2 and n > 2:
                     # (3) up left holes
                     if board[n - 1][i - 1] == ' ' and board[n][i] == board[n - 2][i - 2] == board[n - 3][i - 3]:
                         pieceValue += 200
+                        if (n-1) in currentWantedRows:
+                            pieceValue += 150
                     elif board[n - 2][i - 2] == ' ' and board[n][i] == board[n - 1][i - 1] == board[n - 3][i - 3]:
                         pieceValue += 200
+                        if (n-2) in currentWantedRows:
+                            pieceValue += 150
 
                 # (3) vertical
                 if n < 4 and board[n][i] == board[n + 1][i] == board[n + 2][i]:
                     if n != 0:
                         if board[n - 1][i] == ' ':
                             pieceValue += 180
+                            if (n-1) in currentWantedRows:
+                                pieceValue += 150
 
                 # if n > 0:
                 #     if i < 6:
@@ -310,7 +394,7 @@ def boardHeuristic(board, bot_mark, p_mark):
     return botScore - pScore
 
 
-def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
+def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta, odd):
     global nodesExplored
     result = checkBoardWin(board)
     # print(f'{board[0]} \n {board[1]} \n {board[2]} \n {board[3]} \n {board[4]} \n {board[5]}')
@@ -321,7 +405,7 @@ def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
     elif result == p_mark:
         return -100000000000000000000000000000
     elif depth == 0:
-        return boardHeuristic(board, bot_mark, p_mark)
+        return boardHeuristic(board, bot_mark, p_mark, odd)
 
     nodesExplored += 1
 
@@ -330,7 +414,7 @@ def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
         moves, bool = getValidLocations(board, p_mark, bot_mark)
         for move in moves:
             board[move[0]][move[1]] = bot_mark
-            bestScore = max(bestScore, minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
+            bestScore = max(bestScore, minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta, odd))
             alpha = max(alpha, bestScore)
             board[move[0]][move[1]] = ' '
             if beta <= alpha:
@@ -341,7 +425,7 @@ def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
         moves, bool = getValidLocations(board, p_mark, bot_mark)
         for move in moves:
             board[move[0]][move[1]] = p_mark
-            bestScore = min(bestScore, minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta))
+            bestScore = min(bestScore, minimax(board, depth - 1, not isMaximizing, bot_mark, p_mark, alpha, beta, odd))
             beta = min(beta, bestScore)
             board[move[0]][move[1]] = ' '
             if beta <= alpha:
@@ -349,14 +433,14 @@ def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta):
         return bestScore
 
 
-def bestMove(board, botMark, pMark, depth):
+def bestMove(board, botMark, pMark, depth, odd):
     global nodesExplored
     bestScore = -math.inf
     bestMove = []
     moves, shortened = getValidLocations(board, pMark, botMark)
     for move in moves:
         board[move[0]][move[1]] = botMark
-        score = minimax(board, depth, False, botMark, pMark, -math.inf, math.inf)
+        score = minimax(board, depth, False, botMark, pMark, -math.inf, math.inf, odd)
         board[move[0]][move[1]] = ' '
         if score > bestScore:
             bestScore = score
