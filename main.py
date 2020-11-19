@@ -49,8 +49,8 @@ print("TicTacToe initiated")
 bot.load_extension('Cogs.Connect4')
 print("Connect4 initiated")
 
-bot.load_extension('Cogs.errorHandler')
-print("errorHandler initiated")
+# bot.load_extension('Cogs.errorHandler')
+# print("errorHandler initiated")
 
 # bot.load_extension('Cogs.PostgresTest')
 # print('PostgresTest initiated')

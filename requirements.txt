@@ -5,3 +5,4 @@ requests==2.23.0
 beautifulsoup4
 asyncio==3.4.3
 psycopg2-binary==2.8.6
+randfacts==0.2.4
