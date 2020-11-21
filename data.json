@@ -15,16 +15,14 @@
         "countingChannel": 489513733652086785
     },
     "694630261958115399": {
-        "guildID": "Bot Testing",
-        "noCommandChannels": [
-            695703812043702354
-        ],
+        "guildName": "Bot Testing",
+        "noCommandChannels": [],
         "mods": [
             285879705989677058
         ],
         "prefix": ".",
-        "oneWordChannel": 695703812043702354,
-        "oneWordPrevAuthor": 285879705989677058
+        "oneWordPrevAuthor": "0",
+        "oneWordChannel": "0"
     },
     "726559202411282485": {
         "guildID": "Testing",

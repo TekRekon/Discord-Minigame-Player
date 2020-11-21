@@ -12,33 +12,21 @@ class Connect4(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def leaderboard(self, ctx):
-        await self.bot.wait_until_ready()
-        p_scores = [(3290848, 0)]
-        prev_score = 0
-        for r in Connect4DatabaseTools.fetchStats():
-            games_sum = r[2] + r[3]
-            if games_sum < 10:
-                continue
-            win_percent = round(r[2]/games_sum*100, 2)
-
-            print(f"ID: {r[0]}, NAME: {r[1]}, WINS: {r[2]}, LOSS: {r[3]}")
-
-            i = 0
-            for tuple in p_scores:
-                if tuple[1] >= prev_score:
-                    p_scores.insert(i+1, (r[0], win_percent))
-                    prev_score = win_percent
-                    break
-                i += 1
+        p_scores = Connect4DatabaseTools.fetchRankedStats()
 
         embed = discord.Embed(description='\u200b', color=0xff0000)
-        embed.set_author(name=f'Connect Four Leaderboard', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/779118212850909184/ezgif-3-814c4634232b.gif')
-        p_scores.pop(0)
+        embed.set_author(name=f'Connect Four Leaderboard', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/779444906464247828/2e4e7e76e454f56b24d6883b93afb7932.jpg')
+        embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779118212850909184/ezgif-3-814c4634232b.gif')
         for k, x in enumerate(p_scores):
-            temp_user = ctx.message.guild.get_member(x[0])
-            print(x[0])
-            print(temp_user)
-            embed.add_field(name=f'**{k+1}**: Frick | {x[1]}', value='\u200b', inline=False)
+            if k == 0:
+                embed.add_field(name=f'🥇: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+            elif k == 1:
+                embed.add_field(name=f'🥈: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+            elif k == 2:
+                embed.add_field(name=f'🥉: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+            else:
+                embed.add_field(name=f'**{k+1}**: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+
         embed.set_footer(text='Play a minimum of 10 matches to get ranked')
         await ctx.send(embed=embed)
 
@@ -53,11 +41,13 @@ class Connect4(commands.Cog):
 
         if arg.id not in [i[0] for i in rows]:
             embed = discord.Embed(title=f'{arg.name} does not exist in my database', color=0xff0000)
-            embed.set_author(name='Null Profile', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/777402434447474698/ef6d69dfe7a08c26207dfde9117c8217.gif')
+            embed.set_author(name='Null Profile', icon_url=arg.avatar_url)
+            embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779526483202932777/9bec831078051d4fc5f06e964da71760.gif')
             await ctx.send(embed=embed)
         else:
             embed = discord.Embed(description='\u200b', color=0xff0000)
-            embed.set_author(name=f'{arg.name}\'s Profile', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/777402434447474698/ef6d69dfe7a08c26207dfde9117c8217.gif')
+            embed.set_author(name=f'{arg.name}\'s Profile', icon_url=arg.avatar_url)
+            embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779526483202932777/9bec831078051d4fc5f06e964da71760.gif')
 
             cur.execute("SELECT wins, losses FROM playerConnect4Stats WHERE user_id = %s", [arg.id])
             row = cur.fetchall()
@@ -75,13 +65,28 @@ class Connect4(commands.Cog):
                 embed.add_field(name='💠 **Win %**', value='100', inline=True)
             else:
                 embed.add_field(name='💠 **Win %**', value=f'{round((wins/(losses+wins)*100), 2)}', inline=True)
+
+            ranked_scores = Connect4DatabaseTools.fetchRankedStats()
+            IDs = [tuple[2] for tuple in ranked_scores]
+            winrates = [tuple[1] for tuple in ranked_scores]
+            if arg.id in IDs:
+                i = IDs.index(arg.id)
+                embed.add_field(name='⚜ **Rank**', value=f'{i+1}', inline=False)
+                if i == 0:
+                    embed.add_field(name='📡 **Wins -> Next Rank**', value='0', inline=True)
+                else:
+                    target_winrate = winrates[i-1]
+                    current_winrate = winrates[i]
+                    print(target_winrate, current_winrate)
+                    current_wins = Connect4DatabaseTools.getPlayerStat(arg.id, "wins")
+                    current_losses = Connect4DatabaseTools.getPlayerStat(arg.id, "losses")
+                    f = 0
+                    while target_winrate > current_winrate:
+                        f += 1
+                        current_winrate = round((current_wins+f)/(current_wins+current_losses)*100, 2)
+                    embed.add_field(name='📡 **Wins -> Next Rank**', value=f'{f}', inline=True)
+
             await ctx.send(embed=embed)
-
-        cur.execute("SELECT user_id, username, wins, losses FROM playerConnect4Stats")
-
-        rows = cur.fetchall()
-        for r in rows:
-            print(f"ID: {r[0]}, NAME: {r[1]}, WINS: {r[2]}, LOSS: {r[3]}")
 
         cur.close()
         con.close()
@@ -116,6 +121,17 @@ class Connect4(commands.Cog):
         emoji_list = ['🔵', '🔴']
         random.shuffle(emoji_list)
         alt_emoji = cycle(emoji_list)
+        loading_gifs = ['https://cdn.discordapp.com/attachments/488700267060133889/779516535425335307/giphy.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779518931085819984/gifntext-gif.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779518965923184641/tvnJsU7.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779518988194938960/giphy_1.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779519005941170186/custom-loading-icon.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779519030301294592/giphy_2.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779519058936070164/thA1t5G.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779519089998692372/giphy_3.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779519118672003072/giphy-downsized.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779519144869494804/187917b0606c80a6c295da1f19ff3e40.gif',
+                        'https://cdn.discordapp.com/attachments/488700267060133889/779519172622155806/7dfd95dd9ad07e7af1eaff34a890b322.gif']
         working = True
 
         # Options Menu #
@@ -135,7 +151,7 @@ class Connect4(commands.Cog):
             await sent_embed.add_reaction('❌')
             reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
             if reaction.emoji == '❌':
-                embed.description = f'{ctx.author.mention} chickened out of a game with {user.mention}'
+                embed.description = f'{ctx.author.mention} chickened out of a game with {p2.mention}'
                 await sent_embed.edit(embed=embed)
                 await sent_embed.clear_reactions()
                 return
@@ -145,6 +161,7 @@ class Connect4(commands.Cog):
         # Loading Connect4 #
         embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
         embed.description = 'Loading...'
+        embed.set_thumbnail(url=random.choice(loading_gifs))
         await sent_embed.edit(embed=embed)
         for emoji in reactions:
             await sent_embed.add_reaction(emoji)
@@ -152,11 +169,18 @@ class Connect4(commands.Cog):
 
         if reaction.emoji == '✅':
             Connect4DatabaseTools.addPlayer(user.id, user.name)
+            embed.set_thumbnail(url='')
 
             # Player vs player exclusive variables #
             p_list = [p1, p2]
             random.shuffle(p_list)
             alt_player = cycle(p_list)
+            time_taken = 0
+            p1_total_time = 0
+            p2_total_time = 0
+            p1_turns = 0
+            p2_turns = 0
+
 
             # Actual Game #
             while working:
@@ -168,15 +192,18 @@ class Connect4(commands.Cog):
                 next(alt_emoji)
                 joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
                 fact = randfacts.getFact(filter=False)
-                connect4_tips = ['Move not registering? Try double tapping', 'The middle column and row are the most valuable', 'Try learning the Odd-Even Strategy', 'You\'re looking might fine today', 'You have 5 minutes to make a move before receiving a loss', fact]
+                connect4_tips = ['Move not registering? Try double tapping.', 'The middle column and row are the most valuable.', 'Try learning the Odd-Even Strategy.', 'You\'re looking mighty fine today', 'You have 5 minutes to make a move before receiving a loss.', fact, 'Don\'t fat-finger the reactions.']
 
                 # Player's turn
-                embed.description = f'{current_player.mention}({current_emoji}) Make your move \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                embed.description = f'{current_player.mention}({current_emoji}) Make your move \n \n {other_player.mention}({other_emoji}) took {time_taken} seconds \n \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
                 embed.set_footer(text=random.choice(connect4_tips))
                 await sent_embed.edit(embed=embed)
 
                 try:
+                    start = time.time()
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=300.0, check=check_reaction)
+                    end = time.time()
+                    time_taken = round(end - start, 2)
                 except asyncio.TimeoutError:
                     embed.description = f'{other_player.mention}({other_emoji}) Wins \n {current_player.mention}({current_emoji}) Loses \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
                     embed.set_footer(text='')
