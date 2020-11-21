@@ -71,13 +71,12 @@ class Connect4(commands.Cog):
             winrates = [tuple[1] for tuple in ranked_scores]
             if arg.id in IDs:
                 i = IDs.index(arg.id)
-                embed.add_field(name='⚜ **Rank**', value=f'{i+1}', inline=False)
+                embed.add_field(name='⚜ **Rank**', value=f'{i+1}', inline=True)
                 if i == 0:
                     embed.add_field(name='📡 **Wins -> Next Rank**', value='0', inline=True)
                 else:
                     target_winrate = winrates[i-1]
                     current_winrate = winrates[i]
-                    print(target_winrate, current_winrate)
                     current_wins = Connect4DatabaseTools.getPlayerStat(arg.id, "wins")
                     current_losses = Connect4DatabaseTools.getPlayerStat(arg.id, "losses")
                     f = 0
@@ -180,10 +179,20 @@ class Connect4(commands.Cog):
             p2_total_time = 0
             p1_turns = 0
             p2_turns = 0
+            first_player_score = 0
+            odd = False
+            first_player = next(alt_player)
+            second_player = next(alt_player)
+            first_emoji = next(alt_emoji)
+            second_emoji = next(alt_emoji)
+            if next(alt_player) == p1:
+                odd = True
 
+            next(alt_player)
 
             # Actual Game #
             while working:
+                first_player_score = ConnectFourAI.boardHeuristic(board, first_emoji, second_emoji, odd)
                 current_player = next(alt_player)
                 current_emoji = next(alt_emoji)
                 other_player = next(alt_player)
@@ -195,7 +204,7 @@ class Connect4(commands.Cog):
                 connect4_tips = ['Move not registering? Try double tapping.', 'The middle column and row are the most valuable.', 'Try learning the Odd-Even Strategy.', 'You\'re looking mighty fine today', 'You have 5 minutes to make a move before receiving a loss.', fact, 'Don\'t fat-finger the reactions.']
 
                 # Player's turn
-                embed.description = f'{current_player.mention}({current_emoji}) Make your move \n \n {other_player.mention}({other_emoji}) took {time_taken} seconds \n \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                embed.description = f'{current_player.mention}({current_emoji}) Make your move \n \n {other_player.mention}({other_emoji}) took {time_taken} seconds \n \n {first_player.mention}({first_emoji}) score: {first_player_score} \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
                 embed.set_footer(text=random.choice(connect4_tips))
                 await sent_embed.edit(embed=embed)
 

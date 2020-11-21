@@ -20,7 +20,7 @@ def fetchRankedStats():
 
         # print(f"ID: {r[0]}, NAME: {r[1]}, WINS: {r[2]}, LOSS: {r[3]}")
 
-        for i, tuple in enumerate(reversed(player_scores)):
+        for i, tuple in enumerate(player_scores):
             if win_percent >= tuple[1]:
                 player_scores.insert(i, (r[1], win_percent, r[0]))
                 break

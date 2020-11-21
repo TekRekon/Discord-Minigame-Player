@@ -98,7 +98,7 @@ def convertBoard(board, simple):
     else:
         for i in range(len(board)):
             for j in range(len(board[i])):
-                if board[i][j] in ['🔴', '🔵', '⚪']:
+                if board[i][j] in ['X', 'O', ' ']:
                     board[i][j] = convert(board[i][j])
 
 
@@ -135,22 +135,23 @@ def getPosValue(i, j):
             return 5*multipier
 
 
-def boardHeuristic(board, bot_mark, p_mark, odd):
-    pScore = 0
-    botScore = 0
-    wantedRows = [2, 4, 6]
-    playerWantedRows = [3, 5]
+def boardHeuristic(board, p1_mark, p2_mark, odd):
+    p1Score = 0
+    p2Score = 0
+    p1wantedRows = [4, 2, 0]
+    p2wantedRows = [3, 1]
     if odd:
-        wantedRows = [3, 5]
-        playerWantedRows = [2, 4, 6]
+        p1wantedRows = [3, 1]
+        p2wantedRows = [4, 2, 0]
 
     for n, list in enumerate(board):
         for i, cell in enumerate(list):
             if cell in ['🔴', '🔵']:
                 pieceValue = 0
-                currentWantedRows = wantedRows
-                if cell == p_mark:
-                    wantedRows = playerWantedRows
+                if cell == p1_mark:
+                    currentWantedRows = p1wantedRows
+                else:
+                    currentWantedRows = p2wantedRows
 
                 # Single Piece Value
                 pieceValue += getPosValue(n, i)
@@ -164,7 +165,7 @@ def boardHeuristic(board, bot_mark, p_mark, odd):
                         pieceValue += 200
 
                     if n in currentWantedRows:
-                        pieceValue += 150
+                        pieceValue += (currentWantedRows.index(n)*5)*150
 
                     # (3) horizontal
                     if board[n][i] == board[n][i + 1] == board[n][i + 2]:
@@ -177,18 +178,18 @@ def boardHeuristic(board, bot_mark, p_mark, odd):
                                 pieceValue += 200
 
                         if n in currentWantedRows:
-                            pieceValue += 300
+                            pieceValue += (currentWantedRows.index(n)*5)*300
 
                     if n > 2:
                         # (3) up right holes
                         if board[n - 1][i + 1] == '⚪' and board[n][i] == board[n - 2][i + 2] == board[n - 3][i + 3]:
                             pieceValue += 200
                             if (n-1) in currentWantedRows:
-                                pieceValue += 150
+                                pieceValue += (currentWantedRows.index(n-1)*5)*300
                         if board[n - 2][i + 2] == '⚪' and (board[n][i] == board[n - 1][i + 1] == board[n - 3][i + 3]):
                             pieceValue += 200
                             if (n-2) in currentWantedRows:
-                                pieceValue += 150
+                                pieceValue += (currentWantedRows.index(n-2)*5)*150
 
                         # (3) up right
                         if board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2]:
@@ -196,34 +197,34 @@ def boardHeuristic(board, bot_mark, p_mark, odd):
                                 if board[n + 1][i - 1] == '⚪':
                                     pieceValue += 200
                                     if (n+1) in currentWantedRows:
-                                        pieceValue += 150
+                                        pieceValue += (currentWantedRows.index(n+1)*5)*150
                             if board[n - 3][i + 3] == '⚪':
                                 pieceValue += 200
                                 if (n-3) in currentWantedRows:
-                                    pieceValue += 150
+                                    pieceValue += (currentWantedRows.index(n-3)*5)*150
 
                         # (3) up left
                         if board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2]:
                             if n != 5 and i != 6:
                                 if board[n + 1][i + 1] == '⚪':
                                     if (n+1) in currentWantedRows:
-                                        pieceValue += 150
+                                        pieceValue += (currentWantedRows.index(n+1)*5)*150
                                     pieceValue += 200
                             if board[n - 3][i - 3] == '⚪':
                                 pieceValue += 200
                                 if (n+3) in currentWantedRows:
-                                    pieceValue += 150
+                                    pieceValue += (currentWantedRows.index(n+3)*5)*150
 
                 if i > 2 and n > 2:
                     # (3) up left holes
                     if board[n - 1][i - 1] == '⚪' and board[n][i] == board[n - 2][i - 2] == board[n - 3][i - 3]:
                         pieceValue += 200
                         if (n-1) in currentWantedRows:
-                            pieceValue += 150
+                            pieceValue += (currentWantedRows.index(n-1)*5)*150
                     elif board[n - 2][i - 2] == '⚪' and board[n][i] == board[n - 1][i - 1] == board[n - 3][i - 3]:
                         pieceValue += 200
                         if (n-2) in currentWantedRows:
-                            pieceValue += 150
+                            pieceValue += (currentWantedRows.index(n-2)*5)*150
 
                 # (3) vertical
                 if n < 4 and board[n][i] == board[n + 1][i] == board[n + 2][i]:
@@ -231,7 +232,7 @@ def boardHeuristic(board, bot_mark, p_mark, odd):
                         if board[n - 1][i] == '⚪':
                             pieceValue += 180
                             if (n-1) in currentWantedRows:
-                                pieceValue += 150
+                                pieceValue += (currentWantedRows.index(n-1)*5)*150
 
                 if n > 0:
                     if i < 6:
@@ -271,11 +272,11 @@ def boardHeuristic(board, bot_mark, p_mark, odd):
                             if board[n][i - 1] == '⚪':
                                 pieceValue += 50
 
-                if cell == bot_mark:
-                    botScore += pieceValue
-                elif cell == p_mark:
-                    pScore += pieceValue
-    return botScore - pScore
+                if cell == p1_mark:
+                    p1Score += pieceValue
+                elif cell == p2_mark:
+                    p2Score += pieceValue
+    return p1Score - p2Score
 
 
 def minimax(board, depth, isMaximizing, bot_mark, p_mark, alpha, beta, odd):
