@@ -254,20 +254,26 @@ class Connect4(commands.Cog):
         if reaction.emoji == ' ':  # 💢
 
             # Player vs AI Exclusive Variables #
-            depth = 7
+            depth = 5
             bot_time = 10
             p_time = 0
-            p_list = [p1, self.bot.user]
-            random.shuffle(p_list)
+            p_list = [self.bot.user, p1]
+            # random.shuffle(p_list)
             alt_player = cycle(p_list)
             longest_time = 0
             prev_nodes = 0
             lowest_score = 0
             highest_score = 0
             thinking_shortened = False
+            bot_mark = ' '
+            p_mark = ' '
             odd = False
             if next(alt_player) == self.bot.user:
+                bot_mark = next(alt_emoji)
+                p_mark = next(alt_emoji)
                 odd = True
+            p_mark = next(alt_emoji)
+            bot_mark = next(alt_emoji)
             next(alt_player)
 
             # Actual Game #
@@ -280,10 +286,8 @@ class Connect4(commands.Cog):
                 next(alt_emoji)
                 joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
 
-                if current_player == self.bot.user:
-                    current_heursitic = ConnectFourAI.boardHeuristic(board, current_emoji, other_emoji, odd)
-                else:
-                    current_heursitic = ConnectFourAI.boardHeuristic(board, other_emoji, current_emoji, odd)
+
+                current_heursitic = ConnectFourAI.boardHeuristic(board, bot_mark, p_mark, odd)
 
                 if current_heursitic < lowest_score:
                     lowest_score = current_heursitic
@@ -315,7 +319,7 @@ class Connect4(commands.Cog):
                     embed.description = f'{self.bot.user.mention}({current_emoji}) is thinking... \n \n Current bot score: {current_heursitic} \n \n You took **{p_time} seconds** \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
                     await sent_embed.edit(embed=embed)
                     start = time.time()
-                    move, shortened, nodes_explored = ConnectFourAI.bestMove(board=board, botMark=current_emoji, pMark=other_emoji, depth=depth, odd=odd)
+                    move, shortened, nodes_explored = ConnectFourAI.bestMove(board=board, botMark=bot_mark, pMark=p_mark, depth=depth, odd=odd)
                     prev_nodes = nodes_explored
                     board[move[0]][move[1]] = current_emoji
                     thinking_shortened = shortened

@@ -19,9 +19,6 @@ async def on_ready():
 # bot.load_extension('Cogs.DailyPoll')
 # print('DailyPoll initiated')
 
-bot.load_extension('Cogs.CarouselStatus')
-print('CarouselStatus initiated')
-
 # bot.load_extension('Cogs.OneWordStoryEnforcer')
 # print('OneWordStoryEnforcer Initiated')
 
@@ -30,6 +27,14 @@ print('CarouselStatus initiated')
 
 # bot.load_extension('Cogs.RoleEnforcer')
 # print('RoleEnforcer initiated')
+
+# bot.load_extension('Cogs.PostgresTest')
+# print('PostgresTest initiated')
+
+# ^^ Archived Cogs ^^ #
+
+bot.load_extension('Cogs.CarouselStatus')
+print('CarouselStatus initiated')
 
 bot.load_extension('Cogs.OnDemandEmbed')
 print('OnDemandEmbed initiated')
@@ -46,14 +51,12 @@ print("Awair initiated")
 bot.load_extension('Cogs.TicTacToe')
 print("TicTacToe initiated")
 
-bot.load_extension('Cogs.Connect4')
-print("Connect4 initiated")
-
 bot.load_extension('Cogs.errorHandler')
 print("errorHandler initiated")
 
-# bot.load_extension('Cogs.PostgresTest')
-# print('PostgresTest initiated')
+bot.load_extension('Cogs.Connect4')
+print("Connect4 initiated")
+
 
 bot.run('NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA')
 # NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA
