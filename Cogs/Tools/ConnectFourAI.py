@@ -144,10 +144,26 @@ def boardHeuristic(board, p1_mark, p2_mark, odd):
         p1wantedRows = [3, 1]
         p2wantedRows = [4, 2, 0]
 
+    def get_index(n, i):
+        '''
+        A helper function that discards index values below 0 or above the board's size
+        '''
+
+        try:
+            test = board[n][i]
+            if n < 0 or i < 0:
+                return '()'
+            else:
+                return (n, i, board[n][i])
+        except IndexError:
+            return '()'
+
     for n, list in enumerate(board):
         for i, cell in enumerate(list):
             if cell in ['🔴', '🔵']:
                 pieceValue = 0
+                p1_accounted = False
+                p2_accounted = False
                 if cell == p1_mark:
                     currentWantedRows = p1wantedRows
                 else:
@@ -156,126 +172,153 @@ def boardHeuristic(board, p1_mark, p2_mark, odd):
                 # Single Piece Value
                 pieceValue += getPosValue(n, i)
 
-                if i < 4:
-                    # (3) horizontal holes
-                    if board[n][i + 1] == '⚪' and board[n][i] == board[n][i + 2] == board[n][i + 3]:
-                        pieceValue += 200
+                # Empty Cell Based Heuristics #
+                pieces_below = [get_index(n+1, i), get_index(n+2, i), get_index(n+3, i)]
+                pieces = [tuple[2] for tuple in pieces_below]
+                if '()' not in pieces_below:
+                    if all(x == p1_mark for x in pieces):
+                        p1Score += 50
+                        p1_accounted = True
+                    elif all(x == p2_mark for x in pieces):
+                        p2Score += 50
+                        p2_accounted = True
 
-                    if board[n][i + 2] == '⚪' and board[n][i] == board[n][i + 1] == board[n][i + 3]:
-                        pieceValue += 200
+                pieces_left_down = [get_index(n+1, i-1), get_index(n+2, i-2), get_index(n+3, i-3)]
+                pieces_left = [get_index(n, i-1), get_index(n, i-2), get_index(n, i-3)]
+                pieces_left_up = [get_index(n-1, i-1), get_index(n-2, i-2), get_index(n-3, i-3)]
 
-                    if n in currentWantedRows:
-                        pieceValue += (currentWantedRows.index(n)*5)*150
+                pieces_right_down = [get_index(n+1, i+1), get_index(n+2, i+2), get_index(n+3, i+3)]
+                pieces_right = [get_index(n, i+1), get_index(n, i+2), get_index(n, i+3)]
+                pieces_right_up = [get_index(n-1, i+1), get_index(n-2, i+2), get_index(n-3, i+3)]
 
-                    # (3) horizontal
-                    if board[n][i] == board[n][i + 1] == board[n][i + 2]:
-                        if i != 3:
-                            if board[n][i + 3] == '⚪':
-                                pieceValue += 200
+                positive_diagonal = [x for x in pieces_left_down if '()' not in x] + [(n, i, board[n][i])] + [x for x in pieces_right_up if '()' not in x]
 
-                        if i != 0:
-                            if board[n][i - 1] == '⚪':
-                                pieceValue += 200
 
-                        if n in currentWantedRows:
-                            pieceValue += (currentWantedRows.index(n)*5)*300
 
-                    if n > 2:
-                        # (3) up right holes
-                        if board[n - 1][i + 1] == '⚪' and board[n][i] == board[n - 2][i + 2] == board[n - 3][i + 3]:
-                            pieceValue += 200
-                            if (n-1) in currentWantedRows:
-                                pieceValue += (currentWantedRows.index(n-1)*5)*300
-                        if board[n - 2][i + 2] == '⚪' and (board[n][i] == board[n - 1][i + 1] == board[n - 3][i + 3]):
-                            pieceValue += 200
-                            if (n-2) in currentWantedRows:
-                                pieceValue += (currentWantedRows.index(n-2)*5)*150
 
-                        # (3) up right
-                        if board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2]:
-                            if n != 5 and i != 0:
-                                if board[n + 1][i - 1] == '⚪':
-                                    pieceValue += 200
-                                    if (n+1) in currentWantedRows:
-                                        pieceValue += (currentWantedRows.index(n+1)*5)*150
-                            if board[n - 3][i + 3] == '⚪':
-                                pieceValue += 200
-                                if (n-3) in currentWantedRows:
-                                    pieceValue += (currentWantedRows.index(n-3)*5)*150
 
-                        # (3) up left
-                        if board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2]:
-                            if n != 5 and i != 6:
-                                if board[n + 1][i + 1] == '⚪':
-                                    if (n+1) in currentWantedRows:
-                                        pieceValue += (currentWantedRows.index(n+1)*5)*150
-                                    pieceValue += 200
-                            if board[n - 3][i - 3] == '⚪':
-                                pieceValue += 200
-                                if (n+3) in currentWantedRows:
-                                    pieceValue += (currentWantedRows.index(n+3)*5)*150
 
-                if i > 2 and n > 2:
-                    # (3) up left holes
-                    if board[n - 1][i - 1] == '⚪' and board[n][i] == board[n - 2][i - 2] == board[n - 3][i - 3]:
-                        pieceValue += 200
-                        if (n-1) in currentWantedRows:
-                            pieceValue += (currentWantedRows.index(n-1)*5)*150
-                    elif board[n - 2][i - 2] == '⚪' and board[n][i] == board[n - 1][i - 1] == board[n - 3][i - 3]:
-                        pieceValue += 200
-                        if (n-2) in currentWantedRows:
-                            pieceValue += (currentWantedRows.index(n-2)*5)*150
 
-                # (3) vertical
-                if n < 4 and board[n][i] == board[n + 1][i] == board[n + 2][i]:
-                    if n != 0:
-                        if board[n - 1][i] == '⚪':
-                            pieceValue += 180
-                            if (n-1) in currentWantedRows:
-                                pieceValue += (currentWantedRows.index(n-1)*5)*150
-
-                if n > 0:
-                    if i < 6:
-                        # (2) up right
-                        if board[n][i] == board[n - 1][i + 1]:
-                            if n != 1 and i != 5:
-                                if board[n - 2][i + 2] == '⚪':
-                                    pieceValue += 50
-                            if n != 5 and i != 0:
-                                if board[n + 1][i - 1] == '⚪':
-                                    pieceValue += 50
-
-                    if i > 0:
-                        # (2) up left
-                        if board[n][i] == board[n - 1][i - 1]:
-                            if n != 1 and i != 1:
-                                if board[n - 2][i - 2] == '⚪':
-                                    pieceValue += 50
-                                if i != 6 and n != 5:
-                                    if board[n + 1][i + 1] == '⚪':
-                                        pieceValue += 50
-
-                if n < 5:
-                    # (2) vertical
-                    if board[n][i] == board[n + 1][i]:
-                        if n > 0:
-                            if board[n - 1][i] == '⚪':
-                                pieceValue += 25
-
-                if i < 6:
-                    # (2) horizontal
-                    if board[n][i] == board[n][i + 1]:
-                        if i != 5:
-                            if board[n][i + 2] == '⚪':
-                                pieceValue += 50
-                        if i != 0:
-                            if board[n][i - 1] == '⚪':
-                                pieceValue += 50
-
-                if cell == p1_mark:
-                    p1Score += pieceValue
-                elif cell == p2_mark:
-                    p2Score += pieceValue
+                # if i < 4:
+                #     # (3) horizontal holes
+                #     if board[n][i + 1] == '⚪' and board[n][i] == board[n][i + 2] == board[n][i + 3]:
+                #         pieceValue += 200
+                #
+                #     if board[n][i + 2] == '⚪' and board[n][i] == board[n][i + 1] == board[n][i + 3]:
+                #         pieceValue += 200
+                #
+                #     if n in currentWantedRows:
+                #         pieceValue += (currentWantedRows.index(n)*5)*150
+                #
+                #     # (3) horizontal
+                #     if board[n][i] == board[n][i + 1] == board[n][i + 2]:
+                #         if i != 3:
+                #             if board[n][i + 3] == '⚪':
+                #                 pieceValue += 200
+                #
+                #         if i != 0:
+                #             if board[n][i - 1] == '⚪':
+                #                 pieceValue += 200
+                #
+                #         if n in currentWantedRows:
+                #             pieceValue += (currentWantedRows.index(n)*5)*300
+                #
+                #     if n > 2:
+                #         # (3) up right holes
+                #         if board[n - 1][i + 1] == '⚪' and board[n][i] == board[n - 2][i + 2] == board[n - 3][i + 3]:
+                #             pieceValue += 200
+                #             if (n-1) in currentWantedRows:
+                #                 pieceValue += (currentWantedRows.index(n-1)*5)*300
+                #         if board[n - 2][i + 2] == '⚪' and (board[n][i] == board[n - 1][i + 1] == board[n - 3][i + 3]):
+                #             pieceValue += 200
+                #             if (n-2) in currentWantedRows:
+                #                 pieceValue += (currentWantedRows.index(n-2)*5)*150
+                #
+                #         # (3) up right
+                #         if board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2]:
+                #             if n != 5 and i != 0:
+                #                 if board[n + 1][i - 1] == '⚪':
+                #                     pieceValue += 200
+                #                     if (n+1) in currentWantedRows:
+                #                         pieceValue += (currentWantedRows.index(n+1)*5)*150
+                #             if board[n - 3][i + 3] == '⚪':
+                #                 pieceValue += 200
+                #                 if (n-3) in currentWantedRows:
+                #                     pieceValue += (currentWantedRows.index(n-3)*5)*150
+                #
+                #         # (3) up left
+                #         if board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2]:
+                #             if n != 5 and i != 6:
+                #                 if board[n + 1][i + 1] == '⚪':
+                #                     if (n+1) in currentWantedRows:
+                #                         pieceValue += (currentWantedRows.index(n+1)*5)*150
+                #                     pieceValue += 200
+                #             if board[n - 3][i - 3] == '⚪':
+                #                 pieceValue += 200
+                #                 if (n+3) in currentWantedRows:
+                #                     pieceValue += (currentWantedRows.index(n+3)*5)*150
+                #
+                # if i > 2 and n > 2:
+                #     # (3) up left holes
+                #     if board[n - 1][i - 1] == '⚪' and board[n][i] == board[n - 2][i - 2] == board[n - 3][i - 3]:
+                #         pieceValue += 200
+                #         if (n-1) in currentWantedRows:
+                #             pieceValue += (currentWantedRows.index(n-1)*5)*150
+                #     elif board[n - 2][i - 2] == '⚪' and board[n][i] == board[n - 1][i - 1] == board[n - 3][i - 3]:
+                #         pieceValue += 200
+                #         if (n-2) in currentWantedRows:
+                #             pieceValue += (currentWantedRows.index(n-2)*5)*150
+                #
+                # # (3) vertical
+                # if n < 4 and board[n][i] == board[n + 1][i] == board[n + 2][i]:
+                #     if n != 0:
+                #         if board[n - 1][i] == '⚪':
+                #             pieceValue += 180
+                #             if (n-1) in currentWantedRows:
+                #                 pieceValue += (currentWantedRows.index(n-1)*5)*150
+                #
+                # if n > 0:
+                #     if i < 6:
+                #         # (2) up right
+                #         if board[n][i] == board[n - 1][i + 1]:
+                #             if n != 1 and i != 5:
+                #                 if board[n - 2][i + 2] == '⚪':
+                #                     pieceValue += 50
+                #             if n != 5 and i != 0:
+                #                 if board[n + 1][i - 1] == '⚪':
+                #                     pieceValue += 50
+                #
+                #     if i > 0:
+                #         # (2) up left
+                #         if board[n][i] == board[n - 1][i - 1]:
+                #             if n != 1 and i != 1:
+                #                 if board[n - 2][i - 2] == '⚪':
+                #                     pieceValue += 50
+                #                 if i != 6 and n != 5:
+                #                     if board[n + 1][i + 1] == '⚪':
+                #                         pieceValue += 50
+                #
+                # if n < 5:
+                #     # (2) vertical
+                #     if board[n][i] == board[n + 1][i]:
+                #         if n > 0:
+                #             if board[n - 1][i] == '⚪':
+                #                 pieceValue += 25
+                #
+                # if i < 6:
+                #     # (2) horizontal
+                #     if board[n][i] == board[n][i + 1]:
+                #         if i != 5:
+                #             if board[n][i + 2] == '⚪':
+                #                 pieceValue += 50
+                #         if i != 0:
+                #             if board[n][i - 1] == '⚪':
+                #                 pieceValue += 50
+                #
+                # if cell == p1_mark:
+                #     p1Score += pieceValue
+                # elif cell == p2_mark:
+                #     p2Score += pieceValue
     return p1Score - p2Score
 
 
