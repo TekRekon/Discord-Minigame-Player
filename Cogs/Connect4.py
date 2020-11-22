@@ -251,10 +251,10 @@ class Connect4(commands.Cog):
                     await sent_embed.clear_reactions()
 
         # Unbeatable? Mode #
-        if reaction.emoji == ' ':  # 💢
+        if reaction.emoji == '💢':  # 💢
 
             # Player vs AI Exclusive Variables #
-            depth = 5
+            depth = 6
             bot_time = 10
             p_time = 0
             p_list = [self.bot.user, p1]
@@ -286,7 +286,6 @@ class Connect4(commands.Cog):
                 next(alt_emoji)
                 joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
 
-
                 current_heursitic = ConnectFourAI.boardHeuristic(board, bot_mark, p_mark, odd)
 
                 if current_heursitic < lowest_score:
@@ -311,7 +310,7 @@ class Connect4(commands.Cog):
                                 if list[i] == '⚪':
                                     list[i] = current_emoji
                                     break
-                    if bot_time < p_time and not thinking_shortened:
+                    if bot_time < 5 and not thinking_shortened:
                         depth += 1
 
                 # AI's Turn #
