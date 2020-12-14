@@ -13,7 +13,6 @@ class Awair(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.HepaOn = False
         self.autoHepaToggler.start()
 
     @staticmethod
@@ -27,9 +26,6 @@ class Awair(commands.Cog):
                 else:
                     result = await r.json()
                     return result
-
-
-
 
     @staticmethod
     async def switchHepa(state):
@@ -53,12 +49,10 @@ class Awair(commands.Cog):
                     voc_level = sensor['value']
 
             print(f"{dust_level} and {voc_level}")
-            if (dust_level > 0 or voc_level > 0) and not self.HepaOn:
+            if dust_level > 0 or voc_level > 1:
                 await Awair.switchHepa(True)
-                self.HepaOn = True
-            elif (dust_level == 0 and voc_level == 0) and self.HepaOn:
+            elif dust_level == 0 and voc_level <= 1:
                 await Awair.switchHepa(False)
-                self.HepaOn = False
 
         # Data returned is empty if device is offline
         except IndexError:
