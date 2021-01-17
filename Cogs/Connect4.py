@@ -1,5 +1,5 @@
 from discord.ext import commands
-from Cogs.Tools import ConnectFourAI, Connect4DatabaseTools
+from Cogs.Tools import Connect4DatabaseTools
 from itertools import cycle
 import asyncio, randfacts, psycopg2, time, random, discord
 

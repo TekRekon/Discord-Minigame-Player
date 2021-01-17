@@ -14,28 +14,11 @@ bot = commands.Bot(command_prefix='.')
 async def on_ready():
     print('Rigged for silent running')
 
-# bot.load_extension('Cogs.PostgresTest')
-# print('PostgresTest initiated')
-
-# ^^ Archived Cogs ^^ #
-
 bot.load_extension('Cogs.CarouselStatus')
 print('CarouselStatus initiated')
 
-bot.load_extension('Cogs.OnDemandEmbed')
-print('OnDemandEmbed initiated')
-
-bot.load_extension('Cogs.ConfigBot')
-print('jsonExperiment initiated')
-
-bot.load_extension('Cogs.Fun')
-print('Fun initiated')
-
-bot.load_extension('Cogs.TicTacToe')
-print("TicTacToe initiated")
-
-# bot.load_extension('Cogs.errorHandler')
-# print("errorHandler initiated")
+bot.load_extension('Cogs.errorHandler')
+print("errorHandler initiated")
 
 bot.load_extension('Cogs.Connect4')
 print("Connect4 initiated")
