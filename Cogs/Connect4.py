@@ -9,26 +9,26 @@ class Connect4(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # @commands.command()
-    # @commands.cooldown(1, 10, commands.BucketType.user)
-    # async def leaderboard(self, ctx):
-    #     p_scores = Connect4DatabaseTools.fetchRankedStats()
-    #
-    #     embed = discord.Embed(description='\u200b', color=0xff0000)
-    #     embed.set_author(name=f'Connect Four Leaderboard', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/779444906464247828/2e4e7e76e454f56b24d6883b93afb7932.jpg')
-    #     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779118212850909184/ezgif-3-814c4634232b.gif')
-    #     for k, x in enumerate(p_scores):
-    #         if k == 0:
-    #             embed.add_field(name=f'🥇: {x[0]} | %{x[1]}', value='\u200b', inline=False)
-    #         elif k == 1:
-    #             embed.add_field(name=f'🥈: {x[0]} | %{x[1]}', value='\u200b', inline=False)
-    #         elif k == 2:
-    #             embed.add_field(name=f'🥉: {x[0]} | %{x[1]}', value='\u200b', inline=False)
-    #         else:
-    #             embed.add_field(name=f'**{k+1}**: {x[0]} | %{x[1]}', value='\u200b', inline=False)
-    #
-    #     embed.set_footer(text='Play a minimum of 10 matches to get ranked')
-    #     await ctx.send(embed=embed)
+    @commands.command()
+    @commands.cooldown(1, 30, commands.BucketType.user)
+    async def leaderboard(self, ctx):
+        p_scores = Connect4DatabaseTools.fetchRankedStats()
+
+        embed = discord.Embed(description='\u200b', color=0xff0000)
+        embed.set_author(name=f'Connect Four Leaderboard', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/779444906464247828/2e4e7e76e454f56b24d6883b93afb7932.jpg')
+        embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779118212850909184/ezgif-3-814c4634232b.gif')
+        for k, x in enumerate(p_scores):
+            if k == 0:
+                embed.add_field(name=f'🥇: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+            elif k == 1:
+                embed.add_field(name=f'🥈: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+            elif k == 2:
+                embed.add_field(name=f'🥉: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+            else:
+                embed.add_field(name=f'**{k+1}**: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+
+        embed.set_footer(text='Play a minimum of 10 matches to get ranked')
+        await ctx.send(embed=embed)
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
@@ -40,8 +40,8 @@ class Connect4(commands.Cog):
         rows = cur.fetchall()
 
         if arg.id not in [i[0] for i in rows]:
-            embed = discord.Embed(title=f'{arg.name} does not exist in my database', color=0xff0000)
-            embed.set_author(name='Null Profile', icon_url=arg.avatar_url)
+            embed = discord.Embed(title=f'{arg.name} has not played a game yet', color=0xff0000)
+            embed.set_author(name=f'{arg.name}\'s Profile', icon_url=arg.avatar_url)
             embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779526483202932777/9bec831078051d4fc5f06e964da71760.gif')
             await ctx.send(embed=embed)
         else:
@@ -71,7 +71,7 @@ class Connect4(commands.Cog):
             winrates = [tuple[1] for tuple in ranked_scores]
             if arg.id in IDs:
                 i = IDs.index(arg.id)
-                embed.add_field(name='⚜ **Global Rank**', value=f'{i+1}', inline=True)
+                embed.add_field(name='⚜ **Global Rank**', value=f'#{i+1}/{len(IDs)} players', inline=True)
                 if i == 0:
                     embed.add_field(name='📡 **Wins -> Next Rank**', value='0', inline=True)
                 else:
@@ -84,6 +84,8 @@ class Connect4(commands.Cog):
                         f += 1
                         current_winrate = round((current_wins+f)/(current_wins+current_losses)*100, 2)
                     embed.add_field(name='📡 **Wins -> Next Rank**', value=f'{f}', inline=True)
+            else:
+                embed.set_footer(text='Play 10 games to get ranked.')
 
             await ctx.send(embed=embed)
 
