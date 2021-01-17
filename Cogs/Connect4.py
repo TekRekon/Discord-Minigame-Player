@@ -9,26 +9,26 @@ class Connect4(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    @commands.cooldown(1, 10, commands.BucketType.user)
-    async def leaderboard(self, ctx):
-        p_scores = Connect4DatabaseTools.fetchRankedStats()
-
-        embed = discord.Embed(description='\u200b', color=0xff0000)
-        embed.set_author(name=f'Connect Four Leaderboard', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/779444906464247828/2e4e7e76e454f56b24d6883b93afb7932.jpg')
-        embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779118212850909184/ezgif-3-814c4634232b.gif')
-        for k, x in enumerate(p_scores):
-            if k == 0:
-                embed.add_field(name=f'🥇: {x[0]} | %{x[1]}', value='\u200b', inline=False)
-            elif k == 1:
-                embed.add_field(name=f'🥈: {x[0]} | %{x[1]}', value='\u200b', inline=False)
-            elif k == 2:
-                embed.add_field(name=f'🥉: {x[0]} | %{x[1]}', value='\u200b', inline=False)
-            else:
-                embed.add_field(name=f'**{k+1}**: {x[0]} | %{x[1]}', value='\u200b', inline=False)
-
-        embed.set_footer(text='Play a minimum of 10 matches to get ranked')
-        await ctx.send(embed=embed)
+    # @commands.command()
+    # @commands.cooldown(1, 10, commands.BucketType.user)
+    # async def leaderboard(self, ctx):
+    #     p_scores = Connect4DatabaseTools.fetchRankedStats()
+    #
+    #     embed = discord.Embed(description='\u200b', color=0xff0000)
+    #     embed.set_author(name=f'Connect Four Leaderboard', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/779444906464247828/2e4e7e76e454f56b24d6883b93afb7932.jpg')
+    #     embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779118212850909184/ezgif-3-814c4634232b.gif')
+    #     for k, x in enumerate(p_scores):
+    #         if k == 0:
+    #             embed.add_field(name=f'🥇: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+    #         elif k == 1:
+    #             embed.add_field(name=f'🥈: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+    #         elif k == 2:
+    #             embed.add_field(name=f'🥉: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+    #         else:
+    #             embed.add_field(name=f'**{k+1}**: {x[0]} | %{x[1]}', value='\u200b', inline=False)
+    #
+    #     embed.set_footer(text='Play a minimum of 10 matches to get ranked')
+    #     await ctx.send(embed=embed)
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
@@ -71,7 +71,7 @@ class Connect4(commands.Cog):
             winrates = [tuple[1] for tuple in ranked_scores]
             if arg.id in IDs:
                 i = IDs.index(arg.id)
-                embed.add_field(name='⚜ **Rank**', value=f'{i+1}', inline=True)
+                embed.add_field(name='⚜ **Global Rank**', value=f'{i+1}', inline=True)
                 if i == 0:
                     embed.add_field(name='📡 **Wins -> Next Rank**', value='0', inline=True)
                 else:
@@ -90,8 +90,26 @@ class Connect4(commands.Cog):
         cur.close()
         con.close()
 
+    @staticmethod
+    def checkBoardWin(board):
+        for n, list in enumerate(board):
+            for i, cell in enumerate(list):
+                if cell in ['🔴', '🔵']:
+                    if i < 4 and n > 2 and (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2] == board[n - 3][i + 3]):
+                        return cell
+                    if i > 2 and n > 2 and (
+                            board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2] == board[n - 3][i - 3]):
+                        return cell
+                    if n < 3 and (board[n][i] == board[n + 1][i] == board[n + 2][i] == board[n + 3][i]):
+                        return cell
+                    if i < 4 and (board[n][i] == board[n][i + 1] == board[n][i + 2] == board[n][i + 3]):
+                        return cell
+                    if n == 0 and '⚪' not in board[n]:
+                        return 'TIE'
+        return 'NO_END'
+
     @commands.command()
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def connect4(self, ctx):
         Connect4DatabaseTools.addPlayer(ctx.author.id, ctx.author.name)
 
@@ -120,17 +138,6 @@ class Connect4(commands.Cog):
         emoji_list = ['🔵', '🔴']
         random.shuffle(emoji_list)
         alt_emoji = cycle(emoji_list)
-        loading_gifs = ['https://cdn.discordapp.com/attachments/488700267060133889/779516535425335307/giphy.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779518931085819984/gifntext-gif.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779518965923184641/tvnJsU7.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779518988194938960/giphy_1.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779519005941170186/custom-loading-icon.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779519030301294592/giphy_2.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779519058936070164/thA1t5G.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779519089998692372/giphy_3.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779519118672003072/giphy-downsized.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779519144869494804/187917b0606c80a6c295da1f19ff3e40.gif',
-                        'https://cdn.discordapp.com/attachments/488700267060133889/779519172622155806/7dfd95dd9ad07e7af1eaff34a890b322.gif']
         working = True
 
         # Options Menu #
@@ -138,7 +145,7 @@ class Connect4(commands.Cog):
         embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
         sent_embed = await ctx.send(embed=embed)
         await sent_embed.add_reaction('📲')
-        reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
+        reaction, user = await self.bot.wait_for('reaction_add', timeout=30.0, check=check_reaction)
         await sent_embed.clear_reactions()
 
         if reaction.emoji == '📲':
@@ -148,161 +155,57 @@ class Connect4(commands.Cog):
             await sent_embed.edit(embed=embed)
             await sent_embed.add_reaction('✅')
             await sent_embed.add_reaction('❌')
-            reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
+            reaction, user = await self.bot.wait_for('reaction_add', timeout=30.0, check=check_reaction)
             if reaction.emoji == '❌':
                 embed.description = f'{ctx.author.mention} chickened out of a game with {p2.mention}'
                 await sent_embed.edit(embed=embed)
                 await sent_embed.clear_reactions()
                 return
-        await sent_embed.clear_reactions()
+            elif reaction.emoji == '✅':
 
-
-        # Loading Connect4 #
-        embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
-        embed.description = 'Loading...'
-        embed.set_thumbnail(url=random.choice(loading_gifs))
-        await sent_embed.edit(embed=embed)
-        for emoji in reactions:
-            await sent_embed.add_reaction(emoji)
-        sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
-
-        if reaction.emoji == '✅':
-            Connect4DatabaseTools.addPlayer(user.id, user.name)
-            embed.set_thumbnail(url='')
-
-            # Player vs player exclusive variables #
-            p_list = [p1, p2]
-            random.shuffle(p_list)
-            alt_player = cycle(p_list)
-            time_taken = 0
-            p1_total_time = 0
-            p2_total_time = 0
-            p1_turns = 0
-            p2_turns = 0
-            first_player_score = 0
-            odd = False
-            first_player = next(alt_player)
-            second_player = next(alt_player)
-            first_emoji = next(alt_emoji)
-            second_emoji = next(alt_emoji)
-            if next(alt_player) == p1:
-                odd = True
-
-            next(alt_player)
-
-            # Actual Game #
-            while working:
-                first_player_score = ConnectFourAI.boardHeuristic(board, first_emoji, second_emoji, odd)
-                current_player = next(alt_player)
-                current_emoji = next(alt_emoji)
-                other_player = next(alt_player)
-                other_emoji = next(alt_emoji)
-                next(alt_player)
-                next(alt_emoji)
-                joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
-                fact = randfacts.getFact(filter=False)
-                connect4_tips = ['Move not registering? Try double tapping.', 'The middle column and row are the most valuable.', 'Try learning the Odd-Even Strategy.', 'You\'re looking mighty fine today', 'You have 5 minutes to make a move before receiving a loss.', fact, 'Don\'t fat-finger the reactions.']
-
-                # Player's turn
-                embed.description = f'{current_player.mention}({current_emoji}) Make your move \n \n {other_player.mention}({other_emoji}) took {time_taken} seconds \n \n {first_player.mention}({first_emoji}) score: {first_player_score} \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
-                embed.set_footer(text=random.choice(connect4_tips))
+                # Loading Connect4 #
+                await sent_embed.clear_reactions()
+                embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
+                embed.description = 'Loading...'
                 await sent_embed.edit(embed=embed)
+                for emoji in reactions:
+                    await sent_embed.add_reaction(emoji)
+                sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
 
-                try:
-                    start = time.time()
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=300.0, check=check_reaction)
-                    end = time.time()
-                    time_taken = round(end - start, 2)
-                except asyncio.TimeoutError:
-                    embed.description = f'{other_player.mention}({other_emoji}) Wins \n {current_player.mention}({current_emoji}) Loses \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
-                    embed.set_footer(text='')
+                Connect4DatabaseTools.addPlayer(user.id, user.name)
+
+                # Player vs player exclusive variables #
+                p_list = [p1, p2]
+                random.shuffle(p_list)
+                alt_player = cycle(p_list)
+
+                # Actual Game #
+                while working:
+                    current_player = next(alt_player)
+                    current_emoji = next(alt_emoji)
+                    other_player = next(alt_player)
+                    other_emoji = next(alt_emoji)
+                    next(alt_player)
+                    next(alt_emoji)
+                    joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
+                    connect4_tips = ['Move not registering? Try double tapping.', 'The middle column and row are the most valuable.', 'Try learning the Odd-Even Strategy.', 'You\'re looking mighty fine today', 'You have 3 minutes to make a move before receiving a loss.', randfacts.getFact(filter=True), 'Don\'t fat-finger the reactions.']
+
+                    # Player's turn
+                    embed.description = f'{current_player.mention}({current_emoji}) Make your move \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                    embed.set_footer(text=random.choice(connect4_tips))
                     await sent_embed.edit(embed=embed)
-                    await sent_embed.clear_reactions()
-                    Connect4DatabaseTools.editPlayerScore(current_player.id, False)
-                    Connect4DatabaseTools.editPlayerScore(other_player.id, True)
-                    return
 
-                await sent_embed.remove_reaction(reaction.emoji, user)
-                for i, emoji in enumerate(reactions):
-                    if emoji == reaction.emoji:
-                        for list in reversed(board):
-                            if list[i] == '⚪':
-                                list[i] = current_emoji
-                                break
+                    try:
+                        reaction, user = await self.bot.wait_for('reaction_add', timeout=180.0, check=check_reaction)
+                    except asyncio.TimeoutError:
+                        embed.description = f'{other_player.mention}({other_emoji}) Wins \n {current_player.mention}({current_emoji}) Loses \n \n "Player turn timed out \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                        embed.set_footer(text='')
+                        await sent_embed.edit(embed=embed)
+                        await sent_embed.clear_reactions()
+                        Connect4DatabaseTools.editPlayerScore(current_player.id, False)
+                        Connect4DatabaseTools.editPlayerScore(other_player.id, True)
+                        return
 
-                # Evaluate Board #
-                joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
-                result = ConnectFourAI.checkBoardWin(board)
-                if result == 'TIE':
-                    working = False
-                    Connect4DatabaseTools.editPlayerScore(current_player.id, True)
-                    Connect4DatabaseTools.editPlayerScore(other_player.id, True)
-                    embed.description = f'Tie between {current_player.mention}({current_emoji}) and {other_player.mention}({other_emoji}) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
-                    embed.set_footer(text='')
-                    await sent_embed.edit(embed=embed)
-                    await sent_embed.clear_reactions()
-                elif result in ['🔴', '🔵']:
-                    working = False
-                    Connect4DatabaseTools.editPlayerScore(current_player.id, True)
-                    Connect4DatabaseTools.editPlayerScore(other_player.id, False)
-                    embed.description = f'{current_player.mention}({current_emoji}) Wins \n {other_player.mention}({other_emoji}) Loses \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
-                    embed.set_footer(text='')
-                    await sent_embed.edit(embed=embed)
-                    await sent_embed.clear_reactions()
-
-        # Unbeatable? Mode #
-        if reaction.emoji == '💢':  # 💢
-
-            # Player vs AI Exclusive Variables #
-            depth = 6
-            bot_time = 10
-            p_time = 0
-            p_list = [self.bot.user, p1]
-            # random.shuffle(p_list)
-            alt_player = cycle(p_list)
-            longest_time = 0
-            prev_nodes = 0
-            lowest_score = 0
-            highest_score = 0
-            thinking_shortened = False
-            bot_mark = ' '
-            p_mark = ' '
-            odd = False
-            if next(alt_player) == self.bot.user:
-                bot_mark = next(alt_emoji)
-                p_mark = next(alt_emoji)
-                odd = True
-            p_mark = next(alt_emoji)
-            bot_mark = next(alt_emoji)
-            next(alt_player)
-
-            # Actual Game #
-            while working:
-                current_player = next(alt_player)
-                current_emoji = next(alt_emoji)
-                other_player = next(alt_player)
-                other_emoji = next(alt_emoji)
-                next(alt_player)
-                next(alt_emoji)
-                joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
-
-                current_heursitic = ConnectFourAI.boardHeuristic(board, bot_mark, p_mark, odd)
-
-                if current_heursitic < lowest_score:
-                    lowest_score = current_heursitic
-                elif current_heursitic > highest_score:
-                    highest_score = current_heursitic
-                if bot_time > longest_time:
-                    longest_time = bot_time
-
-                # Player's turn
-                if current_player == p1:
-                    embed.description = f'{p1.mention}({current_emoji}) Make your move \n \n Current bot score: {current_heursitic} \n \n I took **{bot_time} seconds** \n \n I explored **{prev_nodes} nodes** \n \n depth = {depth} \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
-                    await sent_embed.edit(embed=embed)
-                    start = time.time()
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=300.0, check=check_reaction)
-                    end = time.time()
-                    p_time = round(end - start, 2)
                     await sent_embed.remove_reaction(reaction.emoji, user)
                     for i, emoji in enumerate(reactions):
                         if emoji == reaction.emoji:
@@ -310,36 +213,26 @@ class Connect4(commands.Cog):
                                 if list[i] == '⚪':
                                     list[i] = current_emoji
                                     break
-                    if bot_time < 5 and not thinking_shortened:
-                        depth += 1
 
-                # AI's Turn #
-                elif current_player == self.bot.user:
-                    embed.description = f'{self.bot.user.mention}({current_emoji}) is thinking... \n \n Current bot score: {current_heursitic} \n \n You took **{p_time} seconds** \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
-                    await sent_embed.edit(embed=embed)
-                    start = time.time()
-                    move, shortened, nodes_explored = ConnectFourAI.bestMove(board=board, botMark=bot_mark, pMark=p_mark, depth=depth, odd=odd)
-                    prev_nodes = nodes_explored
-                    board[move[0]][move[1]] = current_emoji
-                    thinking_shortened = shortened
-                    end = time.time()
-                    bot_time = round(end - start, 2)
-
-                # Evaluate Board #
-                joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
-                result = ConnectFourAI.checkBoardWin(board)
-                if result == 'TIE':
-                    working = False
-                    embed.description = f'Tie between {current_player.mention}({current_emoji}) and {other_player.mention}({other_emoji}) \n \n My **highest score** was **{highest_score}** \n My **lowest score** was **{lowest_score}** \n My **longest move** took **{longest_time} seconds** \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
-                    embed.set_footer(text='')
-                    await sent_embed.edit(embed=embed)
-                    await sent_embed.clear_reactions()
-                elif result in ['🔴', '🔵']:
-                    working = False
-                    embed.description = f'{current_player.mention}({current_emoji}) Wins \n {other_player.mention}({other_emoji}) Loses \n \n My **highest score** was **{highest_score}** \n My **lowest score** was **{lowest_score}** \n My **longest move** took **{longest_time} seconds** \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
-                    embed.set_footer(text='')
-                    await sent_embed.edit(embed=embed)
-                    await sent_embed.clear_reactions()
+                    # Evaluate Board #
+                    joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
+                    result = Connect4.checkBoardWin(board)
+                    if result == 'TIE':
+                        working = False
+                        Connect4DatabaseTools.editPlayerScore(current_player.id, True)
+                        Connect4DatabaseTools.editPlayerScore(other_player.id, True)
+                        embed.description = f'Tie between {current_player.mention}({current_emoji}) and {other_player.mention}({other_emoji}) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                        embed.set_footer(text='')
+                        await sent_embed.edit(embed=embed)
+                        await sent_embed.clear_reactions()
+                    elif result in ['🔴', '🔵']:
+                        working = False
+                        Connect4DatabaseTools.editPlayerScore(current_player.id, True)
+                        Connect4DatabaseTools.editPlayerScore(other_player.id, False)
+                        embed.description = f'{current_player.mention}({current_emoji}) Wins \n {other_player.mention}({other_emoji}) Loses \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                        embed.set_footer(text='')
+                        await sent_embed.edit(embed=embed)
+                        await sent_embed.clear_reactions()
 
 
 def setup(bot):

@@ -12,13 +12,10 @@ class CarouselStatus(commands.Cog):
     async def on_ready(self):
         self.playingNames = cycle(['Made By TekRekon',
             f'Latency: {round(self.bot.latency*1000, 2)}ms',
-            f'in {len(self.bot.guilds)} servers',
-            f'Latency: {round(self.bot.latency*1000, 2)}ms',
-            'K̴̢̢̲̼̺̖̩̼̫̃̈́͛̑͌̄̚͠Í̵̢̬̺̠̼͖̲̫̲̦͘͝L̵̰̔L̶̛̘̟̖̪̺̜̈́̏̈́̄̾̎͘͝ ̵̡̎̏̑͌̈́́̈́̿̕͠͝͝E̸̛̝͕̹̝̰̲̣̗͊̑̏̂̀͜ͅͅṾ̴̖̪̥͍̫̓̇̈́͐͐͐̐̌͋͘͠ͅE̸͛̃͆̆̇̔̀̍̋̕͠͝ͅŖ̵̧̫̼̮͓̗̻̠͊̎̔̆̆̈̂̓ͅͅY̷̢̙̱̠̰̰̳͚͎̟̼̜͐̇̇̃̈͌͛̓͆͗Ö̴͎̲̥̺̦͎͓͎̳͉̹̪́̇̆̈́̋̀̊͛̒N̶̢̢̩̺̿̀͂̓͗̃̍̕͘E̸̢̟̟͕̫͚̯̟̞̮̫͓̔',
-            f'Latency: {round(self.bot.latency*1000, 2)}ms'])
+            f'in {len(self.bot.guilds)} servers'])
         self.carousel_status.start()
 
-    @tasks.loop(seconds=10.0)
+    @tasks.loop(seconds=15.0)
     async def carousel_status(self):
         await self.bot.change_presence(activity=discord.Game(next(self.playingNames)))
 
