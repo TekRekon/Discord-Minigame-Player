@@ -19,21 +19,20 @@ class errorHandler(commands.Cog):
             # Raises another Forbidden error if error message sent in channel without access
             pass
         if isinstance(error, discord.ext.commands.errors.BadArgument) or isinstance(error, ValueError):
-            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: Command was used incorrectly. Use .help for assistance', delete=False)
-        # elif isinstance(error, commands.DisabledCommand):
-        #     await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: {ctx.command} has been disabled', delete=False)
+            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: Command was used incorrectly. Use command ```.help``` for more info.', delete=False)
         elif isinstance(error, asyncio.TimeoutError):
             await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Operation timed out', delete=False)
         elif isinstance(error, commands.errors.CommandOnCooldown):
-            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: You may only use this command once every 30 seconds', delete=False)
-        # elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        #     await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: This command is missing required arguments', delete=False)
+            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: You are on cooldown for this command. Use command ```.help``` for more info.', delete=False)
+        elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: This command is missing required arguments. Use command ```.help``` for more info.', delete=False)
         elif isinstance(error, discord.ext.commands.errors.CommandNotFound):
             s = ctx.message.content
             if not s == len(s) * '.':
-                await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Unknown command. Use .help for assistance', delete=False)
+                await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Unknown command. Use command ```.help``` for more info.', delete=False)
         # else:
-        #     await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Unhandled error: {error}', delete=False)
+        #     me = self.bot.get_user(285879705989677058)
+        #     await me.send(f"Unhandled error: {error}")
 
 
 def setup(bot):

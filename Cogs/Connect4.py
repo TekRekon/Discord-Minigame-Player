@@ -10,7 +10,7 @@ class Connect4(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    @commands.cooldown(1, 30, commands.BucketType.user)
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def leaderboard(self, ctx):
         p_scores = Connect4DatabaseTools.fetchRankedStats()
 
@@ -31,7 +31,7 @@ class Connect4(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def profile(self, ctx, arg: discord.Member):
         con = psycopg2.connect("postgres://tmneuvqnzogsxo:d15b738ee44cc1429e2cf014bf3c1df8448fea2b0155a4157e8e2a37dbc0d495@ec2-54-146-142-58.compute-1.amazonaws.com:5432/d3ad8vk1so3cfu")
         cur = con.cursor()
@@ -111,7 +111,7 @@ class Connect4(commands.Cog):
         return 'NO_END'
 
     @commands.command()
-    @commands.cooldown(1, 30, commands.BucketType.user)
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def connect4(self, ctx):
         Connect4DatabaseTools.addPlayer(ctx.author.id, ctx.author.name)
 
