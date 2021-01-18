@@ -30,9 +30,9 @@ class errorHandler(commands.Cog):
             s = ctx.message.content
             if not s == len(s) * '.':
                 await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Unknown command. Use command ```.help``` for more info.', delete=False)
-        # else:
-        #     me = self.bot.get_user(285879705989677058)
-        #     await me.send(f"Unhandled error: {error}")
+        else:
+            me = self.bot.get_user(285879705989677058)
+            await me.send(f"Unhandled error: {error}")
 
 
 def setup(bot):
