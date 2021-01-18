@@ -21,9 +21,6 @@ async def on_ready():
 @commands.cooldown(1, 15, commands.BucketType.user)
 @commands.guild_only()
 async def help(ctx):
-    await ctx.send(".leaderboard")
-    await ctx.send(".connect4")
-    await ctx.send(".help")
     def check_reaction(reaction, user):
         if reaction.emoji in ['👤', '🏆', '🎮', '🛑', '↩', '🆘']:
             return reaction.message.id == sent_embed.id and user == ctx.author
