@@ -19,7 +19,11 @@ async def on_ready():
 
 @bot.command()
 @commands.cooldown(1, 15, commands.BucketType.user)
+@commands.guild_only()
 async def help(ctx):
+    await ctx.send(".leaderboard")
+    await ctx.send(".connect4")
+    await ctx.send(".help")
     def check_reaction(reaction, user):
         if reaction.emoji in ['👤', '🏆', '🎮', '🛑', '↩', '🆘']:
             return reaction.message.id == sent_embed.id and user == ctx.author
@@ -79,6 +83,6 @@ bot.load_extension('Cogs.Connect4')
 print("Connect4 initiated")
 
 
-bot.run('Nzc5MzY4NzU2MTk5MTYxODY2.X7fhtw.YJwxfNWZnI6r6NXNIoRcx21e7OM')
-# NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA
-# Nzc5MzY4NzU2MTk5MTYxODY2.X7fhtw.YJwxfNWZnI6r6NXNIoRcx21e7OM
+# bot.run('NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA')  # CorruptBot
+bot.run('Nzc5MzY4NzU2MTk5MTYxODY2.X7fhtw.YJwxfNWZnI6r6NXNIoRcx21e7OM')  # GameBot
+
