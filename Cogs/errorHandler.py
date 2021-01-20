@@ -23,19 +23,24 @@ class errorHandler(commands.Cog):
         elif isinstance(error, asyncio.TimeoutError):
             await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Operation timed out', delete=False)
         elif isinstance(error, commands.errors.CommandOnCooldown):
-            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: You are on cooldown for this command. Use command ```.help``` for more info.', delete=False)
+            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: You are on cooldown for this command. For more info, use ```.help```', delete=False)
         elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: This command is missing required arguments. Use command ```.help``` for more info.', delete=False)
+            await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: This command is missing required arguments. For more info, use ```.help```', delete=False)
         elif isinstance(error, discord.ext.commands.errors.CommandNotFound):
-            # s = ctx.message.content
-            # if not s == len(s) * '.':
-            #     await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Unknown command. Use command ```.help``` for more info.', delete=False)
             pass
         elif isinstance(error, discord.ext.commands.NoPrivateMessage):
             pass
         else:
             me = self.bot.get_user(285879705989677058)
             await me.send(f"Unhandled error: {error}")
+
+
+    @commands.command()
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def fetchguilds(self, ctx):
+        if ctx.message.author.id == 285879705989677058:
+            for guild in self.bot.guilds:
+                await ctx.send(f"{guild.name}")
 
 
 def setup(bot):

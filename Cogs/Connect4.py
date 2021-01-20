@@ -10,7 +10,7 @@ class Connect4(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    @commands.cooldown(1, 15, commands.BucketType.user)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.guild_only()
     async def leaderboard(self, ctx):
         p_scores = Connect4DatabaseTools.fetchRankedStats()
@@ -32,7 +32,7 @@ class Connect4(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.cooldown(1, 15, commands.BucketType.user)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.guild_only()
     async def profile(self, ctx, arg: discord.Member):
         con = psycopg2.connect("postgres://tmneuvqnzogsxo:d15b738ee44cc1429e2cf014bf3c1df8448fea2b0155a4157e8e2a37dbc0d495@ec2-54-146-142-58.compute-1.amazonaws.com:5432/d3ad8vk1so3cfu")
@@ -73,7 +73,7 @@ class Connect4(commands.Cog):
             winrates = [tuple[1] for tuple in ranked_scores]
             if arg.id in IDs:
                 i = IDs.index(arg.id)
-                embed.add_field(name='⚜ **Global Rank**', value=f'#{i+1}/{len(IDs)} players', inline=True)
+                embed.add_field(name='⚜ **Global Rank**', value=f'#{i+1}/{len(IDs)} ranked players', inline=True)
                 if i == 0:
                     embed.add_field(name='📡 **Wins -> Next Rank**', value='0', inline=True)
                 else:
@@ -113,7 +113,7 @@ class Connect4(commands.Cog):
         return 'NO_END'
 
     @commands.command()
-    @commands.cooldown(1, 15, commands.BucketType.user)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.guild_only()
     async def connect4(self, ctx):
         Connect4DatabaseTools.addPlayer(ctx.author.id, ctx.author.name)
@@ -223,6 +223,8 @@ class Connect4(commands.Cog):
                     joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
                     result = Connect4.checkBoardWin(board)
                     if result == 'TIE':
+                        me = self.bot.get_user(285879705989677058)
+                        await me.send(f"{current_player.id}:{current_player.name} tied with {other_player.id}:{other_player.name} in connect4")
                         working = False
                         Connect4DatabaseTools.editPlayerScore(current_player.id, True)
                         Connect4DatabaseTools.editPlayerScore(other_player.id, True)
@@ -231,6 +233,8 @@ class Connect4(commands.Cog):
                         await sent_embed.edit(embed=embed)
                         await sent_embed.clear_reactions()
                     elif result in ['🔴', '🔵']:
+                        me = self.bot.get_user(285879705989677058)
+                        await me.send(f"{current_player.id}{current_player.name} won against {other_player.id}{other_player.name} in connect4")
                         working = False
                         Connect4DatabaseTools.editPlayerScore(current_player.id, True)
                         Connect4DatabaseTools.editPlayerScore(other_player.id, False)

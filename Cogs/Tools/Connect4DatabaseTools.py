@@ -5,7 +5,7 @@ def fetchRankedStats():
     con = psycopg2.connect("postgres://tmneuvqnzogsxo:d15b738ee44cc1429e2cf014bf3c1df8448fea2b0155a4157e8e2a37dbc0d495@ec2-54-146-142-58.compute-1.amazonaws.com:5432/d3ad8vk1so3cfu")
     cur = con.cursor()
 
-    cur.execute("SELECT user_id, username, wins, losses FROM playerConnect4Stats")
+    cur.execute("SELECT user_id, username, wins, losses FROM playerConnect4Stats ORDER BY wins ASC")
     rows = cur.fetchall()
 
     cur.close()
