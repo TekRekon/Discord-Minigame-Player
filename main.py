@@ -12,7 +12,7 @@ import psycopg2
 
 # pass in the callable to support per-server prefixes
 # bot = commands.Bot(command_prefix=prefix)
-bot = commands.Bot(command_prefix='!', help_command=None)
+bot = commands.Bot(command_prefix='.', help_command=None)
 
 
 @bot.event
@@ -113,6 +113,6 @@ print("Connect4 initiated")
 bot.load_extension('Cogs.admin')
 print("admin initiated")
 
-bot.run('NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA')  # CorruptBot
-#bot.run('Nzc5MzY4NzU2MTk5MTYxODY2.X7fhtw.YJwxfNWZnI6r6NXNIoRcx21e7OM')  # GameBot
+#bot.run('NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA')  # CorruptBot
+bot.run('Nzc5MzY4NzU2MTk5MTYxODY2.X7fhtw.YJwxfNWZnI6r6NXNIoRcx21e7OM')  # GameBot
 
