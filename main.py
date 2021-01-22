@@ -2,6 +2,7 @@ from discord.ext import commands
 from Cogs.Tools import MessageTools
 import asyncio
 import discord
+import psycopg2
 
 
 # A callable to retrieve the current guild's prefix
@@ -11,11 +12,19 @@ import discord
 
 # pass in the callable to support per-server prefixes
 # bot = commands.Bot(command_prefix=prefix)
-bot = commands.Bot(command_prefix='.', help_command=None)
+bot = commands.Bot(command_prefix='!', help_command=None)
+
 
 @bot.event
 async def on_ready():
     print('Rigged for silent running')
+
+@commands.command()
+async def purge(self, ctx, num: int):
+    if ctx.author.id == 285879705989677058:
+        if ctx.message.author != self.bot.user:
+            await ctx.message.delete()
+            await ctx.channel.purge(limit=num)
 
 
 @bot.command()
@@ -43,7 +52,7 @@ async def help(ctx, arg: str = None):
             embed.description = f'🚫 That page does not exist'
         await ctx.send(embed=embed)
 
-    elif not ctx.channel.guild.me.guild_permissions.manage_messages:
+    elif not ctx.guild.me.guild_permissions.manage_messages:
         embed.description = f'{ctx.author.mention}, I do not have the manage messages permission. Bot functionality is limited and the help pages will have to be navigated manually. Use \n ```.help <letter>``` to navigate the menu \n \n 🇦: **.profile** \n 🇧: **.leaderboard** \n 🇨: **.connect4** \n 🇩: **I need more help**'
         await ctx.send(embed=embed)
 
@@ -91,13 +100,6 @@ async def help(ctx, arg: str = None):
             await sent_embed.edit(embed=embed)
             await asyncio.sleep(1)
 
-@bot.event
-async def on_guild_join(guild):
-    bot_entry = await guild.audit_logs(action=discord.AuditLogAction.bot_add).flatten()
-    await MessageTools.sendSimpleEmbed(bot_entry[0].user, "Hello! My name is GameBot. To get started, use the command ```.help```", False)
-    await bot.wait_until_ready()
-    me = bot.get_user(285879705989677058)
-    await me.send(f"{guild.name} has added the bot")
 
 bot.load_extension('Cogs.CarouselStatus')
 print('CarouselStatus initiated')
@@ -108,6 +110,9 @@ print("errorHandler initiated")
 bot.load_extension('Cogs.Connect4')
 print("Connect4 initiated")
 
-#bot.run('NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA')  # CorruptBot
-bot.run('Nzc5MzY4NzU2MTk5MTYxODY2.X7fhtw.YJwxfNWZnI6r6NXNIoRcx21e7OM')  # GameBot
+bot.load_extension('Cogs.admin')
+print("admin initiated")
+
+bot.run('NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA')  # CorruptBot
+#bot.run('Nzc5MzY4NzU2MTk5MTYxODY2.X7fhtw.YJwxfNWZnI6r6NXNIoRcx21e7OM')  # GameBot
 

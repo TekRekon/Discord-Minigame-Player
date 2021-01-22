@@ -35,13 +35,5 @@ class errorHandler(commands.Cog):
             await me.send(f"Unhandled error: {error}")
 
 
-    @commands.command()
-    @commands.cooldown(1, 5, commands.BucketType.user)
-    async def fetchguilds(self, ctx):
-        if ctx.message.author.id == 285879705989677058:
-            for guild in self.bot.guilds:
-                await ctx.send(f"{guild.name}")
-
-
 def setup(bot):
     bot.add_cog(errorHandler(bot))
