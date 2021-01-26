@@ -18,7 +18,7 @@ class errorHandler(commands.Cog):
         if isinstance(error, discord.errors.Forbidden):
             # Raises another Forbidden error if error message sent in channel without access
             pass
-        if isinstance(error, discord.ext.commands.errors.BadArgument) or isinstance(error, ValueError):
+        if isinstance(error, discord.ext.commands.errors.BadArgument):
             await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}: Command was given bad input. Use command ```.help``` for more info.', delete=False)
         elif isinstance(error, asyncio.TimeoutError):
             await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: Operation timed out', delete=False)
@@ -27,6 +27,8 @@ class errorHandler(commands.Cog):
         elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
             await MessageTools.sendSimpleEmbed(ctx.message.channel, f'{ctx.author.name}: This command is missing required arguments. For more info, use ```.help```', delete=False)
         elif isinstance(error, discord.ext.commands.errors.CommandNotFound):
+            pass
+        elif isinstance(error, discord.ext.commands.errors.MissingPermissions):
             pass
         elif isinstance(error, discord.ext.commands.NoPrivateMessage):
             pass
