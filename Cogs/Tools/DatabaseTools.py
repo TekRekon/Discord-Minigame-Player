@@ -99,7 +99,7 @@ def editPlayerScore(player_id, won, mode):
     win_percent = round(wins/(wins+losses)*100, 2)
 
     if mode == 'connect4':
-        cur.execute("UPDATE playerconnect4stats SET wins = {0}, losses = {1}, win_percent = {2} WHERE user_id = {3}", [wins, losses, win_percent, player_id])
+        cur.execute("UPDATE playerconnect4stats SET wins = {0}, losses = {1}, win_percent = {2} WHERE user_id = {3}".format(wins, losses, win_percent, player_id))
     if mode == 'tictactoe':
         cur.execute("UPDATE playertictactoestats SET wins = {0}, losses = {1}, win_percent = {2} WHERE user_id = {3}".format(wins, losses, win_percent, player_id))
 
