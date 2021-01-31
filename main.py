@@ -17,6 +17,7 @@ async def on_ready():
     print('Rigged for silent running')
 
 
+
 @bot.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 @commands.guild_only()
