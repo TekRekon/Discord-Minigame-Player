@@ -1,6 +1,4 @@
 from discord.ext import commands
-from Cogs.Tools import MessageTools
-import asyncio
 import discord
 
 
@@ -11,7 +9,7 @@ import discord
 
 # pass in the callable to support per-server prefixes
 # bot = commands.Bot(command_prefix=prefix)
-bot = commands.Bot(command_prefix='.', help_command=None)
+bot = commands.Bot(command_prefix='+', help_command=None)
 
 
 # TODO add win % prediction
@@ -23,7 +21,7 @@ async def on_ready():
 @bot.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 @commands.guild_only()
-async def help(ctx, arg: str = None):
+async def help(ctx):
     me = bot.get_user(285879705989677058)
     await me.send(f"help initiated")
 
@@ -40,25 +38,25 @@ async def help(ctx, arg: str = None):
 
 
 
-# bot.load_extension('Cogs.CarouselStatus')
-# print('CarouselStatus initiated')
-#
+bot.load_extension('Cogs.CarouselStatus')
+print('CarouselStatus initiated')
+
 bot.load_extension('Cogs.errorHandler')
 print("errorHandler initiated")
-#
-# bot.load_extension('Cogs.Connect4')
-# print("Connect4 initiated")
-#
+
+bot.load_extension('Cogs.Connect4')
+print("Connect4 initiated")
+
 # bot.load_extension('Cogs.admin')
 # print("admin initiated")
-#
-# bot.load_extension('Cogs.tictactoe')
-# print("tictactoe initiated")
-#
-# bot.load_extension('Cogs.DataCommands')
-# print("DataCommands initiated")
 
-bot.run('ODA1MTQ5MjkyNjkwOTMxNzIy.YBWrtg.e3qcrff7obkbCdMqrhD4lqy6XSc') # Reaktor01
+bot.load_extension('Cogs.tictactoe')
+print("tictactoe initiated")
+
+bot.load_extension('Cogs.DataCommands')
+print("DataCommands initiated")
+
+#bot.run('ODA1MTQ5MjkyNjkwOTMxNzIy.YBWrtg.e3qcrff7obkbCdMqrhD4lqy6XSc') # Reaktor01
 #bot.run('NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA')  # CorruptBot
-#bot.run('Nzc5MzY4NzU2MTk5MTYxODY2.X7fhtw.YJwxfNWZnI6r6NXNIoRcx21e7OM')  # GameBot
+bot.run('Nzc5MzY4NzU2MTk5MTYxODY2.X7fhtw.YJwxfNWZnI6r6NXNIoRcx21e7OM')  # GameBot
 
