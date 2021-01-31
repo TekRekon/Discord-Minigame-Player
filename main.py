@@ -1,7 +1,6 @@
 from discord.ext import commands
 import discord
 
-
 # A callable to retrieve the current guild's prefix
 # def prefix(bot, message):
 #     return JsonTools.getData(str(message.guild.id), 'prefix')
