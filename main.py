@@ -34,8 +34,7 @@ async def help(ctx):
     embed.add_field(name='​\n 🔘 Extras', value='`+bug <message>` \n > Report a bug (limit once every three minutes) \n \n | [Discord Invite](https://discord.gg/tK8ThrC2DV) | [Invite Concision](https://discord.com/api/oauth2/authorize?client_id=779368756199161866&permissions=11456&scope=bot) |')
 
     await ctx.send(embed=embed)
-
-
+    
 
 bot.load_extension('Cogs.CarouselStatus')
 print('CarouselStatus initiated')
