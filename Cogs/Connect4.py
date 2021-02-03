@@ -124,7 +124,7 @@ class Connect4(commands.Cog):
                     try:
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=180.0, check=check_reaction)
                     except asyncio.TimeoutError:
-                        embed.description = f'{other_player.mention}({other_emoji}) Wins \n {current_player.mention}({current_emoji}) Loses \n \n "Player turn timed out \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                        embed.description = f'{other_player.mention}({other_emoji}) Wins \n {current_player.mention}({current_emoji}) Loses \n \n Player turn timed out \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
                         embed.set_footer(text='')
                         await sent_embed.edit(embed=embed)
                         await sent_embed.clear_reactions()

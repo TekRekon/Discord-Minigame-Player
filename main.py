@@ -35,7 +35,7 @@ async def help(ctx):
 
     await ctx.send(embed=embed)
 
-    
+
 
 bot.load_extension('Cogs.CarouselStatus')
 print('CarouselStatus initiated')
@@ -54,6 +54,9 @@ print("tictactoe initiated")
 
 bot.load_extension('Cogs.DataCommands')
 print("DataCommands initiated")
+
+# bot.load_extension('Cogs.Othello')
+# print("Othello initiated")
 
 #bot.run('ODA1MTQ5MjkyNjkwOTMxNzIy.YBWrtg.e3qcrff7obkbCdMqrhD4lqy6XSc') # Reaktor01
 #bot.run('NTEzODMyNzk3NjM5NTQwNzM5.W_HeFQ.k086ADDikscfQ3bEju-LKfTXqGA')  # CorruptBot
