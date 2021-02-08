@@ -30,6 +30,7 @@ class Connect4(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.guild_only()
+    @commands.bot_has_permissions(manage_messages=True)
     async def connect4(self, ctx):
 
         def check_reaction(reaction, user):

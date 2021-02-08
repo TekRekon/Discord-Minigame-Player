@@ -13,6 +13,7 @@ class Connect4(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.guild_only()
+    @commands.bot_has_permissions(manage_messages=True)
     async def othello(self, ctx):
 
         def get_flanked(board, n, i):
@@ -283,7 +284,7 @@ class Connect4(commands.Cog):
                                         board[change[0]][change[1]] = current_emoji
                                 reacting = False
                             else:
-                                embed.description = f'{current_player.mention}({current_emoji}) Invalid move, try again (Choose a letter or forfeit your move (⏩)) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]} \n {joined_board[8]}'
+                                embed.description = f'{current_player.mention}({current_emoji}) Invalid move, try again (Choose a letter or forfeit your move ⏩) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]} \n {joined_board[8]}'
                                 await sent_embed.edit(embed=embed)
                                 continue
 

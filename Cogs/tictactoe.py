@@ -32,6 +32,8 @@ class TicTacToe(commands.Cog):
 
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.command()
+    @commands.guild_only()
+    @commands.bot_has_permissions(manage_messages=True)
     async def tictactoe(self, ctx):
 
         availableReactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮']
