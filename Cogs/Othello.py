@@ -191,7 +191,7 @@ class Connect4(commands.Cog):
 
         # Options Menu #
         # TODO add prompt timed out exceptions
-        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: **Join the game**', color=0xff0000)
+        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: **Join the game**', color=0x2596be)
         embed.set_author(name='Othello', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/806228103323189268/a410e8bb83f1a7230d330b912d9eb895_w200.gif')
         sent_embed = await ctx.send(embed=embed)
         await sent_embed.add_reaction('📲')
@@ -263,14 +263,14 @@ class Connect4(commands.Cog):
                         while reacting:
 
                             reaction_alpha, user = await self.bot.wait_for('reaction_add', timeout=180.0, check=check_alpha_reaction)
-                            if reaction_alpha.emoji == '⏩' and moves != 0:
+                            if reaction_alpha.emoji == '⏩':
                                 reacting = False
                                 break
 
                             embed.description = f'{current_player.mention}({current_emoji}) Make your move (Choose a number) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]} \n {joined_board[8]}'
                             await sent_embed.edit(embed=embed)
                             reaction_numeric, user = await self.bot.wait_for('reaction_add', timeout=180.0, check=check_numeric_reaction)
-                            if reaction_numeric.emoji == '⏩' and moves != 0:
+                            if reaction_numeric.emoji == '⏩':
                                 reacting = False
                                 break
 
@@ -312,6 +312,7 @@ class Connect4(commands.Cog):
                         DatabaseTools.editPlayerScore(current_player.id, False, 'othello')
                         DatabaseTools.editPlayerScore(other_player.id, True, 'othello')
                         embed.description = f'{current_player.mention}({current_emoji}) Loses \n {other_player.mention}({other_emoji}) Wins \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
+                        await sent_embed.edit(embed=embed)
 
                     if not any(other_emoji in sublist for sublist in board):
                         working = False
@@ -323,6 +324,7 @@ class Connect4(commands.Cog):
                         DatabaseTools.editPlayerScore(current_player.id, True, 'othello')
                         DatabaseTools.editPlayerScore(other_player.id, False, 'othello')
                         embed.description = f'{current_player.mention}({current_emoji}) Wins \n {other_player.mention}({other_emoji}) Loses \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
+                        await sent_embed.edit(embed=embed)
 
 
                     if not any('🟩' in sublist for sublist in board):
@@ -362,15 +364,14 @@ class Connect4(commands.Cog):
                                 DatabaseTools.editPlayerScore(other_player.id, True, 'othello')
                                 embed.description = f'{current_player.mention}({current_emoji}) Loses \n {other_player.mention}({other_emoji}) Wins \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
                             embed.set_footer(text='')
-                            await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
                         else:
                             DatabaseTools.editPlayerScore(current_player.id, True, 'othello')
                             DatabaseTools.editPlayerScore(other_player.id, True, 'othello')
                             embed.description = f'Tie between {current_player.mention}({current_emoji}) amd {other_player.mention}({other_emoji}) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
                             embed.set_footer(text='')
-                            await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
+                        await sent_embed.edit(embed=embed)
 
 
 def setup(bot):
