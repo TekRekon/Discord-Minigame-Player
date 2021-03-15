@@ -62,7 +62,7 @@ class Connect4(commands.Cog):
 
         # Options Menu #
         # TODO add prompt timed out exceptions
-        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: **Join the game**', color=0xff0000)
+        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: **Join the game**', color=0x2596be)
         embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
         sent_embed = await ctx.send(embed=embed)
         await sent_embed.add_reaction('📲')

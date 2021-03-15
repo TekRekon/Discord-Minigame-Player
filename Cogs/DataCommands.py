@@ -24,17 +24,24 @@ class DataCommands(commands.Cog):
             p_scores = DatabaseTools.fetchRankedStats("connect4")
         elif mode == "othello":
             p_scores = DatabaseTools.fetchRankedStats("othello")
+        elif mode == "rps":
+            p_scores = DatabaseTools.fetchRankedStats("rps")
         else:
             raise discord.ext.commands.errors.BadArgument()
 
-        if start < 1 or start > len(p_scores):
+        if len(p_scores) == 0:
+            embed = discord.Embed(title=f'No ranked players yet. To get ranked, play 10 games of {mode}', color=0x2596be)
+            await ctx.send(embed=embed)
+            return
+
+        elif start < 1 or start > len(p_scores):
             raise discord.ext.commands.errors.BadArgument()
 
 
         cur.close()
         con.close()
 
-        embed = discord.Embed(description='\u200b', color=0xff0000)
+        embed = discord.Embed(description='\u200b', color=0x2596be)
         embed.set_author(name=f'{mode} Leaderboard', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/779444906464247828/2e4e7e76e454f56b24d6883b93afb7932.jpg')
         embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779118212850909184/ezgif-3-814c4634232b.gif')
         for k, x in enumerate(p_scores):
@@ -57,7 +64,7 @@ class DataCommands(commands.Cog):
     async def profile(self, ctx, arg: discord.Member, mode: str):
         me = self.bot.get_user(285879705989677058)
         await me.send(f"profile initiated")
-        if mode not in ['connect4', 'tictactoe', 'othello']:
+        if mode not in ['connect4', 'tictactoe', 'othello', 'rps']:
             raise discord.ext.commands.errors.BadArgument()
         con = psycopg2.connect("postgres://tmneuvqnzogsxo:d15b738ee44cc1429e2cf014bf3c1df8448fea2b0155a4157e8e2a37dbc0d495@ec2-54-146-142-58.compute-1.amazonaws.com:5432/d3ad8vk1so3cfu")
         cur = con.cursor()
@@ -68,15 +75,17 @@ class DataCommands(commands.Cog):
             cur.execute("SELECT user_id FROM playertictactoestats")
         elif mode == 'othello':
             cur.execute("SELECT user_id FROM playerothellostats")
+        elif mode == 'rps':
+            cur.execute("SELECT user_id FROM playerrpsstats")
         rows = cur.fetchall()
 
         if arg.id not in [i[0] for i in rows]:
-            embed = discord.Embed(title=f'{arg.name} has not played a game of {mode} yet', color=0xff0000)
+            embed = discord.Embed(title=f'{arg.name} has not played a game of {mode} yet', color=0x2596be)
             embed.set_author(name=f'{arg.name}\'s {mode} Profile', icon_url=arg.avatar_url)
             embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779526483202932777/9bec831078051d4fc5f06e964da71760.gif')
             await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(description='\u200b', color=0xff0000)
+            embed = discord.Embed(description='\u200b', color=0x2596be)
             embed.set_author(name=f'{arg.name}\'s {mode} Profile', icon_url=arg.avatar_url)
             embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/488700267060133889/779526483202932777/9bec831078051d4fc5f06e964da71760.gif')
 

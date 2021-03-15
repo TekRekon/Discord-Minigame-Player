@@ -50,7 +50,7 @@ class TicTacToe(commands.Cog):
 
         # TODO add game confirmation
         # TODO add prompt timed out exceptions
-        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game \n 🤖: Add a bot (wins/losses don\'t count)', color=0xff0000)
+        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game \n 🤖: Add a bot (wins/losses don\'t count)', color=0x2596be)
         embed.set_author(name='Tic Tac Toe', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/695373427204292658/ezgif-7-895df30489d9.gif')
         embed.set_footer(text='React to continue')
         sent_embed = await ctx.send(embed=embed)

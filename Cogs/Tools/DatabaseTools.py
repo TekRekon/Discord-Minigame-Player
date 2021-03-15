@@ -12,6 +12,8 @@ def fetchRankedStats(mode):
         cur.execute("SELECT username, win_percent, wins, losses, user_id FROM playertictactoestats ORDER BY win_percent DESC")
     elif mode == 'othello':
         cur.execute("SELECT username, win_percent, wins, losses, user_id FROM playerothellostats ORDER BY win_percent DESC")
+    elif mode == 'rps':
+        cur.execute("SELECT username, win_percent, wins, losses, user_id FROM playerrpsstats ORDER BY win_percent DESC")
 
 
     rows = cur.fetchall()
@@ -36,6 +38,8 @@ def getPlayerStat(player_id, data, mode):
         cur.execute("SELECT username, wins, losses, win_percent FROM playertictactoestats WHERE user_id = %s", [player_id])
     elif mode == 'othello':
         cur.execute("SELECT username, wins, losses, win_percent FROM playerothellostats WHERE user_id = %s", [player_id])
+    elif mode == 'rps':
+        cur.execute("SELECT username, wins, losses, win_percent FROM playerrpsstats WHERE user_id = %s", [player_id])
     user = cur.fetchall()
 
     cur.close()
@@ -84,6 +88,16 @@ def addPlayer(player_id, name, mode):
             )
             cont = True
 
+    elif mode == 'rps':
+        cur.execute("SELECT EXISTS(SELECT 1 FROM playerrpsstats WHERE user_id = %s)", [player_id])
+        player_exist = cur.fetchall()
+        if not player_exist[0][0]:
+            new_player = (
+                "INSERT INTO playerrpsstats (user_id, username, wins, losses, win_percent) "
+                "VALUES (%s, %s, %s, %s, %s)"
+            )
+            cont = True
+
     if cont:
         data = (player_id, name, 0, 0, 0)
 
@@ -104,6 +118,8 @@ def editPlayerScore(player_id, won, mode):
         cur.execute("SELECT wins, losses, win_percent FROM playertictactoestats WHERE user_id = {0}".format(player_id))
     elif mode == 'othello':
         cur.execute("SELECT wins, losses, win_percent FROM playerothellostats WHERE user_id = {0}".format(player_id))
+    elif mode == 'rps':
+        cur.execute("SELECT wins, losses, win_percent FROM playerrpsstats WHERE user_id = {0}".format(player_id))
     user = cur.fetchall()
     wins = user[0][0]
     losses = user[0][1]
@@ -120,6 +136,8 @@ def editPlayerScore(player_id, won, mode):
         cur.execute("UPDATE playertictactoestats SET wins = {0}, losses = {1}, win_percent = {2} WHERE user_id = {3}".format(wins, losses, win_percent, player_id))
     elif mode == 'othello':
         cur.execute("UPDATE playerothellostats SET wins = {0}, losses = {1}, win_percent = {2} WHERE user_id = {3}".format(wins, losses, win_percent, player_id))
+    elif mode == 'rps':
+        cur.execute("UPDATE playerrpsstats SET wins = {0}, losses = {1}, win_percent = {2} WHERE user_id = {3}".format(wins, losses, win_percent, player_id))
 
     con.commit()
 
