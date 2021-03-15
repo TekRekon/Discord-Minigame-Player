@@ -43,15 +43,21 @@ class errorHandler(commands.Cog):
         elif isinstance(error, discord.ext.commands.NoPrivateMessage):
             pass
         else:
-            me = self.bot.get_user(285879705989677058)
-            await me.send(f"Unhandled error: {error} \n Message: {ctx.message}")
+            try:
+                me = await self.bot.fetch_user(285879705989677058)
+                await me.send(f"Unhandled error: {error} \n Message: {ctx.message}")
+            except Exception:
+                print(Exception)
 
     @commands.command()
     @commands.cooldown(1, 180, commands.BucketType.user)
     async def bug(self, ctx, *, message):
-        me = self.bot.get_user(285879705989677058)
-        await me.send(f"> {ctx.author.name}#{ctx.author.discriminator}({ctx.author.id}): {message}")
-        await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention}: ✅ Report sent successfully: \n `{message}`', delete=False)
+        try:
+            me = await self.bot.fetch_user(285879705989677058)
+            await me.send(f"> {ctx.author.name}#{ctx.author.discriminator}({ctx.author.id}): {message}")
+            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention}: ✅ Report sent successfully: \n `{message}`', delete=False)
+        except Exception:
+            await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention}: ❌ Report failed to send`', delete=False)
 
 
 def setup(bot):
