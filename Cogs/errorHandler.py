@@ -10,10 +10,10 @@ class errorHandler(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
+    async def on_command_error(self, ctx, error1):
 
         # Check for an original exception, if present
-        error = getattr(error, 'original', error)
+        error = getattr(error1, 'original', error1)
 
         if isinstance(error, discord.errors.Forbidden):
             # Raises another Forbidden error if error message sent in channel without access
@@ -45,7 +45,7 @@ class errorHandler(commands.Cog):
         else:
             try:
                 me = await self.bot.fetch_user(285879705989677058)
-                await me.send(f"Unhandled error: {error} \n Message: {ctx.message}")
+                await me.send(f"Unhandled error: {error} \n Message: {ctx.message} \n More: {error1}")
             except Exception:
                 print(Exception)
 

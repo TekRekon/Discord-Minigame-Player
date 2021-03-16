@@ -29,7 +29,7 @@ async def help(ctx):
     embed.description = '`<>` = required argument \n `[]` = optional argument \n `+` = bot prefix'
     embed.add_field(name='​\n 🎮 Games', value=f'`+connect4` \n > Initiates a connect four game \n \n `+tictactoe` \n > Initiates a tic-tac-toe game \n \n `+othello` \n > Initiates an Othello (Reversi) game \n \n `+rps` \n > Initiates a rock-paper-scissors game', inline=False)
     embed.add_field(name='​\n 📈 Statistics', value=f'`+profile <user mention> <connect4/tictactoe/othello/rps>` \n > Gives you the game statistics of a user \n \n `+leaderboard <connect4/tictactoe/othello/rps> [starting point]` \n > Check who the top 10 players are, or provide a starting point from which 9 additional users will be displayed', inline=False)
-    embed.add_field(name='​\n 🔘 Extras', value='`+bug <message>` \n > Report a bug (limit once every three minutes) \n \n | [Discord Invite](https://discord.gg/tK8ThrC2DV) | [Invite Concision](https://discord.com/api/oauth2/authorize?client_id=779368756199161866&permissions=11456&scope=bot) |')
+    embed.add_field(name='​\n 🔘 Extras', value='`+bug <message>` \n > Report a bug (limit once every three minutes) \n \n | [Discord](https://discord.gg/tK8ThrC2DV) | [Invite Concision](https://discord.com/api/oauth2/authorize?client_id=779368756199161866&permissions=11456&scope=bot) |')
 
 
     await ctx.send(embed=embed)
