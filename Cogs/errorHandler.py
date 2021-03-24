@@ -21,6 +21,9 @@ class errorHandler(commands.Cog):
         elif isinstance(error, discord.ext.commands.errors.MissingPermissions):
             # Actual channel is not giving access, but has the permissions in its user
             pass
+        elif isinstance(error, discord.ext.commands.errors.CommandNotFound):
+            # Good practice to pass these errors
+            pass
         elif isinstance(error, discord.ext.commands.errors.BadArgument):
             await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.name}, Command was given bad input. For more info, use command `+help`', delete=False)
         elif isinstance(error, asyncio.TimeoutError):
@@ -45,7 +48,7 @@ class errorHandler(commands.Cog):
         else:
             try:
                 me = await self.bot.fetch_user(285879705989677058)
-                await me.send(f"Unhandled error: {error} \n Message: {ctx.message} \n More: {error1}")
+                await me.send(f"Unhandled error: {error}-----{type(error)}-----{error.args} \n Message: {ctx.message}")
             except Exception:
                 print(Exception)
 
@@ -58,6 +61,8 @@ class errorHandler(commands.Cog):
             await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention}: ✅ Report sent successfully: \n `{message}`', delete=False)
         except Exception:
             await MessageTools.sendSimpleEmbed(ctx, f'{ctx.author.mention}: ❌ Report failed to send`', delete=False)
+            me = await self.bot.fetch_user(285879705989677058)
+            await me.send(f"Error sending you user feedback")
 
 
 def setup(bot):

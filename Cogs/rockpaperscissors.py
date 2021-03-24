@@ -191,7 +191,7 @@ class rockpaperscissors(commands.Cog):
                         working = False
                     except Exception as e:
                         me = await self.bot.fetch_user(285879705989677058)
-                        await me.send(f"Failed to update scores in rps: {e}")
+                        await me.send(f"Error in rps: {e}-----{type(e)}-----{e.args}-----{ctx.guild}")
                         embed.description = f'Profile scores failed to update. If this problem persists, report it using command +bug <message>'
                         await ctx.send(embed=embed)
 
