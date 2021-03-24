@@ -3,6 +3,7 @@ import discord
 from Cogs.Tools import DatabaseTools
 from itertools import cycle
 import random
+import psycopg2
 import asyncio
 import randfacts
 
@@ -38,7 +39,7 @@ class rockpaperscissors(commands.Cog):
 
         # TODO add game confirmation
         # TODO add prompt timed out exceptions
-        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game \n 🤖: Add a bot (wins/losses don\'t count)', color=0x2596be)
+        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: Join the game \n 🤖: Add a bot', color=0x2596be)
         embed.set_author(name='Rock Paper Scissors', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/808744030618779658/b680a062246147.5a8a773c6932d.gif')
         embed.set_footer(text='React to continue.')
         sent_embed = await ctx.send(embed=embed)
@@ -87,37 +88,37 @@ class rockpaperscissors(commands.Cog):
                         if 'rock' in x and 'paper' in x:
                             if message1.content == 'paper':
                                 embed.description = f'{message1.author.mention} won against {message2.author.mention} using {message1.content}'
-                                DatabaseTools.editPlayerScore(message1.author, True, 'rps')
-                                DatabaseTools.editPlayerScore(message2.author, False, 'rps')
+                                DatabaseTools.editPlayerScore(message1.author.id, True, 'rps')
+                                DatabaseTools.editPlayerScore(message2.author.id, False, 'rps')
                                 await sent_embed.edit(embed=embed)
                             else:
                                 embed.description = f'{message2.author.mention} won against {message1.author.mention} using {message2.content}'
-                                DatabaseTools.editPlayerScore(message1.author, False, 'rps')
-                                DatabaseTools.editPlayerScore(message2.author, True, 'rps')
+                                DatabaseTools.editPlayerScore(message1.author.id, False, 'rps')
+                                DatabaseTools.editPlayerScore(message2.author.id, True, 'rps')
                                 await sent_embed.edit(embed=embed)
 
                         elif 'paper' in x and 'scissors' in x:
                             if message1.content == 'scissors':
                                 embed.description = f'{message1.author.mention} won against {message2.author.mention} using {message1.content}'
-                                DatabaseTools.editPlayerScore(message1.author, True, 'rps')
-                                DatabaseTools.editPlayerScore(message2.author, False, 'rps')
+                                DatabaseTools.editPlayerScore(message1.author.id, True, 'rps')
+                                DatabaseTools.editPlayerScore(message2.author.id, False, 'rps')
                                 await sent_embed.edit(embed=embed)
                             else:
                                 embed.description = f'{message2.author.mention} won against {message1.author.mention} using {message2.content}'
-                                DatabaseTools.editPlayerScore(message1.author, False, 'rps')
-                                DatabaseTools.editPlayerScore(message2.author, True, 'rps')
+                                DatabaseTools.editPlayerScore(message1.author.id, False, 'rps')
+                                DatabaseTools.editPlayerScore(message2.author.id, True, 'rps')
                                 await sent_embed.edit(embed=embed)
 
                         elif 'scissors' in x and 'rock' in x:
                             if message1.content == 'rock':
                                 embed.description = f'{message1.author.mention} won against {message2.author.mention} using {message1.content}'
-                                DatabaseTools.editPlayerScore(message1.author, True, 'rps')
-                                DatabaseTools.editPlayerScore(message2.author, False, 'rps')
+                                DatabaseTools.editPlayerScore(message1.author.id, True, 'rps')
+                                DatabaseTools.editPlayerScore(message2.author.id, False, 'rps')
                                 await sent_embed.edit(embed=embed)
                             else:
                                 embed.description = f'{message2.author.mention} won against {message1.author.mention} using {message2.content}'
-                                DatabaseTools.editPlayerScore(message1.author, False, 'rps')
-                                DatabaseTools.editPlayerScore(message2.author, True, 'rps')
+                                DatabaseTools.editPlayerScore(message1.author.id, False, 'rps')
+                                DatabaseTools.editPlayerScore(message2.author.id, True, 'rps')
                                 await sent_embed.edit(embed=embed)
                         working = False
                     except Exception as e:
@@ -193,6 +194,12 @@ class rockpaperscissors(commands.Cog):
                         await me.send(f"Failed to update scores in rps: {e}")
                         embed.description = f'Profile scores failed to update. If this problem persists, report it using command +bug <message>'
                         await ctx.send(embed=embed)
+
+    # @rps.error
+    # async def rps_error(ctx, error):
+    #     if isinstance(error, psycopg2.DatabaseError):
+
+
 
 def setup(bot):
     bot.add_cog(rockpaperscissors(bot))
