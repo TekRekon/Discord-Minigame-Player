@@ -9,7 +9,6 @@ class Connect4(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.guild_only()
@@ -170,7 +169,6 @@ class Connect4(commands.Cog):
                 return reaction.message.id == sent_embed.id and user == current_player
             return False
 
-        # Universal Variables #
         reactions1 = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭']
         reactions1reversed = ['🇭', '🇬', '🇫', '🇪', '🇩', '🇨', '🇧', '🇦']
         reactions2 = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣']
@@ -191,8 +189,10 @@ class Connect4(commands.Cog):
 
         # Options Menu #
         # TODO add prompt timed out exceptions
-        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: **Join the game**', color=0x2596be)
-        embed.set_author(name='Othello', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/806228103323189268/a410e8bb83f1a7230d330b912d9eb895_w200.gif')
+        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: **Join the game**',
+                              color=0x2596be)
+        embed.set_author(name='Othello', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/'
+                                                  '806228103323189268/a410e8bb83f1a7230d330b912d9eb895_w200.gif')
         sent_embed = await ctx.send(embed=embed)
         await sent_embed.add_reaction('📲')
         reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
@@ -213,10 +213,6 @@ class Connect4(commands.Cog):
                 await sent_embed.clear_reactions()
                 return
             elif reaction.emoji == '✅':
-
-                me = self.bot.get_user(285879705989677058)
-                await me.send(f"othello game initiated")
-
                 # Loading Connect4 #
                 await sent_embed.clear_reactions()
                 embed.description = 'Loading...'
@@ -228,18 +224,18 @@ class Connect4(commands.Cog):
                 await sent_embed.add_reaction('⏩')
                 sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
 
-
-                # Player vs player exclusive variables #
                 global moves
                 moves = []
                 p_list = [p1, p2]
                 random.shuffle(p_list)
                 alt_player = cycle(p_list)
                 moves = 0
-                othello_tips = ['Move not registering? Try double tapping.', 'A minute to learn, a lifetime to master. ', 'You have 3 minutes to make a move before receiving a loss.', randfacts.getFact(filter=True), 'Don\'t fat-finger the reactions.']
+                othello_tips = ['Move not registering? Try double tapping.', 'A minute to learn, a lifetime to master.'
+                    , 'You have 3 minutes to make a move before receiving a loss.', randfacts.getFact(filter=True),
+                                'Don\'t fat-finger the reactions.']
                 embed.set_footer(text=random.choice(othello_tips))
 
-                # Actual Game #
+                # Game #
                 while working:
                     current_player = next(alt_player)
                     current_emoji = next(alt_emoji)
@@ -247,12 +243,18 @@ class Connect4(commands.Cog):
                     other_emoji = next(alt_emoji)
                     next(alt_player)
                     next(alt_emoji)
-                    joined_board = ["|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5]), "|".join(board[6]), "|".join(board[7]), '⬛' + '|' + "|".join(reactions2)]
+                    joined_board = ["|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]),
+                                    "|".join(board[4]), "|".join(board[5]), "|".join(board[6]), "|".join(board[7]),
+                                    '⬛' + '|' + "|".join(reactions2)]
                     for i in range(len(board)):
                         joined_board[i] = reactions1reversed[i] + '|' + joined_board[i]
 
                     # Player's turn
-                    embed.description = f'{current_player.mention}({current_emoji}) Make your move (Choose a letter) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]} \n {joined_board[8]}'
+                    embed.description = f'{current_player.mention}({current_emoji}) Make your move ' \
+                                        f'(Choose a letter) \n \n {joined_board[0]} \n {joined_board[1]} \n ' \
+                                        f'{joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n ' \
+                                        f'{joined_board[5]} \n {joined_board[6]} \n {joined_board[7]} \n ' \
+                                        f'{joined_board[8]}'
                     if moves % 5 == 0:
                         embed.set_footer(text=random.choice(othello_tips))
                     await sent_embed.edit(embed=embed)
@@ -262,14 +264,20 @@ class Connect4(commands.Cog):
                         cont = True
                         while reacting:
 
-                            reaction_alpha, user = await self.bot.wait_for('reaction_add', timeout=180.0, check=check_alpha_reaction)
+                            reaction_alpha, user = await self.bot.wait_for('reaction_add', timeout=180.0,
+                                                                           check=check_alpha_reaction)
                             if reaction_alpha.emoji == '⏩':
                                 reacting = False
                                 break
 
-                            embed.description = f'{current_player.mention}({current_emoji}) Make your move (Choose a number) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]} \n {joined_board[8]}'
+                            embed.description = f'{current_player.mention}({current_emoji}) Make your move ' \
+                                                f'(Choose a number) \n \n {joined_board[0]} \n {joined_board[1]} \n ' \
+                                                f'{joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n ' \
+                                                f'{joined_board[5]} \n {joined_board[6]} \n {joined_board[7]} \n ' \
+                                                f'{joined_board[8]}'
                             await sent_embed.edit(embed=embed)
-                            reaction_numeric, user = await self.bot.wait_for('reaction_add', timeout=180.0, check=check_numeric_reaction)
+                            reaction_numeric, user = await self.bot.wait_for('reaction_add', timeout=180.0,
+                                                                             check=check_numeric_reaction)
                             if reaction_numeric.emoji == '⏩':
                                 reacting = False
                                 break
@@ -284,13 +292,21 @@ class Connect4(commands.Cog):
                                         board[change[0]][change[1]] = current_emoji
                                 reacting = False
                             else:
-                                embed.description = f'{current_player.mention}({current_emoji}) Invalid move, try again (Choose a letter or forfeit your move ⏩) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]} \n {joined_board[8]}'
+                                embed.description = f'{current_player.mention}({current_emoji}) Invalid move, try ' \
+                                                    f'again (Choose a letter or forfeit your move ⏩) \n \n ' \
+                                                    f'{joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} ' \
+                                                    f'\n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]}' \
+                                                    f' \n {joined_board[6]} \n {joined_board[7]} \n {joined_board[8]}'
                                 await sent_embed.edit(embed=embed)
                                 continue
 
 
                     except asyncio.TimeoutError:
-                        embed.description = f'{other_player.mention}({other_emoji}) Wins \n {current_player.mention}({current_emoji}) Loses \n \n Player turn timed out \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]} \n {joined_board[8]}'
+                        embed.description = f'{other_player.mention}({other_emoji}) Wins \n {current_player.mention}' \
+                                            f'({current_emoji}) Loses \n \n Player turn timed out \n \n ' \
+                                            f'{joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n ' \
+                                            f'{joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n ' \
+                                            f'{joined_board[6]} \n {joined_board[7]} \n {joined_board[8]}'
                         embed.set_footer(text='')
                         await sent_embed.edit(embed=embed)
                         await sent_embed.clear_reactions()
@@ -304,26 +320,38 @@ class Connect4(commands.Cog):
 
                     if not any(current_emoji in sublist for sublist in board):
                         working = False
-                        joined_board = ["|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5]), "|".join(board[6]), "|".join(board[7]), '⬛' + '|' + "|".join(reactions2)]
+                        joined_board = ["|".join(board[0]), "|".join(board[1]), "|".join(board[2]),
+                                        "|".join(board[3]), "|".join(board[4]), "|".join(board[5]),
+                                        "|".join(board[6]), "|".join(board[7]), '⬛' + '|' + "|".join(reactions2)]
                         for i in range(len(board)):
                             joined_board[i] = reactions1reversed[i] + '|' + joined_board[i]
                         DatabaseTools.addPlayer(current_player.id, current_player.name, 'othello')
                         DatabaseTools.addPlayer(other_player.id, other_player.name, 'othello')
                         DatabaseTools.editPlayerScore(current_player.id, False, 'othello')
                         DatabaseTools.editPlayerScore(other_player.id, True, 'othello')
-                        embed.description = f'{current_player.mention}({current_emoji}) Loses \n {other_player.mention}({other_emoji}) Wins \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
+                        embed.description = f'{current_player.mention}({current_emoji}) Loses \n ' \
+                                            f'{other_player.mention}({other_emoji}) Wins \n \n {joined_board[0]} \n ' \
+                                            f'{joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n ' \
+                                            f'{joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n ' \
+                                            f'{joined_board[7]}'
                         await sent_embed.edit(embed=embed)
 
                     if not any(other_emoji in sublist for sublist in board):
                         working = False
-                        joined_board = ["|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5]), "|".join(board[6]), "|".join(board[7]), '⬛' + '|' + "|".join(reactions2)]
+                        joined_board = ["|".join(board[0]), "|".join(board[1]), "|".join(board[2]),
+                                        "|".join(board[3]), "|".join(board[4]), "|".join(board[5]),
+                                        "|".join(board[6]), "|".join(board[7]), '⬛' + '|' + "|".join(reactions2)]
                         for i in range(len(board)):
                             joined_board[i] = reactions1reversed[i] + '|' + joined_board[i]
                         DatabaseTools.addPlayer(current_player.id, current_player.name, 'othello')
                         DatabaseTools.addPlayer(other_player.id, other_player.name, 'othello')
                         DatabaseTools.editPlayerScore(current_player.id, True, 'othello')
                         DatabaseTools.editPlayerScore(other_player.id, False, 'othello')
-                        embed.description = f'{current_player.mention}({current_emoji}) Wins \n {other_player.mention}({other_emoji}) Loses \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
+                        embed.description = f'{current_player.mention}({current_emoji}) Wins \n ' \
+                                            f'{other_player.mention}({other_emoji}) Loses \n \n {joined_board[0]} \n' \
+                                            f' {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n ' \
+                                            f'{joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n ' \
+                                            f'{joined_board[7]}'
                         await sent_embed.edit(embed=embed)
 
 
@@ -331,7 +359,9 @@ class Connect4(commands.Cog):
                         DatabaseTools.addPlayer(current_player.id, current_player.name, 'othello')
                         DatabaseTools.addPlayer(other_player.id, other_player.name, 'othello')
                         working = False
-                        joined_board = ["|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5]), "|".join(board[6]), "|".join(board[7]), '⬛' + '|' + "|".join(reactions2)]
+                        joined_board = ["|".join(board[0]), "|".join(board[1]), "|".join(board[2]),
+                                        "|".join(board[3]), "|".join(board[4]), "|".join(board[5]),
+                                        "|".join(board[6]), "|".join(board[7]), '⬛' + '|' + "|".join(reactions2)]
                         for i in range(len(board)):
                             joined_board[i] = reactions1reversed[i] + '|' + joined_board[i]
                         black = 0
@@ -346,11 +376,19 @@ class Connect4(commands.Cog):
                             if current_emoji == '⚫':
                                 DatabaseTools.editPlayerScore(current_player.id, False, 'othello')
                                 DatabaseTools.editPlayerScore(other_player.id, True, 'othello')
-                                embed.description = f'{current_player.mention}({current_emoji}) Loses \n {other_player.mention}({other_emoji}) Wins \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
+                                embed.description = f'{current_player.mention}({current_emoji}) Loses \n ' \
+                                                    f'{other_player.mention}({other_emoji}) Wins \n \n ' \
+                                                    f'{joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} ' \
+                                                    f'\n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]}' \
+                                                    f' \n {joined_board[6]} \n {joined_board[7]}'
                             else:
                                 DatabaseTools.editPlayerScore(current_player.id, True, 'othello')
                                 DatabaseTools.editPlayerScore(other_player.id, False, 'othello')
-                                embed.description = f'{current_player.mention}({current_emoji}) Wins \n {other_player.mention}({other_emoji}) Loses \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
+                                embed.description = f'{current_player.mention}({current_emoji}) Wins \n' \
+                                                    f' {other_player.mention}({other_emoji}) Loses \n \n ' \
+                                                    f'{joined_board[0]} \n {joined_board[1]} \n {joined_board[2]}' \
+                                                    f' \n {joined_board[3]} \n {joined_board[4]} \n ' \
+                                                    f'{joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
                             embed.set_footer(text='')
                             await sent_embed.edit(embed=embed)
                             await sent_embed.clear_reactions()
@@ -358,17 +396,29 @@ class Connect4(commands.Cog):
                             if current_emoji == '⚫':
                                 DatabaseTools.editPlayerScore(current_player.id, True, 'othello')
                                 DatabaseTools.editPlayerScore(other_player.id, False, 'othello')
-                                embed.description = f'{current_player.mention}({current_emoji}) Wins \n {other_player.mention}({other_emoji}) Loses \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
+                                embed.description = f'{current_player.mention}({current_emoji}) Wins \n ' \
+                                                    f'{other_player.mention}({other_emoji}) Loses \n \n ' \
+                                                    f'{joined_board[0]} \n {joined_board[1]} \n {joined_board[2]}' \
+                                                    f' \n {joined_board[3]} \n {joined_board[4]} \n ' \
+                                                    f'{joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
                             else:
                                 DatabaseTools.editPlayerScore(current_player.id, False, 'othello')
                                 DatabaseTools.editPlayerScore(other_player.id, True, 'othello')
-                                embed.description = f'{current_player.mention}({current_emoji}) Loses \n {other_player.mention}({other_emoji}) Wins \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
+                                embed.description = f'{current_player.mention}({current_emoji}) Loses \n ' \
+                                                    f'{other_player.mention}({other_emoji}) Wins \n \n ' \
+                                                    f'{joined_board[0]} \n {joined_board[1]} \n {joined_board[2]}' \
+                                                    f' \n {joined_board[3]} \n {joined_board[4]} \n ' \
+                                                    f'{joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
                             embed.set_footer(text='')
                             await sent_embed.clear_reactions()
                         else:
                             DatabaseTools.editPlayerScore(current_player.id, True, 'othello')
                             DatabaseTools.editPlayerScore(other_player.id, True, 'othello')
-                            embed.description = f'Tie between {current_player.mention}({current_emoji}) amd {other_player.mention}({other_emoji}) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]} \n {joined_board[7]}'
+                            embed.description = f'Tie between {current_player.mention}({current_emoji}) and ' \
+                                                f'{other_player.mention}({other_emoji}) \n \n {joined_board[0]}' \
+                                                f' \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]}' \
+                                                f' \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}' \
+                                                f' \n {joined_board[7]}'
                             embed.set_footer(text='')
                             await sent_embed.clear_reactions()
                         await sent_embed.edit(embed=embed)

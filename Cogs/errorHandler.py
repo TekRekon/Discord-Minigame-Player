@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 import asyncio
+import config
 from Cogs.Tools import MessageTools
 
 
@@ -47,7 +48,7 @@ class errorHandler(commands.Cog):
             pass
         else:
             try:
-                me = await self.bot.fetch_user(285879705989677058)
+                me = await self.bot.fetch_user(config.personal_id)
                 await me.send(f"Unhandled error: {error}-----{type(error)}-----{error.args} \n Message: {ctx.message}")
             except Exception:
                 print(Exception)

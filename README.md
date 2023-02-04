@@ -15,8 +15,11 @@ Just a fun little project I have decided to start on my own
   * Go to https://discordapp.com/developers/applications/
   * Click "New Application" in the top right hand corner and make a new application
   * Navigate to the section named "Bot" and copy the token
-  * Make a new file in `\src` named "secret.txt"
-  * Paste your client key in that folder
+  * Edit the file in `\src` named "config.py" and update the variable named "bot_token" with your client key
+  * Update personal_id to your account's discord id
+* **Database Tools** - Supply the bot with a database to store information
+  * Create a postgresql database and update the variables in the file `\src` named "config.py" with your 
+   database information
   
 ## Downloads
 

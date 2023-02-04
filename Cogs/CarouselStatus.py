@@ -10,7 +10,8 @@ class CarouselStatus(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.playingNames = cycle([f'Latency: {round(self.bot.latency*1000, 2)}ms', f'in {len(self.bot.guilds)} servers', '+help'])
+        self.playingNames = cycle([f'Latency: {round(self.bot.latency*1000, 2)}ms', f'in {len(self.bot.guilds)} '
+                                                                                    f'servers', '+help'])
         self.carousel_status.start()
 
     @tasks.loop(seconds=15.0)

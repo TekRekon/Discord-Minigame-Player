@@ -11,23 +11,6 @@ async def sendSimpleEmbed(channel, text, delete):
     return sent_msg
 
 
-# def correct_command_use(ctx, mod_command):
-#     """
-#     Given context and boolean for mod-only, check if command is used correctly
-#     """
-#     # TODO implement permission_required instead of this method
-#     data = JsonTools.getDataParsable()
-#     guildID = str(ctx.guild.id)
-#     if ctx.message.channel.id not in data[guildID]['noCommandChannels']:
-#         if ctx.message.content.startswith(data[guildID]['prefix']):
-#             if mod_command and ctx.author.id in data[guildID]['mods']:
-#                     return True
-#             elif not mod_command:
-#                 return True
-#     else:
-#         return False
-
-
 async def addReactions(message, num):
     """
     Add reactions given a message and number of reactions

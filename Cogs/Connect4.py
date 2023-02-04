@@ -14,7 +14,8 @@ class Connect4(commands.Cog):
         for n, list in enumerate(board):
             for i, cell in enumerate(list):
                 if cell in ['🔴', '🔵']:
-                    if i < 4 and n > 2 and (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2] == board[n - 3][i + 3]):
+                    if i < 4 and n > 2 and (board[n][i] == board[n - 1][i + 1] == board[n - 2][i + 2] == board[n - 3]
+                    [i + 3]):
                         return cell
                     if i > 2 and n > 2 and (
                             board[n][i] == board[n - 1][i - 1] == board[n - 2][i - 2] == board[n - 3][i - 3]):
@@ -45,7 +46,6 @@ class Connect4(commands.Cog):
                             return reaction.message.id == sent_embed.id and user == current_player
             return False
 
-        # Universal Variables #
         reactions = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬']
         # board = [['⚪']*7 for i in range(6)]
         board = [['⚪', '⚪', '⚪', '⚪', '⚪', '⚪', '⚪'],  # board[0][0-6]
@@ -62,8 +62,10 @@ class Connect4(commands.Cog):
 
         # Options Menu #
         # TODO add prompt timed out exceptions
-        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: **Join the game**', color=0x2596be)
-        embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
+        embed = discord.Embed(description=f'{ctx.author.mention} is waiting... \n 📲: **Join the game**',
+                              color=0x2596be)
+        embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/'
+                                                       '699343937965654122/ezgif-7-6d4bab9dedb9.gif')
         sent_embed = await ctx.send(embed=embed)
         await sent_embed.add_reaction('📲')
         reaction, user = await self.bot.wait_for('reaction_add', timeout=60.0, check=check_reaction)
@@ -84,29 +86,28 @@ class Connect4(commands.Cog):
                 await sent_embed.clear_reactions()
                 return
             elif reaction.emoji == '✅':
-
-                me = self.bot.get_user(285879705989677058)
-                await me.send(f"connect4 game initiated")
-
                 # Loading Connect4 #
                 await sent_embed.clear_reactions()
-                embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/488700267060133889/699343937965654122/ezgif-7-6d4bab9dedb9.gif')
+                embed.set_author(name='Connect Four', icon_url='https://cdn.discordapp.com/attachments/'
+                                                               '488700267060133889/699343937965654122/'
+                                                               'ezgif-7-6d4bab9dedb9.gif')
                 embed.description = 'Loading...'
                 await sent_embed.edit(embed=embed)
                 for emoji in reactions:
                     await sent_embed.add_reaction(emoji)
                 sent_embed = await self.bot.get_channel(ctx.channel.id).fetch_message(sent_embed.id)
 
-
-                # Player vs player exclusive variables #
                 p_list = [p1, p2]
                 random.shuffle(p_list)
                 alt_player = cycle(p_list)
                 moves = 0
-                connect4_tips = ['Move not registering? Try double tapping.', 'The middle column and row are the most valuable.', 'Try learning the Odd-Even Strategy.', 'You\'re looking mighty fine today', 'You have 3 minutes to make a move before receiving a loss.', randfacts.getFact(filter=True), 'Don\'t fat-finger the reactions.']
+                connect4_tips = ['Move not registering? Try double tapping.', 'The middle column and row are the '
+                                 'most valuable.', 'Try learning the Odd-Even Strategy.', 'You have 3 minutes to '
+                                 'make a move before receiving a loss.', randfacts.getFact(filter=True), 'Don\'t '
+                                                                                       'fat-finger the reactions.']
                 embed.set_footer(text=random.choice(connect4_tips))
 
-            # Actual Game #
+                # Active Game #
                 while working:
                     current_player = next(alt_player)
                     current_emoji = next(alt_emoji)
@@ -114,10 +115,14 @@ class Connect4(commands.Cog):
                     other_emoji = next(alt_emoji)
                     next(alt_player)
                     next(alt_emoji)
-                    joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
+                    joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]),
+                                    "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
 
                     # Player's turn
-                    embed.description = f'{current_player.mention}({current_emoji}) Make your move \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                    embed.description = f'{current_player.mention}({current_emoji}) Make your move \n \n ' \
+                                        f'{joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n ' \
+                                        f'{joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n ' \
+                                        f'{joined_board[6]}'
                     if moves % 5 == 0:
                         embed.set_footer(text=random.choice(connect4_tips))
                     await sent_embed.edit(embed=embed)
@@ -125,7 +130,11 @@ class Connect4(commands.Cog):
                     try:
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=180.0, check=check_reaction)
                     except asyncio.TimeoutError:
-                        embed.description = f'{other_player.mention}({other_emoji}) Wins \n {current_player.mention}({current_emoji}) Loses \n \n Player turn timed out \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                        embed.description = f'{other_player.mention}({other_emoji}) Wins \n {current_player.mention}' \
+                                            f'({current_emoji}) Loses \n \n Player turn timed out \n \n ' \
+                                            f'{joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n ' \
+                                            f'{joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n ' \
+                                            f'{joined_board[6]}'
                         embed.set_footer(text='')
                         await sent_embed.edit(embed=embed)
                         await sent_embed.clear_reactions()
@@ -146,7 +155,8 @@ class Connect4(commands.Cog):
                     moves += 1
 
                     # Evaluate Board #
-                    joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]), "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
+                    joined_board = ["|".join(reactions), "|".join(board[0]), "|".join(board[1]), "|".join(board[2]),
+                                    "|".join(board[3]), "|".join(board[4]), "|".join(board[5])]
                     result = Connect4.checkBoardWin(board)
                     if result == 'TIE':
                         working = False
@@ -154,7 +164,10 @@ class Connect4(commands.Cog):
                         DatabaseTools.addPlayer(other_player.id, other_player.name, 'connect4')
                         DatabaseTools.editPlayerScore(current_player.id, True, 'connect4')
                         DatabaseTools.editPlayerScore(other_player.id, True, 'connect4')
-                        embed.description = f'Tie between {current_player.mention}({current_emoji}) and {other_player.mention}({other_emoji}) \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                        embed.description = f'Tie between {current_player.mention}({current_emoji}) and ' \
+                                            f'{other_player.mention}({other_emoji}) \n \n {joined_board[0]} \n ' \
+                                            f'{joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n ' \
+                                            f'{joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
                         embed.set_footer(text='')
                         await sent_embed.edit(embed=embed)
                         await sent_embed.clear_reactions()
@@ -164,7 +177,11 @@ class Connect4(commands.Cog):
                         DatabaseTools.addPlayer(other_player.id, other_player.name, 'connect4')
                         DatabaseTools.editPlayerScore(current_player.id, True, 'connect4')
                         DatabaseTools.editPlayerScore(other_player.id, False, 'connect4')
-                        embed.description = f'{current_player.mention}({current_emoji}) Wins \n {other_player.mention}({other_emoji}) Loses \n \n {joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n {joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n {joined_board[6]}'
+                        embed.description = f'{current_player.mention}({current_emoji}) Wins \n ' \
+                                            f'{other_player.mention}({other_emoji}) Loses \n \n ' \
+                                            f'{joined_board[0]} \n {joined_board[1]} \n {joined_board[2]} \n ' \
+                                            f'{joined_board[3]} \n {joined_board[4]} \n {joined_board[5]} \n ' \
+                                            f'{joined_board[6]}'
                         embed.set_footer(text='')
                         await sent_embed.edit(embed=embed)
                         await sent_embed.clear_reactions()
